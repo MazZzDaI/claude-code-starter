@@ -573,6 +573,16 @@ test_memory_layers_code() {
     # CLAUDE.md should mention Memory Layers section
     assert_file_contains "CLAUDE.md" "Слои памяти" "CLAUDE.md has Memory Layers section" || fail=1
 
+    # Regression: a host project's SNAPSHOT.md/BACKLOG.md must be a blank
+    # template, never the framework's own live state (found 2026-09-14 —
+    # AIchatTG's install leaked Project_init's own "v6.3.0 — оркестраторская
+    # модель" snapshot because the installer fell back to the framework's
+    # live .claude/SNAPSHOT.md when no dedicated blank template existed).
+    assert_file_not_contains ".claude/SNAPSHOT.md" "оркестраторская модель" \
+        "SNAPSHOT.md is a blank template, not the framework's own live state" || fail=1
+    assert_file_not_contains ".claude/BACKLOG.md" "archive/context" \
+        "BACKLOG.md is a blank template, not the framework's own live state" || fail=1
+
     return $fail
 }
 

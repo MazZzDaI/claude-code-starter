@@ -198,6 +198,7 @@ detect_project_type() {
 
     code_count=$(find . -maxdepth 4 -type f \
         \( -name '*.py' -o -name '*.js' -o -name '*.ts' -o -name '*.tsx' -o -name '*.jsx' \
+           -o -name '*.mjs' -o -name '*.cjs' -o -name '*.mts' -o -name '*.cts' \
            -o -name '*.go' -o -name '*.rs' -o -name '*.php' -o -name '*.sh' -o -name '*.rb' \
            -o -name '*.java' -o -name '*.cs' -o -name '*.swift' -o -name '*.kt' \) \
         -not -path './.git/*' \
@@ -222,7 +223,7 @@ detect_project_type() {
     done
 
     local code_dirs_score=0
-    for d in src lib app pages components tests e2e migrations infra; do
+    for d in src lib app apps packages pages components tests e2e migrations infra; do
         [ -d "$d" ] && code_dirs_score=$((code_dirs_score + 1))
     done
 
@@ -826,17 +827,32 @@ install_code() {
                         ".claude/agents/${agent}/${agent}.md"
     done
 
-    # SNAPSHOT.md
+    # SNAPSHOT.md — блан-шаблон из templates/global/.claude/, а не живой
+    # .claude/SNAPSHOT.md фреймворка: тот несёт СОБСТВЕННОЕ состояние
+    # Project_init (текущий релиз, что в работе у него), и его копирование
+    # в хост-проект утекает чужой снимок вместо пустого каркаса.
     if [ ! -f ".claude/SNAPSHOT.md" ]; then
-        if [ -f "$TEMPLATE_DIR/.claude/SNAPSHOT.md" ]; then
-            substitute_placeholders "$TEMPLATE_DIR/.claude/SNAPSHOT.md" ".claude/SNAPSHOT.md"
+        if [ -f "$TEMPLATE_DIR/templates/global/.claude/SNAPSHOT.md" ]; then
+            substitute_placeholders "$TEMPLATE_DIR/templates/global/.claude/SNAPSHOT.md" ".claude/SNAPSHOT.md"
             log_success "Created: .claude/SNAPSHOT.md"
+        elif [ -f "$TEMPLATE_DIR/.claude/SNAPSHOT.md" ]; then
+            substitute_placeholders "$TEMPLATE_DIR/.claude/SNAPSHOT.md" ".claude/SNAPSHOT.md"
+            log_success "Created: .claude/SNAPSHOT.md (fallback)"
         fi
     else
         log_warning "Exists:  .claude/SNAPSHOT.md (not overwritten)"
     fi
 
-    # Memory layers — contracts axis (ARCHITECTURE, BACKLOG, INVARIANTS)
+    # Memory layers — contracts axis (ARCHITECTURE, BACKLOG, INVARIANTS).
+    # BACKLOG has the same live-state leak as SNAPSHOT above; ARCHITECTURE
+    # and INVARIANTS stay sourced from the framework's own root because its
+    # copies are already generic templates, not live state.
+    if [ -f "$TEMPLATE_DIR/templates/global/.claude/BACKLOG.md" ] && [ ! -f ".claude/BACKLOG.md" ]; then
+        substitute_placeholders "$TEMPLATE_DIR/templates/global/.claude/BACKLOG.md" ".claude/BACKLOG.md"
+        log_success "Created: .claude/BACKLOG.md"
+    elif [ -f ".claude/BACKLOG.md" ]; then
+        log_warning "Exists:  .claude/BACKLOG.md (not overwritten)"
+    fi
     install_memory_layers "$TEMPLATE_DIR/.claude"
 }
 
@@ -947,11 +963,16 @@ install_content() {
     # Starter structure по content_type
     install_content_starter
 
-    # SNAPSHOT.md (content version)
+    # SNAPSHOT.md (content version) — same live-state leak guard as the code
+    # path: prefer the content template, then the generic blank, and only
+    # then the framework's own live SNAPSHOT.md as a last resort.
     if [ ! -f ".claude/SNAPSHOT.md" ]; then
         if [ -f "$ct/SNAPSHOT.md" ]; then
             substitute_placeholders "$ct/SNAPSHOT.md" ".claude/SNAPSHOT.md"
             log_success "Created: .claude/SNAPSHOT.md (content)"
+        elif [ -f "$TEMPLATE_DIR/templates/global/.claude/SNAPSHOT.md" ]; then
+            substitute_placeholders "$TEMPLATE_DIR/templates/global/.claude/SNAPSHOT.md" ".claude/SNAPSHOT.md"
+            log_success "Created: .claude/SNAPSHOT.md (global fallback)"
         elif [ -f "$TEMPLATE_DIR/.claude/SNAPSHOT.md" ]; then
             substitute_placeholders "$TEMPLATE_DIR/.claude/SNAPSHOT.md" ".claude/SNAPSHOT.md"
             log_success "Created: .claude/SNAPSHOT.md (fallback)"
