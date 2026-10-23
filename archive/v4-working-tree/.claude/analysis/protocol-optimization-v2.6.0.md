@@ -8,7 +8,7 @@
 ## Problem Statement
 
 **User feedback:**
-> "Есть, как мне кажется, еще один у нас крупный недостаток... У нас есть протокол старта и протокол завершения. И каждый этот протокол по факту сейчас занимает почти 5-6 минут и требует большого количества подтверждений, плюс выводит гигантское количество информации, которое абсолютно не нужна... почти 20% времени работы над проектом, а это очень много, если не 30% времени, уходит на постоянное обслуживание протоколов старта или протоколов завершения."
+> "There is, I think, one more big shortcoming we have... We have a start protocol and a completion protocol. And each of these protocols in fact now takes almost 5-6 minutes and requires a large number of confirmations, plus it outputs a gigantic amount of information that is absolutely not needed... almost 20% of the time spent working on the project, and that is a lot, if not 30% of the time, goes on constantly servicing the start protocols or the completion protocols."
 
 **Core issues:**
 1. **Time overhead:** 5-6 minutes per protocol
@@ -420,7 +420,7 @@ Read .claude/protocols/completion-optimized.md and execute all steps.
 
 ## User Quote
 
-> "Слушай, начинай про. Просто делать, потому что когда это ты все сделаешь, и. Я начну его использовать. Все дырки-то здесь и вылезут. Но естественно проверяя ошибки."
+> "Listen, start pro. Just doing it, because when you've done all of it, and. I'll start using it. That's when all the holes will show up. But naturally checking for errors."
 
 **Translation:** "Listen, just start doing it, because when you finish everything and I start using it, all the holes will come out. But naturally checking for errors."
 

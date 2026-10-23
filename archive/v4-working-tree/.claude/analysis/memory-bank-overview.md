@@ -1,90 +1,90 @@
-# Memory Bank vs Claude Code Starter: Сравнительный обзор
+# Memory Bank vs Claude Code Starter: Comparative Overview
 
-**Дата:** 2026-01-20 (обновлено после внедрения)
-**Версии:** Memory Bank (Cline) vs Claude Code Starter v2.5.1
-**Статус:** ✅ Внедрено (3 из 5 предложений)
+**Date:** 2026-01-20 (updated after implementation)
+**Versions:** Memory Bank (Cline) vs Claude Code Starter v2.5.1
+**Status:** ✅ Implemented (3 of 5 proposals)
 
-**📄 См. также:** [`memory-bank-implementation-results.md`](./memory-bank-implementation-results.md) — детальный отчет о процессе внедрения и результатах.
-
----
-
-## Общая проблема
-
-**Проблема:** AI-ассистенты теряют контекст между сессиями. Каждая новая сессия начинается "с нуля" — AI не помнит проект, его архитектуру, принятые решения, текущие задачи.
-
-**Последствия:**
-- Разработчик тратит время на повторное объяснение контекста
-- AI делает ошибки из-за незнания истории проекта
-- Теряются принятые решения и их обоснования
-- Нет преемственности между сессиями
-- Невозможна долгосрочная работа над проектом
-
-**Что нужно:** Система сохранения контекста проекта в файлах, которые AI читает при старте сессии.
+**📄 See also:** [`memory-bank-implementation-results.md`](./memory-bank-implementation-results.md) — a detailed report on the implementation process and results.
 
 ---
 
-## Два подхода к решению
+## The common problem
+
+**Problem:** AI assistants lose context between sessions. Every new session starts "from scratch" — the AI does not remember the project, its architecture, the decisions made, or the current tasks.
+
+**Consequences:**
+- The developer spends time explaining the context all over again
+- The AI makes mistakes through not knowing the project's history
+- Decisions made and their justifications get lost
+- There is no continuity between sessions
+- Long-term work on a project is impossible
+
+**What is needed:** A system for preserving project context in files that the AI reads at the start of a session.
+
+---
+
+## Two approaches to the solution
 
 ### Memory Bank (Cline)
 
-**Что это:** Универсальная система метафайлов для любого AI-ассистента, разработанная для Cline.
+**What it is:** A universal metafile system for any AI assistant, developed for Cline.
 
-**Расположение:** `memory-bank/` (в корне проекта)
+**Location:** `memory-bank/` (in the project root)
 
-**Структура:** 6 обязательных файлов
+**Structure:** 6 mandatory files
 ```
 memory-bank/
-├── inst.md              # Системные инструкции для AI
-├── projectbrief.md      # Краткое описание проекта
-├── productContext.md    # Зачем проект, проблемы, UX, аудитория
-├── systemPatterns.md    # Архитектура, паттерны, технические решения
-├── techContext.md       # Технологии, setup, зависимости, инструменты
-├── activeContext.md     # Текущий фокус, решения, инсайты
-└── progress.md          # Что сделано, что осталось, метрики
+├── inst.md              # System instructions for the AI
+├── projectbrief.md      # Short project description
+├── productContext.md    # Why the project exists, problems, UX, audience
+├── systemPatterns.md    # Architecture, patterns, technical decisions
+├── techContext.md       # Technologies, setup, dependencies, tools
+├── activeContext.md     # Current focus, decisions, insights
+└── progress.md          # What is done, what is left, metrics
 ```
 
-**Размер:** ~920 строк (~6-7k tokens)
+**Size:** ~920 lines (~6-7k tokens)
 
-**Философия:** "Читай ВСЕ файлы каждую сессию" — полнота контекста важнее скорости.
+**Philosophy:** "Read ALL files every session" — completeness of context matters more than speed.
 
-**Цитата из документации:**
+**Quote from the documentation:**
 > "I MUST read ALL memory bank files at the start of EVERY task - this is not optional."
 
 ---
 
-### Claude Code Starter (наш фреймворк)
+### Claude Code Starter (our framework)
 
-**Что это:** Meta-framework для Claude Code с протоколами, автоматизацией и privacy-first подходом.
+**What it is:** A meta-framework for Claude Code with protocols, automation and a privacy-first approach.
 
-**Расположение:** `.claude/` (в корне проекта)
+**Location:** `.claude/` (in the project root)
 
-**Структура:** 3 обязательных + 2 on demand + protocols
+**Structure:** 3 mandatory + 2 on demand + protocols
 ```
 .claude/
-├── CLAUDE.md            # Системные инструкции (router к протоколам)
+├── CLAUDE.md            # System instructions (router to the protocols)
 ├── protocols/
-│   ├── cold-start.md    # Протокол инициализации сессии
-│   └── completion.md    # Протокол завершения спринта
-├── SNAPSHOT.md          # Текущее состояние (читается всегда)
-├── BACKLOG.md           # Задачи (читается всегда)
-├── ARCHITECTURE.md      # Структура кода (читается всегда)
-├── ROADMAP.md           # Стратегия (on demand)
-├── IDEAS.md             # Идеи (on demand)
+│   ├── cold-start.md    # Session initialisation protocol
+│   └── completion.md    # Sprint completion protocol
+├── SNAPSHOT.md          # Current state (always read)
+├── BACKLOG.md           # Tasks (always read)
+├── ARCHITECTURE.md      # Code structure (always read)
+├── ROADMAP.md           # Strategy (on demand)
+├── IDEAS.md             # Ideas (on demand)
 ├── COMMIT_POLICY.md     # Security policy
 └── commands/            # 19 slash commands
 ```
 
-**Cold Start читает (после внедрения):** 3 файла (~1653 строк, ~6.5-7.5k tokens)
-- SNAPSHOT.md: 862 строки (было 646, +216)
-- BACKLOG.md: 791 строка (было 676, +115)
-- ARCHITECTURE.md: 171 строка
+**Cold Start reads (after implementation):** 3 files (~1653 lines, ~6.5-7.5k tokens)
+- SNAPSHOT.md: 862 lines (was 646, +216)
+- BACKLOG.md: 791 lines (was 676, +115)
+- ARCHITECTURE.md: 171 lines
 
-**Философия:** "Читай минимум для быстрого старта" → эволюционировала в "Читай нужное с высокой плотностью ценности"
+**Philosophy:** "Read the minimum for a fast start" → evolved into "Read what is needed, with high value density"
 
-**Особенности:**
-- Unlimited context (auto-summarization в Claude Code)
-- Protocols в отдельных файлах (immune to context compaction)
-- 19 slash commands для автоматизации
+**Features:**
+- Unlimited context (auto-summarization in Claude Code)
+- Protocols in separate files (immune to context compaction)
+- 19 slash commands for automation
 - Auto-update mechanism
 - Bug reporting system
 - 6-layer security (COMMIT_POLICY protection)
@@ -92,136 +92,136 @@ memory-bank/
 
 ---
 
-## Главные различия
+## Main differences
 
-| Аспект | Memory Bank | Claude Code Starter |
+| Aspect | Memory Bank | Claude Code Starter |
 |--------|-------------|---------------------|
-| **AI платформа** | Cline (VS Code extension) | Claude Code (CLI) |
-| **Философия** | "Read all files" | "High-value density" |
-| **Файлов обязательных** | 6 | 3 |
-| **Размер при старте** | ~920 lines (~6-7k tokens) | ~1653 lines (~6.5-7.5k tokens) |
-| **Скорость старта** | Медленнее | Сравнимо |
-| **Плотность ценности** | Средняя (дублирование) | Высокая (Decision Log, Lessons, etc.) |
-| **Протоколы** | Inline в inst.md | Отдельные файлы |
-| **Автоматизация** | Нет | 19 slash commands |
-| **Context window** | Manual управление | Unlimited (auto-summarization) |
-| **Универсальность** | Любой AI | Специфично для Claude Code |
-| **Decision tracking** | ✅ В activeContext.md | ✅ В SNAPSHOT.md (NEW) |
-| **Lessons learned** | ✅ В activeContext.md | ✅ В SNAPSHOT.md (NEW) |
-| **What NOT to do** | ✅ В progress.md | ✅ В BACKLOG.md (NEW) |
+| **AI platform** | Cline (VS Code extension) | Claude Code (CLI) |
+| **Philosophy** | "Read all files" | "High-value density" |
+| **Mandatory files** | 6 | 3 |
+| **Size at start** | ~920 lines (~6-7k tokens) | ~1653 lines (~6.5-7.5k tokens) |
+| **Start-up speed** | Slower | Comparable |
+| **Value density** | Medium (duplication) | High (Decision Log, Lessons, etc.) |
+| **Protocols** | Inline in inst.md | Separate files |
+| **Automation** | None | 19 slash commands |
+| **Context window** | Manual management | Unlimited (auto-summarization) |
+| **Universality** | Any AI | Specific to Claude Code |
+| **Decision tracking** | ✅ In activeContext.md | ✅ In SNAPSHOT.md (NEW) |
+| **Lessons learned** | ✅ In activeContext.md | ✅ In SNAPSHOT.md (NEW) |
+| **What NOT to do** | ✅ In progress.md | ✅ In BACKLOG.md (NEW) |
 
 ---
 
-## Плюсы и минусы
+## Pros and cons
 
 ### Memory Bank
 
-#### ✅ Плюсы
+#### ✅ Pros
 
-1. **Полнота контекста** — AI получает максимум информации каждую сессию
-2. **Структурированность** — четкая иерархия файлов (foundation → active → progress)
-3. **Product thinking** — productContext.md документирует "зачем" и "для кого"
-4. **Decision log** — activeContext.md хранит "почему так решили" с альтернативами
-5. **Lessons learned** — накопление инсайтов и уроков (что работает, что нет)
-6. **"What NOT to do"** — progress.md содержит сознательно исключенные идеи
-7. **Универсальность** — работает с любым AI-ассистентом (Cline, Claude, GPT)
-8. **Детальная документация** — techContext.md с setup, миграцией, интеграциями
+1. **Completeness of context** — the AI gets the maximum information every session
+2. **Structure** — a clear file hierarchy (foundation → active → progress)
+3. **Product thinking** — productContext.md documents the "why" and the "for whom"
+4. **Decision log** — activeContext.md stores "why we decided this" with alternatives
+5. **Lessons learned** — accumulation of insights and lessons (what works, what doesn't)
+6. **"What NOT to do"** — progress.md contains deliberately excluded ideas
+7. **Universality** — works with any AI assistant (Cline, Claude, GPT)
+8. **Detailed documentation** — techContext.md with setup, migration, integrations
 
-#### ❌ Минусы
+#### ❌ Cons
 
-1. **Дублирование информации** — одни и те же факты в разных файлах
-2. **Избыточность для технических проектов** — productContext может быть overkill
-3. **Нет протоколов** — инструкции inline в inst.md (риск context compaction)
-4. **Нет автоматизации** — нет slash commands, все вручную
-5. **Manual update** — требуется команда "update memory bank" для сохранения
-6. **Context window проблемы** — Cline требует manual management
-7. **Жесткая структура** — все 6 файлов обязательны, нельзя упростить
-8. **Больше maintenance** — нужно поддерживать больше файлов
+1. **Duplication of information** — the same facts in different files
+2. **Redundant for technical projects** — productContext can be overkill
+3. **No protocols** — instructions inline in inst.md (risk of context compaction)
+4. **No automation** — no slash commands, everything by hand
+5. **Manual update** — the "update memory bank" command is required to save
+6. **Context window problems** — Cline requires manual management
+7. **Rigid structure** — all 6 files are mandatory, it cannot be simplified
+8. **More maintenance** — more files to maintain
 
 ---
 
 ### Claude Code Starter
 
-#### ✅ Плюсы
+#### ✅ Pros
 
-1. **High-value density** — 6.5-7.5k tokens, но максимум ценности (Decision Log, Lessons, etc.)
-2. **Protocol files** — отдельные файлы, immune to context compaction
-3. **Автоматизация** — 19 slash commands (/fix, /feature, /commit, /pr, etc.)
-4. **Unlimited context** — auto-summarization в Claude Code (нет manual management)
-5. **Auto-update mechanism** — framework обновляется автоматически
-6. **Bug reporting system** — встроенная отправка багов в GitHub Issues
+1. **High-value density** — 6.5-7.5k tokens, but maximum value (Decision Log, Lessons, etc.)
+2. **Protocol files** — separate files, immune to context compaction
+3. **Automation** — 19 slash commands (/fix, /feature, /commit, /pr, etc.)
+4. **Unlimited context** — auto-summarization in Claude Code (no manual management)
+5. **Auto-update mechanism** — the framework updates itself automatically
+6. **Bug reporting system** — built-in submission of bugs to GitHub Issues
 7. **Security focus** — 6 layers of defense (COMMIT_POLICY, pre-commit hooks)
-8. **Dialog export** — сохранение истории сессий с privacy control
-9. **Framework Developer Mode** — инструкции для разработки самого фреймворка
-10. **Crash recovery** — автоматическое восстановление после сбоев
-11. **Публичные метафайлы** — SNAPSHOT, BACKLOG, ARCHITECTURE доступны contributors
-12. **Decision Log** ✅ — документирует ключевые решения с rationale
-13. **Lessons Learned** ✅ — накапливает инсайты (что работает, находки, уроки)
-14. **"What NOT to do"** ✅ — сознательно исключенные идеи с обоснованием
+8. **Dialog export** — preserving session history with privacy control
+9. **Framework Developer Mode** — instructions for developing the framework itself
+10. **Crash recovery** — automatic recovery after failures
+11. **Public metafiles** — SNAPSHOT, BACKLOG, ARCHITECTURE available to contributors
+12. **Decision Log** ✅ — documents key decisions with rationale
+13. **Lessons Learned** ✅ — accumulates insights (what works, findings, lessons)
+14. **"What NOT to do"** ✅ — deliberately excluded ideas with justification
 
-#### ❌ Минусы
+#### ❌ Cons
 
-1. **Нет milestones** — долгосрочное планирование через ROADMAP.md (менее структурировано)
-2. **Нет productContext** — фокус на технической стороне, не продуктовой
-3. **Специфичен для Claude Code** — не работает с Cline/другими AI
-4. **Больше токенов чем было** — 6.5-7.5k vs прежние 2-3k (но сравнимо с Memory Bank)
+1. **No milestones** — long-term planning via ROADMAP.md (less structured)
+2. **No productContext** — focus on the technical side, not the product side
+3. **Specific to Claude Code** — does not work with Cline/other AIs
+4. **More tokens than before** — 6.5-7.5k vs the previous 2-3k (but comparable to Memory Bank)
 
 ---
 
-## Что взяли из Memory Bank
+## What we took from Memory Bank
 
-### ✅ Внедрено (2026-01-20)
+### ✅ Implemented (2026-01-20)
 
-#### 1. Decision Log в SNAPSHOT.md ✅
+#### 1. Decision Log in SNAPSHOT.md ✅
 
-**Что добавили:** Секция "Decision Log" с 5 документированными решениями
+**What we added:** A "Decision Log" section with 5 documented decisions
 
-**Примеры:**
+**Examples:**
 - Hybrid Protocol Files Architecture (v2.4.1)
 - CLAUDE.md Made Public (v2.5.1)
 - Token Economy Approach (v2.0)
 - Defense in Depth Security (v2.5.0)
 - Framework Developer Mode (v2.4.0)
 
-**Каждое решение включает:**
-- Decision (что решили)
-- Rationale (почему)
-- Alternatives Considered (что отвергли и почему)
-- Outcome (результат)
+**Each decision includes:**
+- Decision (what we decided)
+- Rationale (why)
+- Alternatives Considered (what we rejected and why)
+- Outcome (the result)
 
-**Размер:** +70 lines в SNAPSHOT.md
+**Size:** +70 lines in SNAPSHOT.md
 
-**Польза:**
-- История важных решений
-- Понимание rationale (почему так, а не иначе)
-- Избегание повторного обсуждения отвергнутых альтернатив
+**Benefit:**
+- A history of important decisions
+- Understanding the rationale (why this way and not another)
+- Avoiding re-discussion of rejected alternatives
 
 ---
 
-#### 2. Lessons Learned в SNAPSHOT.md ✅
+#### 2. Lessons Learned in SNAPSHOT.md ✅
 
-**Что добавили:** Секция "Lessons Learned" с 16 инсайтами
+**What we added:** A "Lessons Learned" section with 16 insights
 
-**Структура:**
-- **What Works Well** (5 пунктов): Protocol files, Defense in depth, Token economy, Self-healing, Validation
-- **Unexpected Findings** (5 пунктов): COMMIT_POLICY auto-creation, Context compaction, Bug reports, Token costs, User confusion
-- **Hard-Won Lessons** (6 пунктов): Security, Distribution, Documentation, Token economy, Framework development, Migration
+**Structure:**
+- **What Works Well** (5 items): Protocol files, Defense in depth, Token economy, Self-healing, Validation
+- **Unexpected Findings** (5 items): COMMIT_POLICY auto-creation, Context compaction, Bug reports, Token costs, User confusion
+- **Hard-Won Lessons** (6 items): Security, Distribution, Documentation, Token economy, Framework development, Migration
 
-**Размер:** +110 lines в SNAPSHOT.md
+**Size:** +110 lines in SNAPSHOT.md
 
-**Польза:**
-- Накопление project wisdom
+**Benefit:**
+- Accumulation of project wisdom
 - Learning from mistakes
 - Unexpected insights preservation
-- Предотвращение повторения ошибок
+- Preventing repeated mistakes
 
 ---
 
-#### 3. "What NOT to do" в BACKLOG.md ✅
+#### 3. "What NOT to do" in BACKLOG.md ✅
 
-**Что добавили:** Секция "🚫 What NOT to Do" с 6 сознательно исключенными идеями
+**What we added:** A "🚫 What NOT to Do" section with 6 deliberately excluded ideas
 
-**Примеры:**
+**Examples:**
 - Cloud sync for dialog files (privacy violation)
 - Auto-commits without user approval (user control)
 - GUI desktop application (token overhead, maintenance)
@@ -229,62 +229,62 @@ memory-bank/
 - Auto-push to remote (user control)
 - Magic auto-detection of project type (complexity)
 
-**Каждый пункт включает:**
-- Excluded (что исключили)
-- Rationale (почему)
-- Alternative (что предлагаем вместо)
-- Exception (когда можем пересмотреть)
+**Each item includes:**
+- Excluded (what we excluded)
+- Rationale (why)
+- Alternative (what we offer instead)
+- Exception (when we might reconsider)
 
-**Размер:** +115 lines в BACKLOG.md
+**Size:** +115 lines in BACKLOG.md
 
-**Польза:**
-- Избегание повторных дискуссий
-- Экономия времени на уже отвергнутые идеи
-- Четкие boundaries проекта
+**Benefit:**
+- Avoiding repeated discussions
+- Saving time on ideas already rejected
+- Clear project boundaries
 
 ---
 
-### ❌ Сознательно отклонено
+### ❌ Deliberately rejected
 
-#### 4. Milestones в BACKLOG.md ❌
+#### 4. Milestones in BACKLOG.md ❌
 
-**Почему отклонили:**
-- У нас есть ROADMAP.md для долгосрочного планирования
-- У нас есть IDEAS.md для структурированных фич
-- BACKLOG.md содержит "очень конкретное, ближайшее"
-- Добавление Milestones создало бы дублирование
+**Why we rejected it:**
+- We have ROADMAP.md for long-term planning
+- We have IDEAS.md for structured features
+- BACKLOG.md contains "very concrete, immediate" items
+- Adding Milestones would create duplication
 
-**Альтернатива:**
-- ROADMAP.md — стратегические фичи v2.2+
-- IDEAS.md — сырые идеи
-- BACKLOG.md — конкретные задачи (сейчас)
+**Alternative:**
+- ROADMAP.md — strategic features for v2.2+
+- IDEAS.md — raw ideas
+- BACKLOG.md — concrete tasks (now)
 
 ---
 
 #### 5. PROJECT_BRIEF.md ❌
 
-**Почему отклонили:**
-- У нас есть README.md с исчерпывающей информацией
-- README содержит: What is this, Problem, Solution, Features, Installation
-- Создание PROJECT_BRIEF.md дублировало бы README.md
-- Избыточность без добавленной ценности
+**Why we rejected it:**
+- We have README.md with comprehensive information
+- README contains: What is this, Problem, Solution, Features, Installation
+- Creating PROJECT_BRIEF.md would duplicate README.md
+- Redundancy without added value
 
-**Альтернатива:**
-- README.md — полное описание для людей
-- SNAPSHOT.md — technical focus для AI
-- ARCHITECTURE.md — код структура
+**Alternative:**
+- README.md — full description for people
+- SNAPSHOT.md — technical focus for AI
+- ARCHITECTURE.md — code structure
 
 ---
 
-## Итоговое сравнение (после внедрения)
+## Final comparison (after implementation)
 
-### Что лучше у Memory Bank:
-- ✅ Product thinking (productContext.md) — для продуктовых проектов
-- ✅ Универсальность (works with any AI)
-- ✅ Milestones с timeline — для долгосрочного планирования
+### What Memory Bank does better:
+- ✅ Product thinking (productContext.md) — for product projects
+- ✅ Universality (works with any AI)
+- ✅ Milestones with a timeline — for long-term planning
 
-### Что лучше у нас:
-- ✅ High-value density (6.5-7.5k tokens с Decision Log, Lessons, etc.)
+### What we do better:
+- ✅ High-value density (6.5-7.5k tokens with Decision Log, Lessons, etc.)
 - ✅ Protocol architecture (separate files, immune to compaction)
 - ✅ Automation (19 slash commands)
 - ✅ Auto-update mechanism
@@ -293,169 +293,169 @@ memory-bank/
 - ✅ Dialog export
 - ✅ Unlimited context
 - ✅ Crash recovery
-- ✅ Decision Log ✅ (внедрено)
-- ✅ Lessons Learned ✅ (внедрено)
-- ✅ "What NOT to do" ✅ (внедрено)
-- ✅ Публичные метафайлы для contributors
+- ✅ Decision Log ✅ (implemented)
+- ✅ Lessons Learned ✅ (implemented)
+- ✅ "What NOT to do" ✅ (implemented)
+- ✅ Public metafiles for contributors
 
-### Лучшее из обоих миров:
+### The best of both worlds:
 
-**Claude Code Starter v2.5.1 теперь имеет:**
-- Наша автоматизация + их decision tracking ✅
-- Наши протоколы + их lessons learned ✅
-- Наша security + их "what NOT to do" ✅
-- Наш fast startup → high-value density
-- Наши преимущества сохранены + добавлена структурированность
+**Claude Code Starter v2.5.1 now has:**
+- Our automation + their decision tracking ✅
+- Our protocols + their lessons learned ✅
+- Our security + their "what NOT to do" ✅
+- Our fast startup → high-value density
+- Our advantages retained + structure added
 
-**Результат:**
-- Сравнимо по токенам (6.5-7.5k vs их 6-7k)
-- Превосходим по плотности ценности
+**Result:**
+- Comparable in tokens (6.5-7.5k vs their 6-7k)
+- We outperform on value density
 - Smart (decision log + lessons learned)
 - Clear (what NOT to do)
-- Better (сохраняем все наши преимущества)
+- Better (we keep all our advantages)
 
 ---
 
-## Что НЕ взяли и почему
+## What we did NOT take, and why
 
-### ❌ 1. Обязательное чтение всех файлов
+### ❌ 1. Mandatory reading of all files
 
-**Memory Bank подход:**
+**Memory Bank approach:**
 > "I MUST read ALL memory bank files at the start of EVERY task"
 
-**Почему не брали:**
-- У нас 3 файла уже дают достаточный контекст
-- On-demand файлы (ROADMAP, IDEAS) читаются при необходимости
-- Unlimited context (auto-summarization) позволяет не загружать все
+**Why we didn't take it:**
+- Our 3 files already give sufficient context
+- On-demand files (ROADMAP, IDEAS) are read when needed
+- Unlimited context (auto-summarization) means we don't have to load everything
 
-**Наш подход:**
-- Читаем 3 файла всегда (SNAPSHOT, BACKLOG, ARCHITECTURE)
-- Остальное on demand
-- High-value density важнее количества файлов
+**Our approach:**
+- We always read 3 files (SNAPSHOT, BACKLOG, ARCHITECTURE)
+- Everything else on demand
+- High-value density matters more than the number of files
 
 ---
 
-### ❌ 2. Разделение на 6 обязательных файлов
+### ❌ 2. Splitting into 6 mandatory files
 
-**Memory Bank:** 6 файлов, все mandatory (~920 lines total)
+**Memory Bank:** 6 files, all mandatory (~920 lines total)
 
-**Почему не брали:**
-- Дублирование информации между файлами
-- Overhead в maintenance (нужно обновлять больше файлов)
-- Избыточность для технических проектов
+**Why we didn't take it:**
+- Duplication of information between files
+- Maintenance overhead (more files to update)
+- Redundant for technical projects
 
-**Наш подход:**
-- 3 core файла (SNAPSHOT, BACKLOG, ARCHITECTURE)
+**Our approach:**
+- 3 core files (SNAPSHOT, BACKLOG, ARCHITECTURE)
 - 2 on demand (ROADMAP, IDEAS)
-- Информация не дублируется
-- Проще в maintenance
+- Information is not duplicated
+- Simpler to maintain
 
 ---
 
-### ❌ 3. productContext.md как отдельный файл
+### ❌ 3. productContext.md as a separate file
 
 **Memory Bank:** productContext.md (~100 lines)
-- Зачем проект существует
-- Целевая аудитория
-- Сценарии использования
-- Метрики успеха
+- Why the project exists
+- Target audience
+- Usage scenarios
+- Success metrics
 - UX goals
 
-**Почему не брали:**
-- Для фреймворка это избыточно
-- Target audience очевидна (developers)
-- UX описан в README для людей
-- Фреймворк — technical product
+**Why we didn't take it:**
+- For a framework this is redundant
+- The target audience is obvious (developers)
+- UX is described in the README for people
+- The framework is a technical product
 
-**Наш подход:**
-- README.md содержит эту информацию (для людей)
+**Our approach:**
+- README.md contains this information (for people)
 - SNAPSHOT.md — technical focus
-- ARCHITECTURE.md — код структура
+- ARCHITECTURE.md — code structure
 
 ---
 
-### ❌ 4. techContext.md как отдельный файл
+### ❌ 4. techContext.md as a separate file
 
 **Memory Bank:** techContext.md (~230 lines)
-- Технологический стек
+- Technology stack
 - Development setup
 - Tool configurations
 - Dependencies
 - Migration procedures
 
-**Почему не брали:**
-- Информация уже есть в других местах:
+**Why we didn't take it:**
+- The information already exists elsewhere:
   - package.json → dependencies
   - README.md → setup instructions
   - ARCHITECTURE.md → tech stack overview
   - tsconfig.json → TypeScript config
-- Дублирование не нужно
+- Duplication is not needed
 
-**Наш подход:**
-- Tech stack в ARCHITECTURE.md (кратко)
-- Детали в README.md и конфигах
-- AI не нужны setup инструкции каждую сессию
+**Our approach:**
+- Tech stack in ARCHITECTURE.md (briefly)
+- Details in README.md and the configs
+- The AI does not need setup instructions every session
 
 ---
 
-### ❌ 5. Manual "update memory bank" команда
+### ❌ 5. Manual "update memory bank" command
 
-**Memory Bank:** Требует явной команды "update memory bank"
+**Memory Bank:** Requires an explicit "update memory bank" command
 
-**Почему не брали:**
-- У нас Completion Protocol автоматизирует это
-- Triggered by "завершить" или "finish"
-- Обновляет все metafiles автоматически
+**Why we didn't take it:**
+- Our Completion Protocol automates this
+- Triggered by "finish up" or "finish"
+- Updates all metafiles automatically
 
-**Наш подход:**
-- Completion Protocol → автоматическое обновление
-- Git commit → сохранение изменений
-- Меньше manual actions
+**Our approach:**
+- Completion Protocol → automatic update
+- Git commit → saving changes
+- Fewer manual actions
 
 ---
 
 ## Token Impact Analysis
 
-### До внедрения (v2.5.1 до изменений):
-- SNAPSHOT.md: 646 строк
-- BACKLOG.md: 676 строк
-- ARCHITECTURE.md: 171 строка
-- **Total:** ~1493 строки (~2-3k tokens)
+### Before implementation (v2.5.1 before the changes):
+- SNAPSHOT.md: 646 lines
+- BACKLOG.md: 676 lines
+- ARCHITECTURE.md: 171 lines
+- **Total:** ~1493 lines (~2-3k tokens)
 
-### После внедрения (v2.5.1 текущая):
-- SNAPSHOT.md: 862 строки (+216)
-- BACKLOG.md: 791 строка (+115)
-- ARCHITECTURE.md: 171 строка (без изменений)
-- **Total:** ~1824 строки (~6.5-7.5k tokens)
+### After implementation (current v2.5.1):
+- SNAPSHOT.md: 862 lines (+216)
+- BACKLOG.md: 791 lines (+115)
+- ARCHITECTURE.md: 171 lines (unchanged)
+- **Total:** ~1824 lines (~6.5-7.5k tokens)
 
-### Сравнение с Memory Bank:
-- Memory Bank: ~920 строк (~6-7k tokens, 6 файлов)
-- Claude Code Starter: ~1824 строки (~6.5-7.5k tokens, 3 файла)
-- **Разница:** Сравнимо по токенам, но **выше плотность ценности**
+### Comparison with Memory Bank:
+- Memory Bank: ~920 lines (~6-7k tokens, 6 files)
+- Claude Code Starter: ~1824 lines (~6.5-7.5k tokens, 3 files)
+- **Difference:** Comparable in tokens, but **higher value density**
 
-### Добавленная ценность (+331 строка):
-- Decision Log: 5 документированных решений
-- Lessons Learned: 16 инсайтов (5 + 5 + 6)
-- What NOT to do: 6 исключенных идей
-- **ROI:** Предотвращает повторные обсуждения, сохраняет историю решений
+### Added value (+331 lines):
+- Decision Log: 5 documented decisions
+- Lessons Learned: 16 insights (5 + 5 + 6)
+- What NOT to do: 6 excluded ideas
+- **ROI:** Prevents repeated discussions, preserves the history of decisions
 
 ---
 
-## Выводы
+## Conclusions
 
-1. **Успешная интеграция лучших практик Memory Bank:**
-   - ✅ Decision Log внедрен
-   - ✅ Lessons Learned внедрен
-   - ✅ "What NOT to do" внедрен
-   - ❌ Milestones отклонен (есть ROADMAP.md)
-   - ❌ PROJECT_BRIEF отклонен (есть README.md)
+1. **Successful integration of Memory Bank's best practices:**
+   - ✅ Decision Log implemented
+   - ✅ Lessons Learned implemented
+   - ✅ "What NOT to do" implemented
+   - ❌ Milestones rejected (we have ROADMAP.md)
+   - ❌ PROJECT_BRIEF rejected (we have README.md)
 
-2. **Token economy эволюционировала:**
-   - Было: 2-3k tokens ("fast startup")
-   - Стало: 6.5-7.5k tokens ("high-value density")
-   - Философия: Не "читай минимум", а "читай максимум ценности"
+2. **Token economy has evolved:**
+   - Before: 2-3k tokens ("fast startup")
+   - Now: 6.5-7.5k tokens ("high-value density")
+   - Philosophy: Not "read the minimum", but "read the maximum value"
 
-3. **Наши уникальные преимущества сохранены:**
+3. **Our unique advantages retained:**
    - Protocol architecture
    - Automation (19 slash commands)
    - Auto-update
@@ -464,15 +464,15 @@ memory-bank/
    - Dialog export
    - Crash recovery
 
-4. **Превосходим Memory Bank:**
-   - Сравнимо по токенам
-   - Выше плотность ценности (Decision Log с примерами, Lessons с категориями)
-   - Больше автоматизации
-   - Лучше security
-   - Публичные метафайлы для contributors
+4. **We outperform Memory Bank:**
+   - Comparable in tokens
+   - Higher value density (Decision Log with examples, Lessons with categories)
+   - More automation
+   - Better security
+   - Public metafiles for contributors
 
 ---
 
-**Документ обновлен:** 2026-01-20 (после внедрения)
-**Статус:** ✅ Implemented (3 из 5 предложений внедрены)
-**Коммит:** 83e637a "feat: Add framework metafiles to public repository + Memory Bank improvements"
+**Document updated:** 2026-01-20 (after implementation)
+**Status:** ✅ Implemented (3 of 5 proposals implemented)
+**Commit:** 83e637a "feat: Add framework metafiles to public repository + Memory Bank improvements"
