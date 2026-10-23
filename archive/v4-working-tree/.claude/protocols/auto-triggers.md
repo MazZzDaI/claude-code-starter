@@ -17,7 +17,7 @@
 
 **New way:**
 - User finishes task
-- User says "готово" or "done" (natural)
+- User says "ready" or "done" (natural)
 - Framework auto-detects completion
 - Runs Completion automatically (or asks once)
 
@@ -38,7 +38,7 @@ user_message = get_last_user_message()
 
 // Check for explicit triggers
 if (detect_explicit_completion(user_message)) {
-  // User said "готово", "done", etc.
+  // User said "ready", "done", etc.
   run_completion_protocol()
   return
 }
@@ -75,19 +75,19 @@ if (detect_idle_time()) {
 
 ```typescript
 explicit_keywords = [
-  // Russian
-  "готово",
-  "сделано",
-  "сделал",
-  "завершил",
-  "завершено",
-  "закончил",
-  "закончено",
-  "выполнено",
-  "всё",
-  "все сделал",
-  "можно коммитить",
-  "коммить",
+  // Russian (rendered in English)
+  "ready",
+  "done it",
+  "did it",
+  "completed it",
+  "completed",
+  "finished it",
+  "finished",
+  "accomplished",
+  "that's it",
+  "did everything",
+  "ok to commit",
+  "commit",
 
   // English
   "done",
@@ -113,7 +113,7 @@ if (user_message.toLowerCase() in explicit_keywords ||
 
 **Example:**
 ```
-User: "Готово, всё работает"
+User: "Ready, everything works"
 Framework: (runs Completion silently)
 Framework: "✓ Committed (a3f82d1)"
 ```
@@ -127,30 +127,30 @@ Framework: "✓ Committed (a3f82d1)"
 ```typescript
 implicit_patterns = [
   // Task completion
-  "задача завершена",
-  "фича готова",
-  "баг исправлен",
-  "ошибка пофикшена",
-  "тесты проходят",
-  "всё работает",
-  "проблема решена",
+  "task finished",
+  "feature is ready",
+  "bug is fixed",
+  "error is fixed",
+  "tests are passing",
+  "everything works",
+  "problem solved",
 
   // Satisfaction signals
-  "отлично",
-  "идеально",
-  "супер",
-  "круто получилось",
+  "excellent",
+  "perfect",
+  "super",
+  "turned out great",
 
   // Quality signals
-  "код чистый",
-  "всё протестировал",
-  "проверил",
-  "работает как надо",
+  "code is clean",
+  "tested everything",
+  "checked it",
+  "works as it should",
 
   // Request for next steps
-  "что дальше",
-  "следующая задача",
-  "переходим к",
+  "what next",
+  "next task",
+  "moving on to",
 
   // English equivalents
   "task completed",
@@ -176,7 +176,7 @@ if (message_indicates_completion(user_message, patterns)) {
 
 **Example:**
 ```
-User: "Отлично, баг пофикшен и тесты проходят"
+User: "Excellent, the bug is fixed and tests are passing"
 Framework: "Commit changes? (Y/n)"
 User: "y"
 Framework: "✓ Committed (f8c21a4)"
@@ -300,7 +300,7 @@ if (score <= 0.5) {
 ```
 
 **Signals analyzed:**
-- User satisfaction ("отлично", "супер")
+- User satisfaction ("excellent", "super")
 - No errors mentioned recently
 - Implementation followed by confirmation
 - User moves to new topic
@@ -308,10 +308,10 @@ if (score <= 0.5) {
 
 **Example:**
 ```
-User: "Можешь добавить Decision Log?"
+User: "Can you add a Decision Log?"
 AI: (implements Decision Log)
-AI: "Добавил Decision Log с 5 решениями"
-User: "Супер, выглядит отлично"
+AI: "Added a Decision Log with 5 decisions"
+User: "Super, looks excellent"
 Framework: (analyzes context, score: 0.85)
 Framework: "Task complete. Commit? (Y/n)"
 ```
@@ -328,8 +328,8 @@ Framework: "Task complete. Commit? (Y/n)"
     "enabled": true,                    // Master switch
 
     // Trigger types
-    "explicit_keywords": true,          // "готово", "done" → instant
-    "implicit_signals": true,           // "задача завершена" → suggest
+    "explicit_keywords": true,          // "ready", "done" → instant
+    "implicit_signals": true,           // "task finished" → suggest
     "significant_changes": true,        // 100+ lines → suggest
     "idle_time": false,                 // 30min idle → suggest (off by default)
     "context_analysis": true,           // AI analyzes conversation → suggest
@@ -341,7 +341,7 @@ Framework: "Task complete. Commit? (Y/n)"
     "check_interval": 5,                // Check git every N messages
 
     // Behavior
-    "auto_commit_on_explicit": false,   // Auto-commit when "готово" (or ask)
+    "auto_commit_on_explicit": false,   // Auto-commit when "ready" (or ask)
     "confirm_on_implicit": true,        // Ask confirmation for implicit triggers
     "show_trigger_reason": false        // Show why triggered (debugging)
   }
@@ -359,21 +359,21 @@ Framework: "Task complete. Commit? (Y/n)"
 // Preset: "assisted" (suggests, doesn't auto-commit)
 {
   "enabled": true,
-  "auto_commit_on_explicit": false,  // Even "готово" asks confirmation
+  "auto_commit_on_explicit": false,  // Even "ready" asks confirmation
   "confirm_on_implicit": true
 }
 
 // Preset: "autopilot" (fully automated)
 {
   "enabled": true,
-  "auto_commit_on_explicit": true,   // "готово" → auto-commits
+  "auto_commit_on_explicit": true,   // "ready" → auto-commits
   "confirm_on_implicit": false       // Implicit → auto-commits too (risky!)
 }
 
 // Preset: "balanced" (recommended default)
 {
   "enabled": true,
-  "auto_commit_on_explicit": true,   // "готово" → commits
+  "auto_commit_on_explicit": true,   // "ready" → commits
   "confirm_on_implicit": true,       // Others → asks
   "idle_time": false                 // No idle triggers (annoying)
 }
@@ -430,12 +430,12 @@ if (context_analysis === true) {
 ### Example 1: Explicit Keyword
 
 ```
-User: "Добавь Decision Log в SNAPSHOT"
+User: "Add a Decision Log to SNAPSHOT"
 AI: (implements Decision Log)
-AI: "Добавил Decision Log с 5 решениями"
-User: "Готово"
+AI: "Added a Decision Log with 5 decisions"
+User: "Ready"
 
-Framework: (detects explicit keyword "готово")
+Framework: (detects explicit keyword "ready")
 Framework: (runs Completion silently)
 Framework: "✓ Committed (a1b2c3d)"
 ```
@@ -445,12 +445,12 @@ Framework: "✓ Committed (a1b2c3d)"
 ### Example 2: Implicit Signal
 
 ```
-User: "Исправь баг в exporter.ts"
+User: "Fix the bug in exporter.ts"
 AI: (fixes bug)
-AI: "Исправил, теперь работает правильно"
-User: "Супер, тесты проходят"
+AI: "Fixed it, now it works correctly"
+User: "Super, tests are passing"
 
-Framework: (detects implicit signal "супер, тесты проходят")
+Framework: (detects implicit signal "super, tests are passing")
 Framework: "Commit changes? (Y/n)"
 User: "y"
 Framework: "✓ Committed (e4f5a6b)"
@@ -461,10 +461,10 @@ Framework: "✓ Committed (e4f5a6b)"
 ### Example 3: Significant Changes
 
 ```
-User: "Добавь три новых секции в SNAPSHOT"
+User: "Add three new sections to SNAPSHOT"
 AI: (adds sections, +200 lines)
-AI: "Добавил Decision Log, Lessons Learned, и What NOT to do"
-User: "Отлично"
+AI: "Added Decision Log, Lessons Learned, and What NOT to do"
+User: "Excellent"
 
 Framework: (silent check, detects 200+ lines changed)
 Framework: "200+ lines changed. Commit? (Y/n)"
@@ -477,13 +477,13 @@ Framework: "✓ Committed (c7d8e9f)"
 ### Example 4: Context Analysis
 
 ```
-User: "Реализуй оптимизацию протоколов"
+User: "Implement the protocol optimisation"
 AI: (implements optimization)
-AI: "Создал два новых протокола: cold-start-silent и completion-silent"
-User: "Выглядит хорошо, давай протестируем"
+AI: "Created two new protocols: cold-start-silent and completion-silent"
+User: "Looks good, let's test it"
 AI: (tests)
-AI: "Тесты прошли успешно"
-User: "Круто"
+AI: "Tests passed successfully"
+User: "Cool"
 
 Framework: (analyzes context)
 Framework: (completion score: 0.87)
@@ -508,13 +508,13 @@ if (message_ends_with_question_mark(user_message)) {
 
 // 2. User mentions problems
 if (message_contains_error_keywords(user_message)) {
-  // "не работает", "ошибка", "баг", "проблема"
+  // "doesn't work", "error", "bug", "problem"
   skip_trigger()
 }
 
 // 3. User requests changes
 if (message_is_change_request(user_message)) {
-  // "измени", "добавь", "убери", "исправь"
+  // "change", "add", "remove", "fix"
   skip_trigger()
 }
 
@@ -550,7 +550,7 @@ if (git_diff_is_empty()) {
 [19:45:12] Result: no trigger
 
 [19:50:23] Trigger check (message #18)
-[19:50:23] Explicit: YES ("готово")
+[19:50:23] Explicit: YES ("ready")
 [19:50:23] Config: auto_commit_on_explicit = true
 [19:50:23] Result: TRIGGERED (auto-commit)
 [19:50:23] Running Completion Protocol...
@@ -569,7 +569,7 @@ export CLAUDE_TRIGGERS_VERBOSE=true
 
 **Shows why triggered:**
 ```
-Framework: "Trigger: explicit keyword 'готово'"
+Framework: "Trigger: explicit keyword 'ready'"
 Framework: "Running Completion Protocol..."
 Framework: "✓ Committed (a3f82d1)"
 ```

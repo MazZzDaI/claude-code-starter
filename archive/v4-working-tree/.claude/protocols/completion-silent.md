@@ -50,21 +50,21 @@ For content profile, also keep `.claude/content/EDITORIAL_CALENDAR.md` and `.cla
 ### Trigger Patterns:
 
 **1. Explicit completion keywords:**
-- User says: "готово", "сделано", "завершил", "done", "finished", "complete"
-- User types: `/fi`, "заверши", "завершить", "finish"
+- User says: "ready", "all done", "I've finished", "done", "finished", "complete"
+- User types: `/fi`, "wrap up", "finish up", "finish"
 - Immediately trigger Completion
 
 **2. Task completion analysis:**
 ```typescript
 // AI analyzes last few messages
 patterns = [
-  "задача завершена",
-  "фича готова",
-  "баг исправлен",
-  "код работает",
-  "тесты проходят",
-  "всё сделал",
-  "можно коммитить"
+  "task complete",
+  "feature ready",
+  "bug fixed",
+  "code works",
+  "tests pass",
+  "all done",
+  "ready to commit"
 ]
 
 if (dialog_contains_completion_signal) {
@@ -303,7 +303,7 @@ touch .claude/.last_activity
     "auto_push": false,            // Don't auto-push (safe default)
     "auto_pr": false,              // Don't auto-create PR
     "auto_trigger": true,          // Enable auto-detection
-    "trigger_on_keywords": true,   // Detect "готово", "done", etc.
+    "trigger_on_keywords": true,   // Detect "ready", "done", etc.
     "trigger_on_idle": false,      // Don't trigger on idle (can be annoying)
     "trigger_on_significant_changes": true,  // Suggest commit after 100+ lines
     "metafile_updates": "auto"     // Auto-update metafiles (vs ask)
@@ -478,7 +478,7 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>`
 
 ### Scenario 1: Everything OK (auto-commit disabled)
 
-**User types:** "заверши"
+**User types:** "wrap up"
 
 **Output:**
 ```
@@ -500,7 +500,7 @@ Commit: "feat: Add True Silent protocol mode"
 
 ### Scenario 2: Everything OK (auto-commit enabled)
 
-**Framework detects:** "готово" in dialog
+**Framework detects:** "ready" in dialog
 
 **Output:**
 ```

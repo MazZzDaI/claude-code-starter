@@ -1,47 +1,47 @@
 ---
-description: Провести code review последних изменений
+description: Conduct a code review of recent changes
 ---
 
-Проведи детальный code review последних изменений в проекте.
+Conduct a detailed code review of the recent changes in the project.
 
-**Что проверить:**
+**What to check:**
 
-1. **Безопасность:**
-   - Валидация всех пользовательских вводов
-   - Проверка авторизации в Server Actions
-   - Отсутствие SQL-инъекций
-   - Защита от XSS
-   - Нет ли утечки секретов
+1. **Security:**
+   - Validation of all user input
+   - Authorisation checks in Server Actions
+   - No SQL injections
+   - XSS protection
+   - No leaked secrets
 
-2. **Качество кода:**
-   - Соответствие coding standards (.claude/coding-standards.md)
-   - TypeScript типы правильные и strict
-   - Нет использования `any`
-   - Понятные имена переменных и функций
-   - Комментарии для сложной логики
+2. **Code quality:**
+   - Compliance with coding standards (.claude/coding-standards.md)
+   - TypeScript types are correct and strict
+   - No use of `any`
+   - Clear variable and function names
+   - Comments for complex logic
 
-3. **Архитектура:**
-   - Соответствие паттернам проекта (.claude/architecture.md)
-   - Правильное разделение Client/Server Components
-   - Корректное использование Server Actions
-   - Отсутствие дублирования кода
+3. **Architecture:**
+   - Compliance with project patterns (.claude/architecture.md)
+   - Correct separation of Client/Server Components
+   - Correct use of Server Actions
+   - No code duplication
 
-4. **Производительность:**
-   - Нет ли лишних ре-рендеров
-   - Используется ли мемоизация где нужно
-   - Оптимизированы ли запросы к БД
-   - Нет ли блокирующих операций
+4. **Performance:**
+   - No unnecessary re-renders
+   - Memoisation used where needed
+   - Database queries optimised
+   - No blocking operations
 
-5. **Тестируемость:**
-   - Код легко тестируется
-   - Функции не слишком сложные
-   - Логика отделена от UI
+5. **Testability:**
+   - Code is easy to test
+   - Functions are not overly complex
+   - Logic is separated from UI
 
-**Формат ответа:**
+**Response format:**
 
-Для каждого файла укажи:
-- ✅ Что сделано хорошо
-- ⚠️ Что можно улучшить (с примерами кода)
-- ❌ Критические проблемы (требуют исправления)
+For each file, state:
+- ✅ What was done well
+- ⚠️ What could be improved (with code examples)
+- ❌ Critical problems (require fixing)
 
-В конце дай общую оценку и топ-3 рекомендации.
+At the end, give an overall assessment and top-3 recommendations.

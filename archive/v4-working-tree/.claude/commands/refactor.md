@@ -1,64 +1,64 @@
 ---
-description: Помочь с рефакторингом кода
+description: Help with code refactoring
 ---
 
-Помоги отрефакторить код, сохраняя функциональность и улучшая качество.
+Help refactor the code, preserving functionality and improving quality.
 
-**Цели рефакторинга:**
+**Refactoring goals:**
 
-1. **Улучшение читаемости:**
-   - Понятные имена
-   - Разбивка больших функций
-   - Удаление дублирования
-   - Добавление комментариев
+1. **Improving readability:**
+   - Clear names
+   - Breaking up large functions
+   - Removing duplication
+   - Adding comments
 
-2. **Производительность:**
-   - Оптимизация рендеринга
-   - Мемоизация
-   - Ленивая загрузка
-   - Оптимизация запросов к БД
+2. **Performance:**
+   - Rendering optimisation
+   - Memoisation
+   - Lazy loading
+   - Database query optimisation
 
-3. **Типобезопасность:**
-   - Строгая типизация
-   - Удаление `any`
-   - Правильные интерфейсы
+3. **Type safety:**
+   - Strict typing
+   - Removing `any`
+   - Correct interfaces
 
-4. **Архитектура:**
-   - Правильное разделение ответственности
-   - Извлечение переиспользуемой логики
-   - Соответствие паттернам проекта
+4. **Architecture:**
+   - Proper separation of concerns
+   - Extracting reusable logic
+   - Compliance with project patterns
 
-**Процесс:**
+**Process:**
 
-1. **Анализ:**
-   - Что можно улучшить?
-   - Какие есть проблемы?
-   - Где дублирование?
+1. **Analysis:**
+   - What can be improved?
+   - What problems are there?
+   - Where is the duplication?
 
-2. **План:**
-   - Определи шаги рефакторинга
-   - Начни с малого
-   - Проверяй после каждого шага
+2. **Plan:**
+   - Define the refactoring steps
+   - Start small
+   - Check after each step
 
-3. **Рефакторинг:**
-   - Сохраняй функциональность
-   - Следуй coding standards
-   - Улучшай постепенно
+3. **Refactoring:**
+   - Preserve functionality
+   - Follow coding standards
+   - Improve incrementally
 
-4. **Проверка:**
-   - Тесты проходят (если есть)
-   - TypeScript без ошибок
-   - Линтер доволен
-   - Функциональность не изменилась
+4. **Verification:**
+   - Tests pass (if any)
+   - TypeScript has no errors
+   - The linter is happy
+   - Functionality has not changed
 
-**Принципы:**
+**Principles:**
 - DRY (Don't Repeat Yourself)
 - KISS (Keep It Simple, Stupid)
 - YAGNI (You Aren't Gonna Need It)
 - Single Responsibility Principle
 
-**Примеры рефакторинга:**
-- Извлечение кастомных хуков
-- Создание переиспользуемых компонентов
-- Упрощение условной логики
-- Оптимизация запросов
+**Refactoring examples:**
+- Extracting custom hooks
+- Creating reusable components
+- Simplifying conditional logic
+- Optimising queries

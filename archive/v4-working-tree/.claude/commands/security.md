@@ -1,90 +1,90 @@
 ---
-description: Провести аудит безопасности кода
+description: Conduct a security audit of the code
 ---
 
-Проведи детальный аудит безопасности кода согласно SECURITY.md.
+Conduct a detailed security audit of the code according to SECURITY.md.
 
-**ВАЖНО:** Сначала прочитай SECURITY.md для полного контекста!
+**IMPORTANT:** Read SECURITY.md first for full context!
 
-**Проверь следующее:**
+**Check the following:**
 
-## 1. Валидация входных данных
+## 1. Input validation
 
-- [ ] Все пользовательские вводы валидируются на сервере
-- [ ] Используется типобезопасная валидация (Zod или подобное)
-- [ ] Проверяется длина строк
-- [ ] Проверяются типы данных
-- [ ] Проверяются форматы (email, URL, etc)
+- [ ] All user input is validated on the server
+- [ ] Type-safe validation is used (Zod or similar)
+- [ ] String length is checked
+- [ ] Data types are checked
+- [ ] Formats are checked (email, URL, etc)
 
-## 2. Аутентификация и авторизация
+## 2. Authentication and authorisation
 
-- [ ] Проверка аутентификации в каждом Server Action
-- [ ] Проверка авторизации (user может делать операцию)
-- [ ] JWT токены проверяются
-- [ ] Session management корректен
-- [ ] Нет hardcoded credentials
+- [ ] Authentication check in every Server Action
+- [ ] Authorisation check (user is allowed to perform the operation)
+- [ ] JWT tokens are verified
+- [ ] Session management is correct
+- [ ] No hardcoded credentials
 
 ## 3. SQL Injection
 
-- [ ] Используются параметризованные запросы
-- [ ] Нет конкатенации SQL строк
-- [ ] Используется ORM/Query Builder (Supabase)
-- [ ] Input sanitization присутствует
+- [ ] Parameterised queries are used
+- [ ] No SQL string concatenation
+- [ ] An ORM/Query Builder is used (Supabase)
+- [ ] Input sanitisation is present
 
 ## 4. XSS (Cross-Site Scripting)
 
-- [ ] Нет использования `dangerouslySetInnerHTML`
-- [ ] Используется React (автоэкранирование)
-- [ ] Markdown рендерится безопасно (react-markdown)
-- [ ] Нет `eval()` или `Function()`
+- [ ] No use of `dangerouslySetInnerHTML`
+- [ ] React is used (auto-escaping)
+- [ ] Markdown is rendered safely (react-markdown)
+- [ ] No `eval()` or `Function()`
 
 ## 5. CSRF (Cross-Site Request Forgery)
 
-- [ ] Server Actions автоматически защищены Next.js
-- [ ] API routes используют правильные методы
-- [ ] Критичные операции требуют подтверждения
+- [ ] Server Actions are automatically protected by Next.js
+- [ ] API routes use the correct methods
+- [ ] Critical operations require confirmation
 
-## 6. Утечка данных
+## 6. Data leakage
 
-- [ ] Секреты не в коде (используется .env)
-- [ ] .env в .gitignore
-- [ ] Ошибки не раскрывают чувствительную информацию
-- [ ] Логирование не содержит секретов
-- [ ] API не возвращает лишние данные
+- [ ] Secrets are not in the code (.env is used)
+- [ ] .env is in .gitignore
+- [ ] Errors do not reveal sensitive information
+- [ ] Logging contains no secrets
+- [ ] The API does not return excess data
 
 ## 7. Rate Limiting
 
-- [ ] Публичные endpoints имеют rate limiting
-- [ ] Защита от brute force
-- [ ] Защита от DoS
+- [ ] Public endpoints have rate limiting
+- [ ] Brute-force protection
+- [ ] DoS protection
 
-## 8. HTTPS и Headers
+## 8. HTTPS and Headers
 
-- [ ] Используется HTTPS
-- [ ] Security headers настроены (next.config.js)
-- [ ] HSTS включен
-- [ ] CSP настроен
+- [ ] HTTPS is used
+- [ ] Security headers are configured (next.config.js)
+- [ ] HSTS is enabled
+- [ ] CSP is configured
 
 ## 9. Dependencies
 
-- [ ] Нет известных уязвимостей (`npm audit`)
-- [ ] Зависимости обновлены
-- [ ] Используются trusted packages
+- [ ] No known vulnerabilities (`npm audit`)
+- [ ] Dependencies are up to date
+- [ ] Trusted packages are used
 
 ## 10. Supabase Security
 
-- [ ] Row Level Security (RLS) включен
-- [ ] Политики правильные
-- [ ] Пользователи видят только свои данные
-- [ ] Anon key используется правильно
+- [ ] Row Level Security (RLS) is enabled
+- [ ] Policies are correct
+- [ ] Users see only their own data
+- [ ] The anon key is used correctly
 
-**Для каждой найденной проблемы укажи:**
-- ❌ Описание уязвимости
+**For each problem found, state:**
+- ❌ Description of the vulnerability
 - 🎯 Severity (Critical/High/Medium/Low)
-- 💡 Рекомендация по исправлению
-- ✅ Пример правильного кода
+- 💡 Fix recommendation
+- ✅ Example of correct code
 
-**В конце дай:**
-- Общую оценку безопасности
-- Топ-5 критичных проблем (если есть)
-- Рекомендации по улучшению
+**At the end, give:**
+- An overall security assessment
+- Top-5 critical problems (if any)
+- Recommendations for improvement

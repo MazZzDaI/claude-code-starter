@@ -1,49 +1,49 @@
 ---
-description: Помочь найти и исправить баг
+description: Help find and fix a bug
 ---
 
-Помоги найти и исправить баг в проекте.
+Help find and fix a bug in the project.
 
-**Процесс отладки:**
+**Debugging process:**
 
-1. **Сбор информации:**
-   - Какое ожидаемое поведение?
-   - Что происходит на самом деле?
-   - Есть ли ошибки в консоли?
-   - Когда проблема возникает?
-   - Можно ли воспроизвести?
+1. **Gathering information:**
+   - What is the expected behaviour?
+   - What actually happens?
+   - Are there errors in the console?
+   - When does the problem occur?
+   - Can it be reproduced?
 
-2. **Анализ кода:**
-   - Изучи связанные файлы
-   - Проверь недавние изменения
-   - Найди потенциальные причины
+2. **Code analysis:**
+   - Study the related files
+   - Check recent changes
+   - Find potential causes
 
-3. **Гипотезы:**
-   - Предложи возможные причины бага
-   - Приоритизируй по вероятности
+3. **Hypotheses:**
+   - Propose possible causes of the bug
+   - Prioritise by likelihood
 
-4. **Проверка:**
-   - Добавь логирование если нужно
-   - Проверь данные в БД
-   - Протестируй гипотезы
+4. **Verification:**
+   - Add logging if needed
+   - Check the data in the database
+   - Test the hypotheses
 
-5. **Исправление:**
-   - Предложи решение
-   - Объясни почему это работает
-   - Убедись что нет side effects
+5. **Fix:**
+   - Propose a solution
+   - Explain why it works
+   - Make sure there are no side effects
 
-6. **Профилактика:**
-   - Как предотвратить это в будущем?
-   - Нужна ли валидация?
-   - Стоит ли добавить тест?
+6. **Prevention:**
+   - How can this be prevented in future?
+   - Is validation needed?
+   - Is it worth adding a test?
 
-**Частые проблемы:**
+**Common problems:**
 
-- Отсутствие валидации
-- Проблемы с авторизацией
+- Missing validation
+- Authorisation problems
 - Race conditions
-- Неправильная типизация
-- Ошибки в async/await
-- Проблемы с кэшированием
+- Incorrect typing
+- Errors in async/await
+- Caching problems
 
-Если проблема не ясна, смотри `.claude/troubleshooting.md` для частых решений.
+If the problem is unclear, see `.claude/troubleshooting.md` for common solutions.

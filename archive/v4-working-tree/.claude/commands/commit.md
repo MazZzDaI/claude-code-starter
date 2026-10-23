@@ -1,51 +1,51 @@
 ---
-description: Создать git commit с правильным сообщением
+description: Create a git commit with a proper message
 ---
 
-Создай git commit следуя лучшим практикам.
+Create a git commit following best practices.
 
-**ВАЖНО: НЕ используй git add . бездумно!**
+**IMPORTANT: DO NOT use git add . thoughtlessly!**
 
-## Процесс:
+## Process:
 
-### 1. Анализ изменений
-Выполни параллельно:
-- `git status` - посмотри все измененные файлы
-- `git diff` - посмотри unstaged изменения
-- `git diff --staged` - посмотри staged изменения
-- `git log --oneline -n 5` - посмотри последние коммиты для стиля
+### 1. Analyse the changes
+Run in parallel:
+- `git status` - look at all changed files
+- `git diff` - look at unstaged changes
+- `git diff --staged` - look at staged changes
+- `git log --oneline -n 5` - look at recent commits for style
 
-### 2. Проверь что коммитить нельзя
-❌ НЕ добавляй в коммит:
-- `.env` или `.env.local` (секреты!)
+### 2. Check what must not be committed
+❌ DO NOT add to the commit:
+- `.env` or `.env.local` (secrets!)
 - `node_modules/`
-- `dist/`, `build/`, `.next/` (build артефакты)
-- Файлы с секретами (credentials.json, secrets.yaml и т.д.)
-- Временные файлы (*.log, *.tmp, .DS_Store)
+- `dist/`, `build/`, `.next/` (build artefacts)
+- Files with secrets (credentials.json, secrets.yaml, etc.)
+- Temporary files (*.log, *.tmp, .DS_Store)
 
-⚠️ Если пользователь явно просит закоммитить эти файлы - предупреди его о рисках!
+⚠️ If the user explicitly asks to commit these files - warn them about the risks!
 
-### 3. Добавь нужные файлы
-Добавляй файлы **по отдельности** или группами, НЕ `git add .`:
+### 3. Add the required files
+Add files **individually** or in groups, NOT `git add .`:
 ```bash
 git add path/to/file1.ts path/to/file2.ts
 ```
 
-Или по паттерну:
+Or by pattern:
 ```bash
 git add src/**/*.ts
 ```
 
-### 4. Составь commit message
+### 4. Compose the commit message
 
-**Формат:**
+**Format:**
 ```
-<type>: <краткое описание> (до 50 символов)
+<type>: <short description> (up to 50 characters)
 
-<детальное описание - ПОЧЕМУ, а не ЧТО>
-- Причина изменения
-- Какую проблему решает
-- Важные детали
+<detailed description - WHY, not WHAT>
+- Reason for the change
+- What problem it solves
+- Important details
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -53,15 +53,15 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 **Types:**
-- `feat`: новая функциональность
-- `fix`: исправление бага
-- `refactor`: рефакторинг без изменения функциональности
-- `docs`: документация
-- `style`: форматирование, точки с запятой
-- `test`: добавление тестов
-- `chore`: обновление зависимостей, настройка CI
+- `feat`: new functionality
+- `fix`: bug fix
+- `refactor`: refactoring without changing functionality
+- `docs`: documentation
+- `style`: formatting, semicolons
+- `test`: adding tests
+- `chore`: dependency updates, CI configuration
 
-**Примеры хороших сообщений:**
+**Examples of good messages:**
 ```
 feat: add user authentication with JWT
 
@@ -88,14 +88,14 @@ was missing cleanup in dashboard useEffect hook.
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-### 5. Создай коммит
-Используй HEREDOC для правильного форматирования:
+### 5. Create the commit
+Use a HEREDOC for correct formatting:
 
 ```bash
 git commit -m "$(cat <<'EOF'
-<type>: <краткое описание>
+<type>: <short description>
 
-<детальное описание>
+<detailed description>
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -104,43 +104,43 @@ EOF
 )"
 ```
 
-### 6. Проверь результат
+### 6. Check the result
 ```bash
 git log -1 --stat
 ```
 
 ## ⚠️ Pre-commit hook
-Если коммит провалился из-за pre-commit hook:
-1. Посмотри какие изменения сделал hook
-2. Если hook только отформатировал код - сделай amend:
+If the commit failed because of a pre-commit hook:
+1. Look at what changes the hook made
+2. If the hook only formatted the code - amend:
    ```bash
-   git add <измененные файлы>
+   git add <changed files>
    git commit --amend --no-edit
    ```
 
 ## 🔐 Security check
-Перед коммитом ВСЕГДА проверь:
-- [ ] Нет hardcoded секретов (API keys, passwords, tokens)
-- [ ] .env файлы в .gitignore
-- [ ] Нет конфиденциальных данных в логах/комментариях
-- [ ] Используются environment variables для секретов
+Before committing, ALWAYS check:
+- [ ] No hardcoded secrets (API keys, passwords, tokens)
+- [ ] .env files are in .gitignore
+- [ ] No confidential data in logs/comments
+- [ ] Environment variables are used for secrets
 
 ## 📋 Checklist
-- [ ] `git status` - проверил изменения
-- [ ] `git diff` - понимаю что изменил
-- [ ] Проверил стиль последних коммитов
-- [ ] Добавил ТОЛЬКО нужные файлы (не `git add .`)
-- [ ] Проверил на секреты
-- [ ] Создал осмысленное сообщение (why, not what)
-- [ ] Добавил Co-Authored-By: Claude
-- [ ] `git log -1` - проверил результат
+- [ ] `git status` - checked the changes
+- [ ] `git diff` - I understand what I changed
+- [ ] Checked the style of recent commits
+- [ ] Added ONLY the required files (not `git add .`)
+- [ ] Checked for secrets
+- [ ] Wrote a meaningful message (why, not what)
+- [ ] Added Co-Authored-By: Claude
+- [ ] `git log -1` - checked the result
 
-## 🚫 НЕ делай:
-- ❌ `git add .` без проверки что добавляешь
-- ❌ Коммит .env файлов
-- ❌ Расплывчатые сообщения ("fix", "update", "changes")
-- ❌ Коммит закомментированного кода
-- ❌ Коммит TODO комментариев без контекста
-- ❌ `--no-verify` (пропуск hooks) без явного указания пользователя
+## 🚫 DO NOT:
+- ❌ `git add .` without checking what you are adding
+- ❌ Commit .env files
+- ❌ Vague messages ("fix", "update", "changes")
+- ❌ Commit commented-out code
+- ❌ Commit TODO comments without context
+- ❌ `--no-verify` (skipping hooks) without the user's explicit instruction
 
-**Если пользователь не указал что коммитить - спроси его!**
+**If the user has not specified what to commit - ask them!**

@@ -43,22 +43,22 @@
 
 ## Triggers
 
-**"start", "начать":**
+**"start", "begin":**
 → Execute Cold Start Protocol (silent mode)
 
 **Manual Completion:**
-**"/fi", "заверши", "завершить", "finish":**
+**"/fi", "wrap up", "finish up", "finish":**
 → Execute Completion Protocol (silent mode)
 
 **Auto-Trigger Detection (NEW in v2.7.0):**
 Framework automatically detects task completion and triggers Completion Protocol:
 
 **Explicit keywords** (instant trigger):
-- "готово", "сделано", "завершил", "закончил", "done", "completed"
+- "ready", "all done", "I've finished", "I'm through", "done", "completed"
 - Framework runs Completion automatically (or asks once, based on config)
 
 **Implicit signals** (suggest commit):
-- "задача завершена", "фича готова", "баг исправлен", "тесты проходят"
+- "task complete", "feature ready", "bug fixed", "tests pass"
 - Framework suggests: "Commit changes? (Y/n)"
 
 **Significant changes detected** (git analysis):
@@ -346,7 +346,7 @@ fi
 1. **Show welcome message:**
    ```
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   ✅ Установка завершена!
+   ✅ Installation complete!
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
    📁 Framework Files Created:
@@ -361,8 +361,8 @@ fi
 
    🚀 Next Step:
 
-     Введите команду "start" или "начать", чтобы фреймворк запустился.
-     (Type "start" or "начать" to launch the framework)
+     Enter the command "start" or "begin" to launch the framework.
+     (Type "start" or "begin" to launch the framework)
 
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    ```

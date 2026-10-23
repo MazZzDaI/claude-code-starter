@@ -1,39 +1,39 @@
 ---
-description: Помочь написать тесты для кода
+description: Help write tests for code
 ---
 
-Помоги написать тесты для указанного кода.
+Help write tests for the specified code.
 
-**Стратегия тестирования:**
+**Testing strategy:**
 
-1. **Определи тип теста:**
-   - Unit тест (функция, хук)
-   - Component тест (UI компонент)
-   - Integration тест (Server Action, API)
-   - E2E тест (user flow)
+1. **Determine the test type:**
+   - Unit test (function, hook)
+   - Component test (UI component)
+   - Integration test (Server Action, API)
+   - E2E test (user flow)
 
-2. **Определи что тестировать:**
-   - Happy path (основной сценарий)
-   - Edge cases (граничные случаи)
-   - Error cases (обработка ошибок)
-   - Различные входные данные
+2. **Determine what to test:**
+   - Happy path (main scenario)
+   - Edge cases (boundary cases)
+   - Error cases (error handling)
+   - Various input data
 
-3. **Настрой окружение:**
-   - Необходимые моки (Supabase, OpenAI, etc)
+3. **Set up the environment:**
+   - Required mocks (Supabase, OpenAI, etc)
    - Test data
    - Helpers
 
-4. **Напиши тесты:**
-   - Arrange (подготовка)
-   - Act (действие)
-   - Assert (проверка)
+4. **Write the tests:**
+   - Arrange (preparation)
+   - Act (action)
+   - Assert (verification)
 
-5. **Покрытие:**
-   - Все основные сценарии покрыты
-   - Edge cases учтены
-   - Ошибки обрабатываются
+5. **Coverage:**
+   - All main scenarios are covered
+   - Edge cases are accounted for
+   - Errors are handled
 
-**Пример структуры:**
+**Example structure:**
 
 ```typescript
 describe('ComponentName', () => {
@@ -62,10 +62,10 @@ describe('ComponentName', () => {
 ```
 
 **Best practices:**
-- Тестируй поведение, не реализацию
-- Используй понятные названия тестов
-- Изолируй тесты друг от друга
-- Мокируй внешние зависимости
-- Проверяй как success, так и error cases
+- Test behaviour, not implementation
+- Use clear test names
+- Isolate tests from one another
+- Mock external dependencies
+- Check both success and error cases
 
-См. `.claude/testing-guide.md` для подробностей.
+See `.claude/testing-guide.md` for details.

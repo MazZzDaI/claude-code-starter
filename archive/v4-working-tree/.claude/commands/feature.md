@@ -1,44 +1,44 @@
 ---
-description: Помочь спланировать и реализовать новую фичу
+description: Help plan and implement a new feature
 ---
 
-Помоги мне спланировать и реализовать новую функцию в проекте.
+Help me plan and implement a new feature in the project.
 
-**Шаги:**
+**Steps:**
 
-1. **Анализ требований:**
-   - Что именно нужно реализовать?
-   - Какие есть edge cases?
-   - Как это вписывается в существующую архитектуру?
+1. **Requirements analysis:**
+   - What exactly needs to be implemented?
+   - What edge cases are there?
+   - How does it fit into the existing architecture?
 
-2. **Планирование:**
-   - Какие компоненты нужно создать/изменить?
-   - Какие API endpoints или Server Actions нужны?
-   - Нужны ли изменения в БД?
-   - Какие зависимости потребуются?
+2. **Planning:**
+   - Which components need to be created/changed?
+   - Which API endpoints or Server Actions are needed?
+   - Are database changes needed?
+   - What dependencies will be required?
 
-3. **Безопасность:**
-   - Какие риски безопасности?
-   - Что нужно валидировать?
-   - Как проверять авторизацию?
+3. **Security:**
+   - What are the security risks?
+   - What needs to be validated?
+   - How should authorisation be checked?
 
-4. **Разбивка на задачи:**
-   - Разбей реализацию на небольшие шаги
-   - Определи порядок выполнения
-   - Оцени сложность каждого шага
+4. **Breakdown into tasks:**
+   - Break the implementation into small steps
+   - Determine the order of execution
+   - Estimate the complexity of each step
 
-5. **Реализация:**
-   - Создай необходимые файлы
-   - Следуй coding standards
-   - Добавь комментарии
-   - Проверь типы TypeScript
+5. **Implementation:**
+   - Create the necessary files
+   - Follow coding standards
+   - Add comments
+   - Check TypeScript types
 
-6. **Тестирование:**
-   - Как протестировать функцию?
-   - Какие edge cases проверить?
+6. **Testing:**
+   - How should the feature be tested?
+   - Which edge cases should be checked?
 
-**Принципы:**
-- Следуй архитектуре проекта (.claude/architecture.md)
-- Соблюдай coding standards (.claude/coding-standards.md)
-- Безопасность превыше всего
-- Код должен быть понятным и поддерживаемым
+**Principles:**
+- Follow the project architecture (.claude/architecture.md)
+- Adhere to coding standards (.claude/coding-standards.md)
+- Security above all
+- Code must be clear and maintainable

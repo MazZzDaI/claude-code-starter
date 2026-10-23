@@ -5,7 +5,7 @@
 
 **Purpose:** Initialize framework session, load context, prepare for work.
 
-**Trigger:** User types "start" or "начать"
+**Trigger:** User types "start" or "begin"
 
 ---
 
@@ -102,16 +102,16 @@ cat .claude/.last_session
 
     # Ask user what to do with uncommitted changes
     echo ""
-    echo "У вас есть незакоммиченные изменения из crashed session."
+    echo "You have uncommitted changes from a crashed session."
     echo ""
-    echo "Варианты:"
-    echo "  1. Continue - начать новую работу (изменения останутся uncommitted)"
-    echo "  2. Commit first - сначала закоммитить изменения из crashed session"
+    echo "Options:"
+    echo "  1. Continue - start new work (changes will remain uncommitted)"
+    echo "  2. Commit first - commit the changes from the crashed session first"
     echo ""
-    read -p "Ваш выбор? (1/2): " CRASH_CHOICE
+    read -p "Your choice? (1/2): " CRASH_CHOICE
 
     if [ "$CRASH_CHOICE" = "2" ]; then
-      echo "Создаю commit для crashed session..."
+      echo "Creating commit for crashed session..."
       # Guide user through commit
     fi
   fi
@@ -502,9 +502,9 @@ if [ ! -f ".claude/COMMIT_POLICY.md" ]; then
 
     # Create minimal COMMIT_POLICY.md with essential rules
     cat > .claude/COMMIT_POLICY.md <<'EOF'
-# Commit Policy — Что можно коммитить?
+# Commit Policy — What may be committed?
 
-## ❌ НИКОГДА не коммитим:
+## ❌ NEVER commit:
 
 ```
 # Framework files (CRITICAL!)
@@ -526,7 +526,7 @@ credentials/
 *.pem
 ```
 
-## ✅ ВСЕГДА коммитим:
+## ✅ ALWAYS commit:
 
 ```
 src/
@@ -538,7 +538,7 @@ tsconfig.json
 .gitignore
 ```
 
-**Редактируйте этот файл под свой проект!**
+**Edit this file to suit your project!**
 EOF
 
     echo "✅ Minimal COMMIT_POLICY.md created"

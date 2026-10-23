@@ -1,68 +1,68 @@
 ---
-description: Создать database migration с правильным процессом
+description: Create a database migration with the proper process
 ---
 
-Создай database migration следуя лучшим практикам.
+Create a database migration following best practices.
 
-**ВАЖНО: Миграции - критическая часть. Тестируй все тщательно!**
+**IMPORTANT: Migrations are a critical part. Test everything thoroughly!**
 
-## Процесс:
+## Process:
 
-### 1. Анализ текущей схемы БД
+### 1. Analyse the current database schema
 
-Прочитай и проанализируй:
+Read and analyse:
 ```bash
-# Найди файлы схемы БД
+# Find the database schema files
 find . -name "schema.*" -o -name "*.prisma" -o -name "*migration*"
 
-# Посмотри последние миграции
+# Look at the latest migrations
 ls -la supabase/migrations/ || ls -la prisma/migrations/ || ls -la migrations/
 ```
 
-Прочитай:
-- Текущую схему БД
-- Последние миграции
-- Database documentation (если есть в ARCHITECTURE.md)
+Read:
+- The current database schema
+- The latest migrations
+- Database documentation (if present in ARCHITECTURE.md)
 
-### 2. Пойми требования
+### 2. Understand the requirements
 
-Спроси себя:
-- Какие изменения в схеме нужны?
-- Есть ли существующие данные, которые нужно сохранить?
-- Нужна ли обратная совместимость?
-- Есть ли зависимости от других таблиц?
+Ask yourself:
+- What schema changes are needed?
+- Is there existing data that must be preserved?
+- Is backward compatibility needed?
+- Are there dependencies on other tables?
 
-### 3. Спланируй миграцию
+### 3. Plan the migration
 
-**Типы изменений:**
+**Types of changes:**
 
-**Безопасные (можно делать на проде):**
-- ✅ ADD column (с DEFAULT или NULL)
+**Safe (can be done in production):**
+- ✅ ADD column (with DEFAULT or NULL)
 - ✅ ADD index (concurrent)
 - ✅ ADD new table
-- ✅ ADD constraint (NOT VALID, потом VALIDATE)
+- ✅ ADD constraint (NOT VALID, then VALIDATE)
 
-**Опасные (требуют осторожности):**
-- ⚠️ DROP column (может сломать приложение)
-- ⚠️ RENAME column (нужна двухфазная миграция)
-- ⚠️ CHANGE column type (может потерять данные)
-- ⚠️ ADD NOT NULL (сначала заполни данные)
+**Dangerous (require caution):**
+- ⚠️ DROP column (may break the application)
+- ⚠️ RENAME column (requires a two-phase migration)
+- ⚠️ CHANGE column type (may lose data)
+- ⚠️ ADD NOT NULL (populate the data first)
 
-**Очень опасные (только с downtime):**
+**Very dangerous (only with downtime):**
 - 🔴 DROP table
 - 🔴 CHANGE primary key
-- 🔴 Большая структурная переделка
+- 🔴 Major structural rework
 
-### 4. Создай migration файл
+### 4. Create the migration file
 
 **Naming convention:**
 ```
 YYYYMMDDHHMMSS_descriptive_name.sql
 ```
 
-Пример: `20250110120000_add_user_preferences_table.sql`
+Example: `20250110120000_add_user_preferences_table.sql`
 
-**Структура миграции:**
+**Migration structure:**
 
 ```sql
 -- Migration: Add user preferences table
@@ -128,9 +128,9 @@ COMMIT;
 -- COMMIT;
 ```
 
-### 5. Создай TypeScript types (если используется TypeScript)
+### 5. Create TypeScript types (if TypeScript is used)
 
-**Файл: `src/types/database.ts` или обнови существующий:**
+**File: `src/types/database.ts` or update the existing one:**
 
 ```typescript
 // Database Types
@@ -159,43 +159,43 @@ export interface Database {
 }
 ```
 
-### 6. Тестирование миграции
+### 6. Testing the migration
 
-**В Development:**
+**In Development:**
 ```bash
-# Применить миграцию
+# Apply the migration
 make db-migrate
-# или
+# or
 npm run db:migrate
-# или
+# or
 supabase db push
 
-# Проверить что таблица создана
-# (команда зависит от вашей БД)
+# Check that the table has been created
+# (the command depends on your database)
 
-# Тестировать операции
-# - INSERT тестовые данные
-# - SELECT проверить чтение
-# - UPDATE проверить обновление
-# - DELETE проверить удаление
-# - Проверить RLS policies
+# Test operations
+# - INSERT test data
+# - SELECT check reading
+# - UPDATE check updating
+# - DELETE check deletion
+# - Check RLS policies
 ```
 
-**Rollback тест:**
+**Rollback test:**
 ```bash
-# Откатить миграцию
+# Roll back the migration
 make db-rollback
-# или
+# or
 npm run db:rollback
 
-# Проверить что откат работает
-# Применить снова для продолжения работы
+# Check that the rollback works
+# Apply again to continue working
 make db-migrate
 ```
 
-### 7. Обнови документацию
+### 7. Update the documentation
 
-**Обнови ARCHITECTURE.md:**
+**Update ARCHITECTURE.md:**
 ```markdown
 ### Database Schema
 
@@ -220,9 +220,9 @@ Stores user-specific UI and notification preferences.
 - Users can only view/edit their own preferences
 ```
 
-### 8. Обнови связанный код
+### 8. Update the related code
 
-**Создай/обнови API endpoints:**
+**Create/update API endpoints:**
 ```typescript
 // Example: API route for preferences
 import { Database } from '@/types/database';
@@ -243,81 +243,81 @@ export async function GET(req: Request) {
 }
 ```
 
-### 9. Создай коммит
+### 9. Create the commit
 
-Используй `/commit` команду со следующими изменениями:
-- Migration SQL файл
+Use the `/commit` command with the following changes:
+- Migration SQL file
 - TypeScript types
-- Обновленная документация
-- Новый/обновленный код использующий новую схему
+- Updated documentation
+- New/updated code using the new schema
 
-### 10. Security Checklist для миграций
+### 10. Security Checklist for migrations
 
-- [ ] RLS (Row Level Security) включен для новых таблиц
-- [ ] RLS policies созданы и протестированы
-- [ ] Foreign keys правильно настроены
-- [ ] Indexes добавлены для performance
-- [ ] Sensitive data правильно защищена
-- [ ] Cascading deletes настроены где нужно
-- [ ] Comments добавлены для документации
-- [ ] Нет hardcoded значений (используй константы/enums)
+- [ ] RLS (Row Level Security) is enabled for new tables
+- [ ] RLS policies are created and tested
+- [ ] Foreign keys are configured correctly
+- [ ] Indexes are added for performance
+- [ ] Sensitive data is properly protected
+- [ ] Cascading deletes are configured where needed
+- [ ] Comments are added for documentation
+- [ ] No hardcoded values (use constants/enums)
 
 ## 📋 Migration Checklist
 
-### До создания:
-- [ ] Прочитал текущую схему БД
-- [ ] Понял требования к изменениям
-- [ ] Спланировал безопасную миграцию
-- [ ] Проверил зависимости от других таблиц
+### Before creating:
+- [ ] Read the current database schema
+- [ ] Understood the change requirements
+- [ ] Planned a safe migration
+- [ ] Checked dependencies on other tables
 
-### Во время создания:
-- [ ] Создал migration файл с правильным именем
-- [ ] Добавил комментарии и описание
-- [ ] Создал rollback (down migration)
-- [ ] Обновил TypeScript types
-- [ ] Добавил indexes для performance
-- [ ] Настроил RLS и policies
+### During creation:
+- [ ] Created the migration file with a proper name
+- [ ] Added comments and a description
+- [ ] Created a rollback (down migration)
+- [ ] Updated TypeScript types
+- [ ] Added indexes for performance
+- [ ] Configured RLS and policies
 
-### После создания:
-- [ ] Протестировал в development
-- [ ] Протестировал rollback
-- [ ] Обновил ARCHITECTURE.md
-- [ ] Обновил связанный код
-- [ ] Создал коммит с описанием
+### After creation:
+- [ ] Tested in development
+- [ ] Tested the rollback
+- [ ] Updated ARCHITECTURE.md
+- [ ] Updated the related code
+- [ ] Created a commit with a description
 
-## 🚫 Опасные операции
+## 🚫 Dangerous operations
 
-**НИКОГДА не делай без явного подтверждения:**
-- ❌ DROP TABLE на production
-- ❌ DROP COLUMN с данными
+**NEVER do without explicit confirmation:**
+- ❌ DROP TABLE in production
+- ❌ DROP COLUMN with data
 - ❌ TRUNCATE TABLE
-- ❌ ALTER TYPE на больших таблицах (может заблокировать)
-- ❌ Миграции без rollback плана
+- ❌ ALTER TYPE on large tables (may lock)
+- ❌ Migrations without a rollback plan
 
-**Если нужно удалить column:**
-1. Сначала убери использование в коде
-2. Deploy код без использования column
-3. Только потом DROP column в миграции
+**If you need to remove a column:**
+1. First remove its usage in the code
+2. Deploy the code without using the column
+3. Only then DROP the column in a migration
 
 ## 💡 Best Practices
 
-1. **Atomic migrations:** Используй BEGIN/COMMIT
-2. **Idempotent:** Используй IF EXISTS / IF NOT EXISTS
-3. **Reversible:** Всегда создавай down migration
-4. **Documented:** Добавляй комментарии SQL и в docs
-5. **Tested:** Тестируй up и down migrations
-6. **Small:** Одна миграция = одно логическое изменение
-7. **Safe defaults:** Используй DEFAULT для новых columns
+1. **Atomic migrations:** Use BEGIN/COMMIT
+2. **Idempotent:** Use IF EXISTS / IF NOT EXISTS
+3. **Reversible:** Always create a down migration
+4. **Documented:** Add SQL comments and docs
+5. **Tested:** Test up and down migrations
+6. **Small:** One migration = one logical change
+7. **Safe defaults:** Use DEFAULT for new columns
 
-## Примеры частых сценариев:
+## Examples of common scenarios:
 
-### Add column (безопасно):
+### Add column (safe):
 ```sql
 ALTER TABLE users
 ADD COLUMN avatar_url TEXT DEFAULT NULL;
 ```
 
-### Add NOT NULL column (двухфазно):
+### Add NOT NULL column (two-phase):
 ```sql
 -- Phase 1: Add column as nullable with default
 ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT false;
@@ -326,7 +326,7 @@ ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT false;
 -- ALTER TABLE users ALTER COLUMN email_verified SET NOT NULL;
 ```
 
-### Rename column (двухфазно):
+### Rename column (two-phase):
 ```sql
 -- Phase 1: Add new column
 ALTER TABLE users ADD COLUMN full_name TEXT;
@@ -336,4 +336,4 @@ UPDATE users SET full_name = name;
 -- ALTER TABLE users DROP COLUMN name;
 ```
 
-**После выполнения миграции обязательно обнови BACKLOG.md!**
+**After running the migration, be sure to update BACKLOG.md!**

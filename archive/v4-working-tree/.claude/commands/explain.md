@@ -1,5 +1,5 @@
 ---
-description: Объяснить как работает определенная часть кода
+description: Explain how a particular part of the code works
 ---
 
 # Adaptive Code Explanation
@@ -34,75 +34,75 @@ Quickly evaluate the code size and complexity:
 
 **Format:**
 ```
-Краткое объяснение (2-3 предложения):
+Brief explanation (2-3 sentences):
 
-1. Что делает код
-2. Ключевые моменты (если есть)
-3. Результат
+1. What the code does
+2. Key points (if any)
+3. Result
 
-[Если есть важные детали - добавить 1-2 пункта]
+[If there are important details - add 1-2 points]
 ```
 
 **Example:**
 ```
-Этот bash-скрипт генерирует уникальное имя файла для bug report:
+This bash script generates a unique file name for a bug report:
 
-1. Берёт имя текущей папки: PROJECT_NAME=$(basename "$(pwd)")
-2. Создаёт timestamp: 20260116-143055
-3. Собирает путь: .claude/logs/ProjectName-bug-20260116-143055.md
+1. Takes the name of the current folder: PROJECT_NAME=$(basename "$(pwd)")
+2. Creates a timestamp: 20260116-143055
+3. Assembles the path: .claude/logs/ProjectName-bug-20260116-143055.md
 
-Результат: уникальное имя файла для каждого отчёта.
+Result: a unique file name for each report.
 ```
 
 ### For MEDIUM code:
 
 **Sections:**
-1. **Общий обзор** (1-2 предложения)
-2. **Пошаговое объяснение** (ключевые блоки)
-3. **Edge cases** (если есть обработка ошибок)
+1. **General overview** (1-2 sentences)
+2. **Step-by-step explanation** (key blocks)
+3. **Edge cases** (if there is error handling)
 
 **Skip:**
-- Подробные паттерны (unless important)
-- Альтернативные подходы (unless asked)
-- Концепции (unless non-obvious)
+- Detailed patterns (unless important)
+- Alternative approaches (unless asked)
+- Concepts (unless non-obvious)
 
 ### For COMPLEX code:
 
 **Full breakdown with all sections:**
 
-1. **Общий обзор:**
-   - Что делает этот код?
-   - Какова его роль в проекте?
-   - С чем он взаимодействует?
+1. **General overview:**
+   - What does this code do?
+   - What is its role in the project?
+   - What does it interact with?
 
-2. **Пошаговое объяснение:**
-   - Разбери код построчно или по блокам
-   - Объясни логику
-   - Укажи на важные детали
+2. **Step-by-step explanation:**
+   - Break down the code line by line or block by block
+   - Explain the logic
+   - Point out important details
 
-3. **Концепции и паттерны:**
-   - Какие концепции используются?
-   - Какие паттерны проектирования?
-   - Почему выбран этот подход?
+3. **Concepts and patterns:**
+   - Which concepts are used?
+   - Which design patterns?
+   - Why was this approach chosen?
 
 4. **Data flow:**
-   - Как данные входят?
-   - Как преобразуются?
-   - Что возвращается?
+   - How does data come in?
+   - How is it transformed?
+   - What is returned?
 
-5. **Зависимости:**
-   - Какие внешние зависимости?
-   - Какие внутренние модули используются?
-   - Какие side effects?
+5. **Dependencies:**
+   - What external dependencies?
+   - Which internal modules are used?
+   - What side effects?
 
 6. **Edge cases:**
-   - Как обрабатываются ошибки?
-   - Что происходит в граничных случаях?
-   - Какие ограничения?
+   - How are errors handled?
+   - What happens in boundary cases?
+   - What are the limitations?
 
-7. **Возможные улучшения:**
-   - Укажи на потенциальные улучшения
-   - Предложи альтернативные подходы
+7. **Possible improvements:**
+   - Point out potential improvements
+   - Suggest alternative approaches
 
 ## Guidelines
 
@@ -130,8 +130,8 @@ Good (simple):
 User: Explain this code
 const name = path.basename(filePath);
 
-Response: Извлекает имя файла из полного пути (убирает директории).
-Пример: "/home/user/file.txt" → "file.txt"
+Response: Extracts the file name from the full path (strips directories).
+Example: "/home/user/file.txt" → "file.txt"
 ```
 
 Bad (simple):
