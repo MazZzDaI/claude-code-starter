@@ -1,119 +1,119 @@
-# Methodology Layer — как это растёт
+# Methodology Layer — how this grows
 
-## Зачем этот каталог
+## Why this directory exists
 
-Здесь живут **методологии** — приёмы, которые применяются автоматическими пайплайнами (router → adapter → executor): не я-агент применяю их на лету, а код достаёт нужную методологию по сигналу из задачи и собирает из неё промпт для исполнителя.
+This is where **methodologies** live — techniques applied by automated pipelines (router → adapter → executor): it is not me, the agent, applying them on the fly; instead, code retrieves the right methodology from a signal in the task and assembles a prompt for the executor from it.
 
-Чем это отличается от `.claude/rules/`:
+How this differs from `.claude/rules/`:
 
-| Слой | Кому адресовано | Когда применяется | Формат |
+| Layer | Addressed to | When applied | Format |
 |------|-----------------|-------------------|--------|
-| `.claude/rules/` | Мне (Claude Code, интерактивному агенту) | Всегда в контексте сессии | Свободный текст, операционные правила |
-| `methodology/` | Автоматическим пайплайнам (router + LLM-исполнитель) | По routing-сигналу из задачи | Формализованная спецификация: сигналы, декомпозиция, prompt skeleton |
+| `.claude/rules/` | Me (Claude Code, the interactive agent) | Always in session context | Free text, operational rules |
+| `methodology/` | Automated pipelines (router + LLM executor) | On a routing signal from the task | Formalised specification: signals, decomposition, prompt skeleton |
 
-Грубо: rules = «как мне работать»; methodology = «как пайплайн решает однотипные задачи без меня».
+Roughly: rules = "how I work"; methodology = "how the pipeline solves recurring tasks without me".
 
-## Лестница зрелости
+## Maturity ladder
 
-Методологии не рождаются законченными. Они проходят четыре стадии:
+Methodologies are not born finished. They go through four stages:
 
 ```
-draft        — наблюдение: «заметил, что в задачах X помогает подход Y»
-               (свободный текст, минимум метаданных)
-               ↓ когда повторилось в 3+ местах
-pattern      — описание: что, когда, в каких случаях
-               (Concept + Anti-patterns, без жёсткой структуры)
-               ↓ когда стабилизировалось и часто вызывается
-mature       — полная спецификация: routing signals, decomposition,
-               prompt skeleton (формат для зрелых методологий)
-               ↓ когда вызывается одинаково и стабильно
-crystallized — переведено в детерминированный код, методология
-               остаётся как спецификация
+draft        — observation: "noticed that approach Y helps in tasks X"
+               (free text, minimal metadata)
+               ↓ once it has recurred in 3+ places
+pattern      — description: what, when, in which cases
+               (Concept + Anti-patterns, no rigid structure)
+               ↓ once it has stabilised and is invoked often
+mature       — full specification: routing signals, decomposition,
+               prompt skeleton (the format for mature methodologies)
+               ↓ once it is invoked the same way, consistently
+crystallized — translated into deterministic code; the methodology
+               remains as the specification
 ```
 
-Файлы лежат в подкаталогах по статусу: `draft/`, `patterns/`, `mature/`. Когда статус повышается — перемещаешь файл в нужный каталог и меняешь `maturity:` во frontmatter. `crystallized` остаётся в `mature/` (это всё ещё спецификация, просто исполняется кодом).
+Files live in subdirectories by status: `draft/`, `patterns/`, `mature/`. When the status goes up, move the file into the right directory and change `maturity:` in the frontmatter. `crystallized` stays in `mature/` (it is still a specification, just executed by code).
 
-## Когда поднимать статус
+## When to raise the status
 
-| Из → В | Сигнал к переходу |
+| From → To | Signal for the transition |
 |--------|-------------------|
-| draft → pattern | Тот же подход всплыл в 3+ задачах/файлах/сессиях. Стало понятно, в каких случаях применять, а в каких нет. |
-| pattern → mature | Появился стабильный prompt-каркас, известны входы/выходы, результат повторяем. Можно описать routing-сигналы формально. |
-| mature → crystallized | Методология вызывается одинаково, прошла валидацию на реальных задачах, цена/скорость LLM-исполнения стала узким местом, или поведение стало детерминируемым. Часть переезжает в код. |
+| draft → pattern | The same approach has surfaced in 3+ tasks/files/sessions. It has become clear in which cases to apply it and in which not. |
+| pattern → mature | A stable prompt scaffold has emerged, the inputs/outputs are known, the result is repeatable. The routing signals can be described formally. |
+| mature → crystallized | The methodology is invoked the same way, has been validated on real tasks, the cost/speed of LLM execution has become the bottleneck, or the behaviour has become deterministic. Part of it moves into code. |
 
-Обратное движение тоже бывает: если pattern «не взлетел» — оставь как draft с пометкой `seen_in: []` (пусто = не подтвердилось).
+Movement in the other direction happens too: if a pattern "didn't take off", leave it as a draft marked `seen_in: []` (empty = not confirmed).
 
-## Низкий порог входа
+## Low barrier to entry
 
-**Это самое важное.**
+**This is the most important part.**
 
-`draft` — это пометка в 5 строк, не доклад. Если ты заметил что-то полезное — открой `templates/draft.md`, скопируй, заполни «Что заметил» и «В каких случаях», положи в `draft/`. Всё.
+A `draft` is a 5-line note, not a report. If you have noticed something useful, open `templates/draft.md`, copy it, fill in "What I noticed" and "In which cases", and put it in `draft/`. That's it.
 
-- Не нужно полное обоснование.
-- Не нужны ссылки на источники.
-- Не нужно знать, попадёт ли это когда-нибудь в код.
-- Лучше неотшлифованный draft, чем потерянное наблюдение.
+- No full justification needed.
+- No source references needed.
+- No need to know whether it will ever make it into code.
+- An unpolished draft is better than a lost observation.
 
-Большая часть draft'ов никогда не поднимется до mature — и это нормально. Они работают как **архив наблюдений**, который раз в месяц перечитываешь и видишь паттерны, которые иначе бы забылись.
+Most drafts will never rise to mature — and that is fine. They work as an **archive of observations** that you reread once a month to see patterns that would otherwise have been forgotten.
 
-## Глобальный vs проектный слой
+## Global vs project layer
 
-Существует два уровня:
+There are two levels:
 
-- `~/.claude/methodology/` — методологии, общие для всех проектов (например, `llm-as-component`).
-- `<project>/methodology/` — методологии этого проекта.
+- `~/.claude/methodology/` — methodologies shared by all projects (for example, `llm-as-component`).
+- `<project>/methodology/` — this project's methodologies.
 
-Если в глобальном слое есть подходящая методология, проектный файл может **сослаться** на неё и уточнить под конкретный домен, не дублируя содержание:
+If the global layer has a suitable methodology, a project file can **reference** it and refine it for the specific domain without duplicating the content:
 
 ```yaml
 ---
 maturity: mature
 id: my-project-extraction
-related: [[~global/llm-as-component]]   # ссылка на глобальную методологию
+related: [[~global/llm-as-component]]   # reference to the global methodology
 ---
 
-# Methodology: Extraction в этом проекте
+# Methodology: Extraction in this project
 
-Базируется на [[llm-as-component]] (глобальная). Уточнения:
-- chunk size: 8 элементов (а не общий рекоммендованный)
-- routing: применять только к JSON-логам с полем `event_type`
+Based on [[llm-as-component]] (global). Refinements:
+- chunk size: 8 items (rather than the general recommended one)
+- routing: apply only to JSON logs with an `event_type` field
 - ...
 ```
 
-Проектный слой имеет приоритет: если router нашёл совпадение в проектном — берёт его. Глобальный — fallback.
+The project layer takes priority: if the router finds a match in the project layer, it takes that one. The global layer is the fallback.
 
-## Композиция методологий: Router → Adapter → Executor
+## Composing methodologies: Router → Adapter → Executor
 
-Методологии не используются по одной. Они собираются в цепочки:
+Methodologies are not used one at a time. They are assembled into chains:
 
 ```
 [Task input]
      ↓
-[Router]    — LLM-вызов 1: смотрит на задачу, выбирает методологию(и) по
-              applies_when / does_not_apply сигналам
+[Router]    — LLM call 1: looks at the task, selects the methodology(ies) by
+              applies_when / does_not_apply signals
      ↓
-[Adapter]   — LLM-вызов 2 (или код): берёт prompt skeleton выбранной
-              методологии, подставляет данные из задачи, генерирует
-              финальный промпт для исполнителя
+[Adapter]   — LLM call 2 (or code): takes the prompt skeleton of the selected
+              methodology, substitutes data from the task, generates
+              the final prompt for the executor
      ↓
-[Executor]  — LLM-вызов 3 (дешёвая модель): делает узкое суждение в малом
-              окне по полученному промпту
+[Executor]  — LLM call 3 (cheap model): makes a narrow judgement in a small
+              window from the prompt it received
      ↓
-[Bookkeeping код] — учёт, дедуп, агрегация, валидация контракта
+[Bookkeeping code] — accounting, dedup, aggregation, contract validation
 ```
 
-Каждый этап — отдельный вызов с отдельной ответственностью. Это прямое применение принципа [[rules/llm-as-component]]: сильная модель проектирует и оценивает офлайн, runtime собирается из дешёвых надёжных шагов.
+Each stage is a separate call with a separate responsibility. This is a direct application of the [[rules/llm-as-component]] principle: a strong model designs and evaluates offline; the runtime is assembled from cheap, reliable steps.
 
-Поле `composes_with` во frontmatter mature-методологии указывает, какие другие методологии естественно сцепляются с этой в пайплайне.
+The `composes_with` field in a mature methodology's frontmatter indicates which other methodologies naturally chain with this one in a pipeline.
 
-## Связь с другими слоями
+## Relationship to other layers
 
-- [[INVARIANTS]] — методологии не должны противоречить инвариантам проекта. Если противоречат — конфликт эскалируется до изменения инварианта или отказа от методологии.
-- [[ARCHITECTURE]] — методологии описывают **как** пайплайн принимает решения. Архитектура описывает **где** эти пайплайны живут (модули, границы, контракты).
-- [[rules/llm-as-component]] — фундамент. Любая методология для LLM-пайплайна — это применение этого принципа к конкретному домену.
+- [[INVARIANTS]] — methodologies must not contradict the project's invariants. If they do, the conflict is escalated to either changing the invariant or abandoning the methodology.
+- [[ARCHITECTURE]] — methodologies describe **how** the pipeline makes decisions. The architecture describes **where** those pipelines live (modules, boundaries, contracts).
+- [[rules/llm-as-component]] — the foundation. Any methodology for an LLM pipeline is an application of this principle to a specific domain.
 
-## Что читать дальше
+## What to read next
 
-- `00-example-llm-as-component.md` — canonical пример полностью заполненной mature-методологии (это переоформленное глобальное правило `llm-as-component`).
-- `templates/draft.md` — минимальный шаблон, с которого начинать.
-- `templates/pattern.md`, `templates/mature.md`, `templates/crystallized.md` — шаблоны для следующих стадий.
+- `00-example-llm-as-component.md` — the canonical example of a fully filled-in mature methodology (it is the global `llm-as-component` rule, reformatted).
+- `templates/draft.md` — the minimal template to start from.
+- `templates/pattern.md`, `templates/mature.md`, `templates/crystallized.md` — templates for the later stages.

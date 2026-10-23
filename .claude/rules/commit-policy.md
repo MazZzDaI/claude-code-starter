@@ -1,81 +1,81 @@
-# Правило: Commit Policy
+# Rule: Commit Policy
 
-## Принцип
+## Principle
 
-Агент решает сам, что коммитить. Не спрашивай пользователя. Используй `git add` конкретных файлов — никогда `git add .` или `git add -A`.
+The agent decides for itself what to commit. Don't ask the user. Use `git add` with specific files — never `git add .` or `git add -A`.
 
-Политика коммитов зависит от типа проекта. Тип указан в `manifest.md` → `repo_access`.
+The commit policy depends on the project type. The type is specified in `manifest.md` → `repo_access`.
 
-## Три режима
+## Three modes
 
-### 1. `repo_access=public` или `repo_access=private-shared`
+### 1. `repo_access=public` or `repo_access=private-shared`
 
-Публичный репозиторий или приватный с внешними пользователями / командой. В remote попадает **только продукт**: чистый код, пользовательская документация, конфиги. Всё, что связано с процессом разработки — остаётся локально.
+A public repository, or a private one with external users / a team. **Only the product** goes to the remote: clean code, user documentation, configs. Everything to do with the development process stays local.
 
-**Коммитить (продукт):**
-- Исходный код (src/, lib/, app/, pages/)
-- Пользовательская документация (README.md, CHANGELOG.md, docs/)
-- Конфиги проекта (package.json, pyproject.toml, tsconfig.json)
-- Миграции БД (migrations/, schema/)
-- Production-тесты (tests/, e2e/)
+**Commit (product):**
+- Source code (src/, lib/, app/, pages/)
+- User documentation (README.md, CHANGELOG.md, docs/)
+- Project configs (package.json, pyproject.toml, tsconfig.json)
+- DB migrations (migrations/, schema/)
+- Production tests (tests/, e2e/)
 - .gitignore, LICENSE
 
-**НЕ коммитить (процесс разработки → .gitignore):**
-- Эксперименты, прототипы, черновики (experiments/, drafts/, scratch/)
-- Логи тестов, отчёты покрытия (test-results/, playwright-report/, coverage/, *.log)
-- Утилиты разработки, вспомогательные скрипты (scripts/dev-*, tools/local-*)
-- Анализ, исследования, заметки (analysis/, research/, notes/)
-- Промежуточные данные, дампы (data/, dumps/, fixtures/)
-- Метафайлы фреймворка (.claude/, CLAUDE.md, manifest.md, AGENTS.md)
-- Любые размышления, протоколы, внутренняя документация процесса
+**Do NOT commit (development process → .gitignore):**
+- Experiments, prototypes, drafts (experiments/, drafts/, scratch/)
+- Test logs, coverage reports (test-results/, playwright-report/, coverage/, *.log)
+- Development utilities, helper scripts (scripts/dev-*, tools/local-*)
+- Analysis, research, notes (analysis/, research/, notes/)
+- Intermediate data, dumps (data/, dumps/, fixtures/)
+- Framework meta-files (.claude/, CLAUDE.md, manifest.md, AGENTS.md)
+- Any reflections, protocols, internal process documentation
 
-**SNAPSHOT.md** в public/shared режиме — **локальный файл**, а не часть общей git-истории. Это безопасно только если framework files никогда не были закоммичены в эту ветку или были удалены из индекса через `scripts/switch-repo-access.sh`.
+**SNAPSHOT.md** in public/shared mode is a **local file**, not part of the shared git history. This is only safe if framework files were never committed to this branch, or were removed from the index via `scripts/switch-repo-access.sh`.
 
-Если проект уже жил как `private-solo`, а потом стал shared/public:
-- одного `.gitignore` недостаточно;
-- tracked framework files надо удалить из индекса;
-- если они уже были push'нуты в upstream, нужна history rewrite или новая shared/public branch.
+If the project previously lived as `private-solo` and then became shared/public:
+- `.gitignore` alone is not enough;
+- tracked framework files must be removed from the index;
+- if they have already been pushed upstream, a history rewrite or a new shared/public branch is needed.
 
-**Аналогия:** на столе куча инструментов, справочников и черновиков, но пользователю отдаётся только готовое изделие.
+**Analogy:** the workbench is covered in tools, reference books and drafts, but the user is handed only the finished product.
 
 ### 2. `repo_access=private-solo`
 
-Приватный проект, работает только один человек. Коммитится **всё** — код, эксперименты, метафайлы, заметки, анализ. Репозиторий — это полный слепок рабочего стола.
+A private project with only one person working on it. **Everything** is committed — code, experiments, meta-files, notes, analysis. The repository is a full snapshot of the workbench.
 
-**Коммитить:**
-- Всё, что не в списке «Запрещено всегда» (см. ниже)
-- Включая: .claude/, CLAUDE.md, manifest.md, experiments/, notes/, analysis/
+**Commit:**
+- Everything not on the "Always forbidden" list (see below)
+- Including: .claude/, CLAUDE.md, manifest.md, experiments/, notes/, analysis/
 
-### 3. Не указан `repo_access`
+### 3. `repo_access` not specified
 
-По умолчанию: работать как `private-solo`. Если обнаружен публичный remote (github.com без /private/ в URL, или явно public) — переключиться на режим `public`.
+Default: work as `private-solo`. If a public remote is detected (github.com without /private/ in the URL, or explicitly public) — switch to `public` mode.
 
-## Запрещено всегда (любой режим)
+## Always forbidden (any mode)
 
-Эти файлы не коммитятся **никогда**, в любом типе проекта. Если их нет в `.gitignore` — добавь автоматически:
+These files are **never** committed, in any project type. If they aren't in `.gitignore` — add them automatically:
 
-- `.env`, `.env.*` — переменные окружения
-- `*.key`, `*.pem`, `*.p12` — ключи и сертификаты
+- `.env`, `.env.*` — environment variables
+- `*.key`, `*.pem`, `*.p12` — keys and certificates
 - `credentials.json`, `secrets/`, `*secret*` — credentials
-- `.claude/settings.local.json` — личные настройки агента
-- `CLAUDE.local.md` — личные заметки
-- `*.db`, `*.sqlite`, `*.sqlite3` — локальные базы данных
-- `node_modules/`, `__pycache__/`, `.venv/` — зависимости
-- `dist/`, `build/`, `*.egg-info/` — артефакты сборки
+- `.claude/settings.local.json` — personal agent settings
+- `CLAUDE.local.md` — personal notes
+- `*.db`, `*.sqlite`, `*.sqlite3` — local databases
+- `node_modules/`, `__pycache__/`, `.venv/` — dependencies
+- `dist/`, `build/`, `*.egg-info/` — build artefacts
 
-## Формирование .gitignore
+## Building .gitignore
 
-Шаблонный `.gitignore` содержит закомментированный блок для public/shared режима. Агент включает его через `scripts/switch-repo-access.sh`:
+The template `.gitignore` contains a commented-out block for public/shared mode. The agent enables it via `scripts/switch-repo-access.sh`:
 
-1. При bootstrap — базовый набор (зависимости, артефакты, .env, секреты, личные файлы)
-2. До первого framework commit в режиме `public`/`private-shared` — запустить `scripts/switch-repo-access.sh public --commit` или `scripts/switch-repo-access.sh private-shared --commit`
-3. Если проект уже переключается из `private-solo`, тот же скрипт удаляет framework files из индекса и останавливает процесс, если они уже есть в upstream history
-4. Со временем стабилизируется — новые паттерны добавляются по мере обнаружения
+1. At bootstrap — the base set (dependencies, artefacts, .env, secrets, personal files)
+2. Before the first framework commit in `public`/`private-shared` mode — run `scripts/switch-repo-access.sh public --commit` or `scripts/switch-repo-access.sh private-shared --commit`
+3. If the project is already switching from `private-solo`, the same script removes framework files from the index and halts the process if they are already in the upstream history
+4. Over time it stabilises — new patterns are added as they are discovered
 
-## Проверка перед пушем
+## Check before pushing
 
-Перед `git push` — проверить `git diff --name-only origin/main..HEAD`:
-- В любом режиме: нет ли файлов из «Запрещено всегда»
-- В режиме `public`/`private-shared`: нет ли dev-артефактов
+Before `git push` — check `git diff --name-only origin/main..HEAD`:
+- In any mode: are there any files from "Always forbidden"
+- In `public`/`private-shared` mode: are there any dev artefacts
 
-Если есть — `git rm --cached`, обновить `.gitignore`, предупредить пользователя.
+If there are — `git rm --cached`, update `.gitignore`, warn the user.

@@ -2,65 +2,65 @@
 
 ## Purpose
 
-Защитить provenance, авторский смысл, фактическую точность, иерархию истины.
+Protect provenance, authorial meaning, factual accuracy and the hierarchy of truth.
 
 ## Source Hierarchy
 
-Каждый проект определяет порядок доверия. Default:
+Each project defines its order of trust. Default:
 
-1. Primary source — исходные документы, диалоги, транскрипты, filed records, авторские материалы
+1. Primary source — original documents, dialogues, transcripts, filed records, authorial materials
 2. Canon — bible, style guide, terms, arc, approved specs
-3. Brief — задача на конкретный content unit
-4. Existing content — уже написанные главы, уроки, docs
+3. Brief — the task for a specific content unit
+4. Existing content — chapters, lessons, docs already written
 5. Generated notes — research notes, drafts, summaries
 
-При конфликте используй более высокий source. Если конфликт смысловой, эскалируй.
+In a conflict, use the higher source. If the conflict is one of meaning, escalate.
 
 ## Provenance
 
-Для важных утверждений фиксируй:
-- URL или путь к файлу
-- дата доступа (для внешних источников)
-- section, heading или quote id
+For important claims, record:
+- URL or file path
+- access date (for external sources)
+- section, heading or quote id
 - confidence: high / medium / low
 
 ## Rich Input Preservation
 
-Если работаешь с авторским текстом:
-- сохраняй порядок мысли, если нет явной причины менять
-- не удаляй повторы автоматически (могут быть риторические)
-- не заменяй авторские термины синонимами
-- не добавляй "более правильные" референсы без проверки
-- пояснения добавляй как дополнение, не вместо текста
+If you are working with an author's text:
+- preserve the order of thought unless there is a clear reason to change it
+- do not remove repetitions automatically (they may be rhetorical)
+- do not replace the author's terms with synonyms
+- do not add "more correct" references without checking
+- add explanations as a supplement, not in place of the text
 
 ## Citation and Attribution
 
-- Не выдумывай цитаты
-- Не приписывай идеи авторам без проверки
-- Внешний источник указывай в `sources.md` или локальной секции
-- Закрытые/локальные документы: путь вместо публичного URL
+- Do not invent quotes
+- Do not attribute ideas to authors without checking
+- Cite external sources in `sources.md` or a local section
+- Closed/local documents: a path instead of a public URL
 
 ## Deficits
 
 ```markdown
 ## Deficit: [short name]
 
-**Question:** Что неизвестно?
-**Needed for:** Какой content unit блокирует?
-**Current evidence:** Что есть?
+**Question:** What is unknown?
+**Needed for:** Which content unit does it block?
+**Current evidence:** What do we have?
 **Risk:** critical / major / minor
-**Next step:** Где искать?
+**Next step:** Where to look?
 ```
 
 ## Accuracy Modes
 
 ### Normal
-Допустимы разумные обобщения при явной связи с источником.
+Reasonable generalisations are acceptable where there is a clear link to the source.
 
 ### High-stakes
-Для налогов, права, медицины, финансов, официальных документов:
-- разделяй факты от предположений
-- называй uncertainty
-- предпочитай primary documents
-- не давай окончательных выводов без источника
-- проси проверку специалиста, если нужно
+For tax, law, medicine, finance, official documents:
+- separate facts from assumptions
+- name the uncertainty
+- prefer primary documents
+- do not give final conclusions without a source
+- ask for a specialist's review if needed

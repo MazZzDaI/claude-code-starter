@@ -22,8 +22,8 @@ The model is captured as a portable rule set (`orchestration-model.md`, principl
 
 ### Changed
 
-- **`.claude/rules/autonomy.md`** — new section «Оркестраторская модель: владелец над производством»: the working model is explicitly three-level (owner above orchestrator above workers), not the flat "agent-manager + subagents". "Don't pull the owner in" now covers the entire production layer: spawning workers, integration, commits need no confirmation.
-- **`.claude/rules/delegation.md`** — new section «Оркестрация: charter, веер/solo, один писатель, доказательства»: charters for writing workers; when to fan out vs when coherence-critical work must stay solo; single-writer rule for shared contracts enforced by worktree isolation rather than discipline; four evidence statuses without optimistic renaming; deterministic multi-worker graphs via saved workflows.
+- **`.claude/rules/autonomy.md`** — new section "Orchestrator model: owner above production": the working model is explicitly three-level (owner above orchestrator above workers), not the flat "agent-manager + subagents". "Don't pull the owner in" now covers the entire production layer: spawning workers, integration, commits need no confirmation.
+- **`.claude/rules/delegation.md`** — new section "Orchestration: charter, fan-out/solo, single writer, evidence": charters for writing workers; when to fan out vs when coherence-critical work must stay solo; single-writer rule for shared contracts enforced by worktree isolation rather than discipline; four evidence statuses without optimistic renaming; deterministic multi-worker graphs via saved workflows.
 
 ### Why this matters
 
@@ -49,26 +49,26 @@ Our `/start` skill had defects 2 and 3. This release fixes both, adds a guard ag
 ### Fixed
 
 - `.claude/skills/start/SKILL.md` rewritten:
-  - "Доложить кратко, 3-5 строк" removed; report now scales to the user's request (routine start vs "разберись с проектом" vs concrete task)
-  - New mandatory step "Заземлить карту в территорию" — git log / wc / grep against the metafiles' claims, run before the report
-  - New explicit "карта ≠ территория" marker — after `/start` the agent knows the map, not the code; subsystem edits require reading that subsystem's code
+  - "Report briefly, 3-5 lines" removed; report now scales to the user's request (routine start vs "get to grips with the project" vs concrete task)
+  - New mandatory step "Ground the map in the territory" — git log / wc / grep against the metafiles' claims, run before the report
+  - New explicit "map ≠ territory" marker — after `/start` the agent knows the map, not the code; subsystem edits require reading that subsystem's code
   - Three-kinds-of-constraints note in the header: action constraints hard, attention constraints helpful, depth/output constraints **never**
   - Explicit ban on generating a separate ONBOARDING.md
 
 ### Added
 
-- `CLAUDE.md` (code + content templates) — new "Назначение этого файла" section near the top, documenting the three-kinds-of-constraints model so future protocol edits can't quietly reintroduce a depth cap "for brevity"
+- `CLAUDE.md` (code + content templates) — new "Purpose of this file" section near the top, documenting the three-kinds-of-constraints model so future protocol edits can't quietly reintroduce a depth cap "for brevity"
 - `scripts/validate-release.sh` — onboarding-file guard: refuses to release if any `ONBOARDING.md` template ships with the framework
 - `methodology/draft/onboarding-protocols-must-not-cap-depth.md` — recorded the case as a draft methodology; linked to the v6.2 memory-axes draft (same reporter, same project, second observation — pattern in formation)
 
 ### Why this matters
 
-This is the same shape of regression as v6.2: a structural framework choice that silently degraded agent quality across every downstream project. The user who reported it noticed only because they compared two parallel onboardings of the same codebase — one with our protocol, one without — and the contrast was "убогий vs подробный". Without this patch, every new project would inherit the cap.
+This is the same shape of regression as v6.2: a structural framework choice that silently degraded agent quality across every downstream project. The user who reported it noticed only because they compared two parallel onboardings of the same codebase — one with our protocol, one without — and the contrast was "meagre vs detailed". Without this patch, every new project would inherit the cap.
 
 ### Upgrade Notes
 
 - v6.2.0 → v6.2.1: the installer in v6.2.1 detects existing v6.2 installs as `upgrade` and patches `.claude/skills/start/SKILL.md` only if it has not been edited; manual edits are preserved.
-- The CLAUDE.md "Назначение" section is added via the additive merger; existing custom content is preserved.
+- The CLAUDE.md "Purpose" section is added via the additive merger; existing custom content is preserved.
 
 ## [6.2.0] - 2026-06-12
 
@@ -97,7 +97,7 @@ Also new: a **methodology layer** with explicit maturity ladder (draft → patte
   - `/save-dialog` skill — interactive entry point with optional note
   - `/finish` auto-calls `save-dialogs.sh` before commit
   - Privacy-first `.gitignore` — raw JSONL never accidentally committed even in `private-solo`
-- **CLAUDE.md templates** — new "Слои памяти" section documenting the two-axis model so future "simplify" passes cannot quietly collapse it
+- **CLAUDE.md templates** — new "Memory layers" section documenting the two-axis model so future "simplify" passes cannot quietly collapse it
 - **`/start` skill** — now reads both axes (SNAPSHOT, BACKLOG, INVARIANTS, ARCHITECTURE) at session start
 - **`/finish` skill** — updates all memory layers, not only SNAPSHOT; commits the whole bundle in `private-solo` mode
 - **Tests** — 3 new regression tests (`memory_layers_code`, `memory_layers_content`, `save_dialogs_idempotent`); 11/11 passing

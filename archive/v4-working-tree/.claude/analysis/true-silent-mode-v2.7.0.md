@@ -8,15 +8,15 @@
 ## Problem Statement
 
 **User feedback after v2.6.0:**
-> "На самом деле, во время этих протоколов... если они у нас фоном идут, показывать ничего не надо, исключаю те случаи, когда надо конкретно что-то подтвердить"
+> "Actually, during these protocols... if they run in the background for us, nothing needs to be shown, except for those cases when something specifically needs to be confirmed"
 
-> "концепция о том, что человек должен контролировать каждый твой шаг... это нонсенс"
+> "the concept that a person has to control your every step... that's nonsense"
 
-> "моя задача ставить тебе задачи и контролировать не то, что ты как бы делаешь твои мелкие задачи, а то, что получилось на выходе, результат"
+> "my job is to set you tasks and to control not how you, so to speak, do your little tasks, but what came out at the end, the result"
 
-> "надо полностью все убирать фон. И пользователь вообще не должен даже думать об этих протоколах"
+> "everything needs to go fully into the background. And the user shouldn't even think about these protocols at all"
 
-> "Ценность этих протоколов, ценность этого фреймворка в том, чтобы почти полностью автоматизировать рутину"
+> "The value of these protocols, the value of this framework, is in almost completely automating the routine"
 
 **Core philosophy shift:**
 - User wants to **control results, not steps**
@@ -45,8 +45,8 @@
 
 **3. Auto-Trigger Detection**
 - Framework detects task completion from natural language
-- User says "готово" or "done" → auto-commit
-- User says "задача завершена" → suggest commit
+- User says "all done" or "done" → auto-commit
+- User says "task completed" → suggest commit
 - Git analysis: 100+ lines changed → suggest commit
 - Context analysis: AI detects completion from conversation
 
@@ -233,26 +233,26 @@ Continue commit? (Y/n):
 
 **1. Explicit keywords (instant trigger):**
 ```
-Russian: "готово", "сделано", "завершил", "закончил"
+Russian (translated): "all done", "done it", "I've completed it", "I've finished"
 English: "done", "finished", "complete", "completed"
 ```
 
 **Example:**
 ```
-User: "Готово, всё работает"
+User: "All done, everything works"
 Framework: (runs Completion silently)
 Framework: "✓ Committed (a3f82d1)"
 ```
 
 **2. Implicit signals (suggest commit):**
 ```
-"задача завершена", "фича готова", "баг исправлен",
-"тесты проходят", "всё работает"
+"task completed", "feature is ready", "bug fixed",
+"tests pass", "everything works"
 ```
 
 **Example:**
 ```
-User: "Отлично, баг пофикшен и тесты проходят"
+User: "Great, the bug's fixed and the tests pass"
 Framework: "Commit changes? (Y/n)"
 User: "y"
 Framework: "✓ Committed (f8c21a4)"
@@ -306,8 +306,8 @@ if (score > 0.8) {
 {
   "auto_triggers": {
     "enabled": true,
-    "explicit_keywords": true,      // "готово" → instant
-    "implicit_signals": true,       // "задача завершена" → suggest
+    "explicit_keywords": true,      // "all done" → instant
+    "implicit_signals": true,       // "task completed" → suggest
     "significant_changes": true,    // 100+ lines → suggest
     "idle_time": false,             // Off by default (can be annoying)
     "context_analysis": true,       // AI analyzes conversation
@@ -317,7 +317,7 @@ if (score > 0.8) {
     "idle_threshold": 1800,
     "check_interval": 5,
 
-    "auto_commit_on_explicit": false,   // Even "готово" asks (or auto)
+    "auto_commit_on_explicit": false,   // Even "all done" asks (or auto)
     "confirm_on_implicit": true
   }
 }
@@ -533,7 +533,7 @@ User: (starts typing immediately, protocol invisible)
 
 **Old way (v2.5.1):**
 ```
-User: "заверши"
+User: "wrap up"
 Framework: [200+ lines of output over 5-6 minutes]
 User: (confirms 5-10 times)
 Framework: "Committed"
@@ -551,8 +551,8 @@ User: (better, still manual)
 
 **True silent way (v2.7.0):**
 ```
-User: "Готово, всё работает"
-Framework: (detects "готово", runs silently)
+User: "All done, everything works"
+Framework: (detects "all done", runs silently)
 Framework: "✓ Committed (a3f82d1)"
 User: (didn't think about protocol at all)
 ```
@@ -560,7 +560,7 @@ User: (didn't think about protocol at all)
 or with confirmation:
 
 ```
-User: "Отлично, баг пофикшен"
+User: "Great, the bug's fixed"
 Framework: (detects completion signal)
 Framework: "Commit changes? (Y/n)"
 User: "y"
@@ -587,7 +587,7 @@ User must type `/fi` manually
 ```json
 {
   "enabled": true,
-  "auto_commit_on_explicit": false,  // Even "готово" asks
+  "auto_commit_on_explicit": false,  // Even "all done" asks
   "confirm_on_implicit": true
 }
 ```
@@ -597,7 +597,7 @@ Framework suggests commits, user confirms
 ```json
 {
   "enabled": true,
-  "auto_commit_on_explicit": true,   // "готово" → commits
+  "auto_commit_on_explicit": true,   // "all done" → commits
   "confirm_on_implicit": true,       // Others → asks
   "idle_time": false                 // No idle triggers
 }
@@ -657,8 +657,8 @@ Everything automated (use with caution)
    - Verify commit flow works
 
 3. **Auto-trigger detection**
-   - Test explicit keywords ("готово", "done")
-   - Test implicit signals ("задача завершена")
+   - Test explicit keywords ("all done", "done")
+   - Test implicit signals ("task completed")
    - Test git analysis (100+ lines)
    - Test context analysis (AI detection)
 
@@ -695,7 +695,7 @@ Everything automated (use with caution)
 1. **No protocol noise:** Terminal stays clean
 2. **No ceremony:** No "Running...", "Checking...", "Processing..." spam
 3. **Instant start:** Type "start" → ready immediately (or near-instantly)
-4. **Auto-completion:** Say "готово" → framework commits automatically
+4. **Auto-completion:** Say "all done" → framework commits automatically
 5. **Focus on coding:** Framework handles housekeeping invisibly
 
 **Workflow:**
@@ -708,7 +708,7 @@ Old way:
 New way (v2.7.0):
 - Type "start" → (invisible) → start working immediately
 - Work 30 min
-- Say "готово" → (invisible) → "✓ Committed (hash)"
+- Say "all done" → (invisible) → "✓ Committed (hash)"
 ```
 
 **Psychological:**
@@ -723,7 +723,7 @@ New way (v2.7.0):
 ## Philosophy
 
 **User's words:**
-> "моя задача ставить тебе задачи и контролировать не то, что ты как бы делаешь твои мелкие задачи, а то, что получилось на выходе, результат"
+> "my job is to set you tasks and to control not how you, so to speak, do your little tasks, but what came out at the end, the result"
 
 **Translation:**
 "My job is to set tasks and control the result, not to control your every small step"
@@ -818,7 +818,7 @@ CLAUDE.md — Updated to v2.7.0, points to silent protocols
 ## User Quote
 
 **Core philosophy:**
-> "Ценность этих протоколов, ценность этого фреймворка в том, чтобы почти полностью автоматизировать рутину."
+> "The value of these protocols, the value of this framework, is in almost completely automating the routine."
 
 **Translation:**
 "The value of these protocols and framework is to almost completely automate routine."

@@ -5,7 +5,7 @@
 
 **Purpose:** Finalize sprint/task, update metafiles, export sessions, commit changes.
 
-**Trigger:** User types "заверши", "завершить", "finish", or "done"
+**Trigger:** User types "wrap up", "finish up", "finish", or "done"
 
 ---
 
@@ -249,11 +249,11 @@ User sees: "🚨 RELEASE MODE: Running mandatory deep scan..."
 ```
 Claude asks user:
 
-⚠️  Обнаружены потенциальные риски безопасности:
+⚠️  Potential security risks detected:
   • [reasons from trigger detection]
 
-Рекомендую запустить deep scan изменений спринта (1-2 минуты).
-Запустить AI-агент для проверки? (y/N)
+I recommend running a deep scan of the sprint changes (1-2 minutes).
+Run the AI agent to check? (y/N)
 
 If user answers "y" → Claude invokes /security-dialogs
 If user answers "N" → Claude skips, proceeds with commit
@@ -262,7 +262,7 @@ If user answers "N" → Claude skips, proceeds with commit
 **If exit code = 12 (MEDIUM):**
 ```
 Claude optionally mentions:
-"💡 Если хотите дополнительную проверку, можете запустить /security-dialogs"
+"💡 If you want an additional check, you can run /security-dialogs"
 ```
 
 **Important:**
@@ -338,7 +338,7 @@ if [ ! -f ".claude/COMMIT_POLICY.md" ]; then
     cat > .claude/COMMIT_POLICY.md <<'EOF'
 # Commit Policy
 
-## ❌ НИКОГДА:
+## ❌ NEVER:
 \`\`\`
 dialog/
 .claude/logs/
@@ -351,7 +351,7 @@ credentials/
 *.pem
 \`\`\`
 
-## ✅ ВСЕГДА:
+## ✅ ALWAYS:
 \`\`\`
 src/
 tests/
@@ -418,7 +418,7 @@ git status --short
 
 **For each changed file, check against COMMIT_POLICY patterns:**
 
-**1. Check "НИКОГДА" patterns (auto-block):**
+**1. Check "NEVER" patterns (auto-block):**
 ```
 notes/, scratch/, experiments/, WIP_*, INTERNAL_*, DRAFT_*
 dialog/, .claude/logs/, *.debug.log, debug/, reports/
@@ -426,12 +426,12 @@ dialog/, .claude/logs/, *.debug.log, debug/, reports/
 secrets/, credentials/, *.key, *.pem, .production-credentials, backup/
 ```
 
-**If file matches "НИКОГДА":**
+**If file matches "NEVER":**
 - DO NOT stage this file
 - Add to blocked list
 - Continue to next file
 
-**2. Check "ВСЕГДА" patterns (auto-approve):**
+**2. Check "ALWAYS" patterns (auto-approve):**
 ```
 src/, lib/, tests/
 README.md, CHANGELOG.md, LICENSE
@@ -439,18 +439,18 @@ package.json, tsconfig.json, .gitignore
 .claude/ARCHITECTURE.md (if public project)
 ```
 
-**If file matches "ВСЕГДА":**
+**If file matches "ALWAYS":**
 - Add to staging list
 - Continue to next file
 
-**3. Check "СПРОСИТЬ" patterns (ask user):**
+**3. Check "ASK" patterns (ask user):**
 ```
-- New folders not in НИКОГДА/ВСЕГДА lists
+- New folders not in NEVER/ALWAYS lists
 - Filenames containing: api-key, password, secret, prod, production
 - Files >1000 lines (may be generated)
 ```
 
-**If file matches "СПРОСИТЬ":**
+**If file matches "ASK":**
 - Add to ask-user list
 - Will prompt user later
 
@@ -458,7 +458,7 @@ package.json, tsconfig.json, .gitignore
 
 **If blocked files found:**
 ```
-⚠️  WARNING: Following files match COMMIT_POLICY "НИКОГДА" and will NOT be committed:
+⚠️  WARNING: Following files match COMMIT_POLICY "NEVER" and will NOT be committed:
 
   • notes/my-internal-plans.md (matches: notes/)
   • WIP_new-feature.js (matches: WIP_*)
@@ -484,9 +484,9 @@ Add these files to commit? (y/N)
 ### Step 4.5: Stage Only Approved Files
 
 ```bash
-# НЕ git add -A! Селективный staging:
+# NOT git add -A! Selective staging:
 git add src/ tests/ README.md package.json CHANGELOG.md
-# (только файлы из auto-approve + user-approved)
+# (only files from auto-approve + user-approved)
 ```
 
 **Important:** Use explicit paths, NOT `git add -A`!

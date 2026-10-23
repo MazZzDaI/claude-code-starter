@@ -1,59 +1,59 @@
-# Commit Policy — Что можно коммитить?
+# Commit Policy — What may be committed?
 
-**Цель:** Защита от случайной утечки конфиденциальной информации в git.
+**Goal:** Protection against accidental leakage of confidential information into git.
 
-**Как работает:** Claude AI читает этот файл перед каждым коммитом и проверяет изменения.
+**How it works:** Claude AI reads this file before every commit and checks the changes.
 
 ---
 
-## ❌ НИКОГДА не коммитим (автоматически блокируется)
+## ❌ NEVER commit (blocked automatically)
 
-### 1. Внутренняя кухня разработки
-
-```
-notes/                  # Личные заметки, TODO списки
-scratch/                # Черновики, эксперименты
-experiments/            # Эксперименты и тесты
-WIP_*                   # Work in progress файлы
-INTERNAL_*              # Внутренние документы
-DRAFT_*                 # Черновики
-```
-
-### 2. Framework логи и диалоги (КРИТИЧНО!)
+### 1. Internal development kitchen
 
 ```
-dialog/                 # Claude диалоги (могут содержать credentials!)
+notes/                  # Personal notes, TODO lists
+scratch/                # Drafts, experiments
+experiments/            # Experiments and tests
+WIP_*                   # Work in progress files
+INTERNAL_*              # Internal documents
+DRAFT_*                 # Drafts
+```
+
+### 2. Framework logs and dialogs (CRITICAL!)
+
+```
+dialog/                 # Claude dialogs (may contain credentials!)
 .claude/logs/           # Framework execution logs
-*.debug.log             # Debug логи
-debug/                  # Debug файлы
-reports/                # Bug reports и migration logs (уже в GitHub Issues)
+*.debug.log             # Debug logs
+debug/                  # Debug files
+reports/                # Bug reports and migration logs (already in GitHub Issues)
 ```
 
-### 3. Технические файлы
+### 3. Technical files
 
 ```
-*.local.*               # Локальные конфиги
-.env.local              # Локальные environment переменные
-.vscode/                # IDE настройки (личные)
-.idea/                  # IDE настройки (личные)
+*.local.*               # Local configs
+.env.local              # Local environment variables
+.vscode/                # IDE settings (personal)
+.idea/                  # IDE settings (personal)
 ```
 
-### 4. Чувствительные данные
+### 4. Sensitive data
 
 ```
-secrets/                # Секреты
+secrets/                # Secrets
 credentials/            # Credentials
-*.key                   # Приватные ключи
+*.key                   # Private keys
 *.pem                   # SSL certificates
 .production-credentials # Production credentials
-backup/                 # Backup файлы
+backup/                 # Backup files
 ```
 
 ---
 
-## ✅ ВСЕГДА коммитим (автоматически одобряется)
+## ✅ ALWAYS commit (approved automatically)
 
-### 1. Исходный код
+### 1. Source code
 
 ```
 src/                    # Source code
@@ -61,7 +61,7 @@ lib/                    # Libraries
 tests/                  # Tests
 ```
 
-### 2. Публичная документация
+### 2. Public documentation
 
 ```
 README.md               # Project README
@@ -69,7 +69,7 @@ CHANGELOG.md            # Version history
 LICENSE                 # License file
 ```
 
-### 3. Конфигурация проекта
+### 3. Project configuration
 
 ```
 package.json            # npm config
@@ -79,27 +79,27 @@ tsconfig.json           # TypeScript config
 
 ---
 
-## ⚠️ СПРОСИТЬ ПОЛЬЗОВАТЕЛЯ (требует подтверждения)
+## ⚠️ ASK THE USER (requires confirmation)
 
-- Новые папки не из списков выше
-- Имена содержат: `api-key`, `password`, `secret`, `prod`
-- Файлы >1000 строк
+- New folders not in the lists above
+- Names containing: `api-key`, `password`, `secret`, `prod`
+- Files >1000 lines
 
 ---
 
-## 🔧 Настройка под ваш проект
+## 🔧 Customising for your project
 
-**Добавьте ваши правила здесь:**
+**Add your rules here:**
 
 ```markdown
-## ❌ НИКОГДА ({{PROJECT_NAME}}):
+## ❌ NEVER ({{PROJECT_NAME}}):
 
-# Добавьте папки/файлы специфичные для вашего проекта
-# Пример:
+# Add folders/files specific to your project
+# Example:
 # business-plans/
 # internal-docs/
 ```
 
 ---
 
-**Редактируйте этот файл под свой проект!**
+**Edit this file to suit your project!**

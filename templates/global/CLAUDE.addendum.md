@@ -1,131 +1,131 @@
-# Глобальные настройки Claude Code
+# Global Claude Code settings
 
-## Доступные слои framework
+## Available framework layers
 
-В `~/.claude/` установлены универсальные правила, навыки и агенты Claude Code Starter. Они работают как **базовая сетка** во всех проектах. Когда в проекте есть свой `.claude/` — он перекрывает глобальный для своих файлов; всё остальное берётся из глобального.
+`~/.claude/` contains the universal rules, skills and agents of Claude Code Starter. They act as a **baseline grid** across all projects. When a project has its own `.claude/`, it overrides the global layer for its own files; everything else is taken from the global layer.
 
-### Правила (`~/.claude/rules/`)
+### Rules (`~/.claude/rules/`)
 
-Универсальные:
+Universal:
 - `autonomy.md`, `delegation.md`, `context-management.md`, `commit-policy.md`, `production-safety.md`, `logging.md`, `local-first.md`, `dialog-preservation.md`
-- `orchestration-model.md` (v6.3.0+) — оркестраторская модель: владелец = продукт **над** производством; агент = оркестратор + главный девелопер, сам поднимает воркеров. Читать при выборе режима ведения задачи (сам / субагент / веер / workflow).
+- `orchestration-model.md` (v6.3.0+) — the orchestrator model: owner = product **above** production; agent = orchestrator + lead developer, who spins up workers itself. Read it when choosing how to run a task (yourself / subagent / fan-out / workflow).
 
-Контентные (для проектов с текстами/курсами/книгами):
+Content (for projects with texts/courses/books):
 - `content-pipeline.md` — Intake → Research → Outline → Write → Enrich → Review → Export
-- `content-quality.md` — universal review checklist (28 точек)
+- `content-quality.md` — universal review checklist (28 points)
 - `source-management.md` — provenance, hierarchy, deficits
-- `content-formats.md` — chapter/lesson/transcript/article/document форматы
-- `content-commit-policy.md` — content-префиксы (`content:`, `chapter:`, `lesson:`, `research:`, `index:`)
+- `content-formats.md` — chapter/lesson/transcript/article/document formats
+- `content-commit-policy.md` — content prefixes (`content:`, `chapter:`, `lesson:`, `research:`, `index:`)
 
-Применяй контентные правила, если в проекте `manifest.md` имеет `project_type=content` или `project_type=hybrid`.
+Apply the content rules if the project's `manifest.md` has `project_type=content` or `project_type=hybrid`.
 
-### Навыки (`~/.claude/skills/`)
+### Skills (`~/.claude/skills/`)
 
-Общие: `/start`, `/finish`, `/testing`, `/handoff`, `/housekeeping` (универсальная — проверяет и код, и контент), `/save-dialog` (архив сессионных JSONL)
+General: `/start`, `/finish`, `/testing`, `/handoff`, `/housekeeping` (universal — checks both code and content), `/save-dialog` (archive of session JSONL files)
 
 Code: `/db-migrate`, `/playwright`
 
 Content: `/research`, `/outline`, `/write-content`, `/review-content`, `/enrich`, `/content-index`
 
-Bootstrap: `/setup-project` — устанавливает framework в текущую папку (auto-detect type). Это самописный skill из Claude Code Starter; не путай со встроенной командой `/init`, которая просто генерирует CLAUDE.md документацию.
+Bootstrap: `/setup-project` — installs the framework into the current folder (auto-detects type). This is a custom skill from Claude Code Starter; do not confuse it with the built-in `/init` command, which simply generates CLAUDE.md documentation.
 
 ### Dialog Preservation (`dialog-preservation.md` + `/save-dialog`)
 
-Claude Code пишет JSONL текущей сессии в `~/.claude/projects/<encoded-cwd>/`. Эти файлы со временем подчищаются retention'ом. Глобальная сетка включает:
+Claude Code writes the current session's JSONL to `~/.claude/projects/<encoded-cwd>/`. These files are cleaned up over time by retention. The global grid includes:
 
-- правило `dialog-preservation.md` — куда копировать, как индексировать, политика по `repo_access`;
-- скилл `/save-dialog` — явное сохранение текущей сессии в `.claude/dialogs/`;
-- автоматическое сохранение при `/finish` (если в проекте установлен `scripts/save-dialogs.sh`).
+- the `dialog-preservation.md` rule — where to copy, how to index, the `repo_access` policy;
+- the `/save-dialog` skill — explicitly saves the current session into `.claude/dialogs/`;
+- automatic saving on `/finish` (if `scripts/save-dialogs.sh` is installed in the project).
 
-Архив `.claude/dialogs/` коммитится только в `repo_access=private-solo`; в shared/public — остаётся локальным.
+The `.claude/dialogs/` archive is committed only under `repo_access=private-solo`; in shared/public it stays local.
 
-### Агенты (`~/.claude/agents/`)
+### Agents (`~/.claude/agents/`)
 
-- `researcher` — исследование (универсален: код и контент)
-- `implementer` — реализация кода
+- `researcher` — research (universal: code and content)
+- `implementer` — code implementation
 - `reviewer` — code review
-- `writer` — написание/адаптация content units
-- `editor` — проверка стиля/голоса/формата контента (находит проблемы, не переписывает)
-- `content-reviewer` — release review для контента (28-point checklist)
+- `writer` — writing/adapting content units
+- `editor` — checks content style/voice/format (finds problems, does not rewrite)
+- `content-reviewer` — release review for content (28-point checklist)
 
 ### Methodology layer (`~/.claude/methodology/`)
 
-Глобальные методологии для пайплайнов (router → adapter → executor). Их потребители — автоматические LLM-цепочки, не интерактивный агент.
+Global methodologies for pipelines (router → adapter → executor). Their consumers are automated LLM chains, not the interactive agent.
 
-- `_HOW-THIS-GROWS.md` — объясняет лестницу зрелости draft → pattern → mature → crystallized
-- `00-example-llm-as-component.md` — canonical mature example (LLM как ненадёжный компонент)
+- `_HOW-THIS-GROWS.md` — explains the maturity ladder draft → pattern → mature → crystallized
+- `00-example-llm-as-component.md` — canonical mature example (the LLM as an unreliable component)
 
-Проектные методологии в `<project>/methodology/` могут ссылаться на глобальные и уточнять их под локальный контекст. Подробнее — `_HOW-THIS-GROWS.md`.
+Project methodologies in `<project>/methodology/` may reference the global ones and refine them for the local context. More detail — `_HOW-THIS-GROWS.md`.
 
-### Слои памяти проекта
+### Project memory layers
 
-Проекты с фреймворком держат память на двух осях:
+Projects with the framework keep memory on two axes:
 
-- **Контракты** (медленно меняются): `.claude/ARCHITECTURE.md`, `.claude/INVARIANTS.md`, `methodology/`
-- **State** (быстро меняется): `.claude/SNAPSHOT.md`, `.claude/BACKLOG.md`, `.claude/dialogs/`
+- **Contracts** (change slowly): `.claude/ARCHITECTURE.md`, `.claude/INVARIANTS.md`, `methodology/`
+- **State** (changes quickly): `.claude/SNAPSHOT.md`, `.claude/BACKLOG.md`, `.claude/dialogs/`
 
-При старте сессии в проекте — читай обе оси. При завершении — обновляй обе. Не схлопывай контракты в SNAPSHOT (это известная регрессия v5).
+When a session starts in a project, read both axes. When it finishes, update both. Do not collapse the contracts into SNAPSHOT (this is a known v5 regression).
 
-### Протокол `/start` и три вида ограничений (v6.2.1+)
+### The `/start` protocol and the three kinds of constraint (v6.2.1+)
 
-Skill `/start` в проектах v6.2.1+ работает по этим принципам:
+The `/start` skill in v6.2.1+ projects works on these principles:
 
-1. **Читает обе оси памяти** (контракты + state) — обязательно.
-2. **Заземляет карту в территорию** — `git log`, `wc -l` по основным каталогам, `grep` по TODO/FIXME/NotImplementedError. Метафайлы — это карта; если она разошлась с кодом, ты унаследуешь слепые пятна. Цена заземления — минута, ценность — представление, которому можно верить.
-3. **Доклад масштабируется под запрос пользователя**, не фиксирован форматом. Рутинный «start» — компактно; «разберись с проектом» — полный аналитический разбор. Минимум — пол адекватности, потолка нет.
-4. **Помнит, что после `/start` это карта, не территория** — перед правкой подсистемы читает её код и локальные docs.
+1. **Reads both memory axes** (contracts + state) — mandatory.
+2. **Grounds the map in the territory** — `git log`, `wc -l` over the main directories, `grep` for TODO/FIXME/NotImplementedError. The meta-files are the map; if it has drifted from the code, you inherit its blind spots. Grounding costs a minute; the value is a picture you can trust.
+3. **The report scales to the user's request**, it is not fixed by a format. A routine "start" — compact; "get to grips with the project" — a full analytical breakdown. The minimum is a floor of adequacy; there is no ceiling.
+4. **Remembers that after `/start` this is the map, not the territory** — before changing a subsystem it reads that subsystem's code and local docs.
 
-Это исходит из принципа «три вида ограничений», задокументированного в шапке проектного `CLAUDE.md`:
+This follows from the "three kinds of constraint" principle documented in the header of the project `CLAUDE.md`:
 
-| Вид ограничения | Норма |
+| Kind of constraint | Norm |
 |---|---|
-| На действия (INVARIANTS, production-safety) | **жёстко** |
-| На внимание (порядок чтения, две оси) | **полезно** |
-| На глубину/выход доклада | **никогда не кэпить** |
+| On actions (INVARIANTS, production-safety) | **strict** |
+| On attention (reading order, two axes) | **useful** |
+| On depth/output of the report | **never cap** |
 
-Если в каком-либо протоколе появляется «доложи N строк» применительно к **пониманию** — это структурный баг, а не норма. См. [FRAMEWORK-CASE-ONBOARDING.md](https://github.com/alexeykrol/claude-code-starter/blob/main/FRAMEWORK-CASE-ONBOARDING.md) для разбора.
+If any protocol says "report N lines" in relation to **understanding**, that is a structural bug, not a norm. See [FRAMEWORK-CASE-ONBOARDING.md](https://github.com/alexeykrol/claude-code-starter/blob/main/FRAMEWORK-CASE-ONBOARDING.md) for the analysis.
 
-Параллельный `ONBOARDING.md` в проектах фреймворком не генерируется и запрещён валидатором: конституция живёт только в `CLAUDE.md`, который харнес автозагружает.
+A parallel `ONBOARDING.md` is not generated in framework projects and is forbidden by the validator: the constitution lives only in `CLAUDE.md`, which the harness auto-loads.
 
-### Оркестраторская модель (v6.3.0+)
+### The orchestrator model (v6.3.0+)
 
-Режим работы по умолчанию — трёхуровневый, не плоский «агент + субагенты»:
+The default way of working is three-tier, not a flat "agent + subagents":
 
 ```
-ВЛАДЕЛЕЦ      продукт/методолог НАД производством: цель + границы полномочий + ревью + стоп-точки
-ОРКЕСТРАТОР   агент в ведущей сессии: режет на потоки, САМ поднимает воркеров, интегрирует, верифицирует, коммитит
-ВОРКЕРЫ       эфемерные исполнители в своих контекстах (субагенты / worktree / workflows); владельцу невидимы
+OWNER         product/methodologist ABOVE production: goal + scope of authority + review + stop points
+ORCHESTRATOR  agent in the lead session: cuts work into streams, spins up workers ITSELF, integrates, verifies, commits
+WORKERS       ephemeral executors in their own contexts (subagents / worktree / workflows); invisible to the owner
 ```
 
-Ключевые правила (полный свод — `~/.claude/rules/orchestration-model.md`, O1–O12):
+Key rules (full compendium — `~/.claude/rules/orchestration-model.md`, O1–O12):
 
-1. **Не дёргай владельца** на поднятие воркеров, интеграцию, коммиты — это производственный слой агента. Стоп-точки: прод, внешние эффекты, необратимое, удаление рантайм-данных.
-2. **Пишущий воркер получает charter** (цель, источники истины, границы, команды проверки, стоп-условия); без charter — только read-only разведка.
-3. **Один писатель на общий контракт** (schema/API/CI/entrypoint) — принуждается worktree-изоляцией, не дисциплиной.
-4. **Доказательства:** `passed / failed / not_run / inconclusive`, без подмены оптимизмом; верификатор независим и свои находки не чинит.
-5. **Непрерывность между сессиями** держит двух-осевая ограниченная память + `/handoff` как тонкий указатель — не разрастающийся мегафайл контекста.
+1. **Don't pester the owner** about spinning up workers, integration or commits — that is the agent's production layer. Stop points: production, external effects, the irreversible, deletion of runtime data.
+2. **A writing worker gets a charter** (goal, sources of truth, boundaries, verification commands, stop conditions); without a charter — read-only reconnaissance only.
+3. **Single writer per shared contract** (schema/API/CI/entrypoint) — enforced by worktree isolation, not by discipline.
+4. **Evidence:** `passed / failed / not_run / inconclusive`, without substituting optimism; the verifier is independent and does not fix its own findings.
+5. **Continuity between sessions** is held by two-axis bounded memory + `/handoff` as a thin pointer — not an ever-growing context megafile.
 
-## Поведение при старте сессии
+## Behaviour at session start
 
-1. **Если в текущей папке нет проектного `.claude/`** — это вероятно новая папка. Предложи пользователю запустить `/setup-project`, который установит framework. Не запускай молча — это создаёт файлы в его проекте.
+1. **If the current folder has no project `.claude/`** — this is probably a new folder. Suggest that the user run `/setup-project`, which will install the framework. Do not run it silently — it creates files in their project.
 
-2. **Если есть проектный `.claude/`** — нормальная работа. Выполни обычный cold-start: прочитай `CLAUDE.md`, `.claude/SNAPSHOT.md`, доложи готовность.
+2. **If there is a project `.claude/`** — normal work. Do the usual cold start: read `CLAUDE.md`, `.claude/SNAPSHOT.md`, report readiness.
 
-3. **Если есть проектный `.claude/`, но устаревший** (например, содержит `.claude/commands/` или `.claude/protocols/` — артефакты старых версий) — это legacy framework. Предложи запустить `/setup-project` для безопасной аддитивной миграции.
+3. **If there is a project `.claude/` but it is outdated** (for example, it contains `.claude/commands/` or `.claude/protocols/` — artefacts of old versions) — this is a legacy framework. Suggest running `/setup-project` for a safe additive migration.
 
-## Как определить тип текущего проекта
+## How to determine the current project's type
 
-Если есть `manifest.md` → читай `project_type` и `content_type`. Если нет — определяй по содержимому:
+If there is a `manifest.md` → read `project_type` and `content_type`. If not — determine it from the contents:
 
-- Папки `chapters/`, `briefs/`, `bible/` → книга
-- `modules/`, `lessons/` → курс
+- Folders `chapters/`, `briefs/`, `bible/` → book
+- `modules/`, `lessons/` → course
 - `articles/`, `INDEX.md` → knowledge base
-- `Section-*/`, `*-Lecture-*` → транскрипты
+- `Section-*/`, `*-Lecture-*` → transcripts
 - `package.json`/`pyproject.toml` + content folders → hybrid
-- Только `package.json`/`pyproject.toml` без content folders → code
+- Only `package.json`/`pyproject.toml` without content folders → code
 
-При неоднозначности — спроси одним вопросом.
+If it is ambiguous — ask a single question.
 
-## Источник framework
+## Framework source
 
-Путь к framework checkout записан в `~/.claude/framework-source-path`. Скилл `/setup-project` использует его для запуска установщика. Если файла нет — скилл сам найдёт checkout в стандартных местах или склонирует из GitHub.
+The path to the framework checkout is recorded in `~/.claude/framework-source-path`. The `/setup-project` skill uses it to run the installer. If the file is missing, the skill will find the checkout in the standard locations itself or clone it from GitHub.

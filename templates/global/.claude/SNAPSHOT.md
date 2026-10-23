@@ -1,30 +1,30 @@
 # Project Snapshot — {{PROJECT_NAME}}
 
-**Last Updated:** {{DATE}}
+**Last updated:** {{DATE}}
 
 <!--
-State-слой (что есть ПРЯМО СЕЙЧАС), не contract-слой. Архитектура и
-инварианты живут в ARCHITECTURE.md / INVARIANTS.md — этот файл их не
-дублирует. Обновляй при каждом /finish, не только когда "есть что сказать".
+State layer (what exists RIGHT NOW), not the contract layer. Architecture and
+invariants live in ARCHITECTURE.md / INVARIANTS.md — this file does not
+duplicate them. Update it at every /finish, not only when "there is something to say".
 -->
 
-## Текущее состояние
+## Current state
 
-**Статус:** ...
-**В работе:** ...
+**Status:** ...
+**In progress:** ...
 
-## Что сделано
-
-- ...
-
-## Что в процессе
+## Done
 
 - ...
 
-## Известные проблемы
+## In progress
 
 - ...
 
-## Следующие шаги
+## Known issues
+
+- ...
+
+## Next steps
 
 - ...

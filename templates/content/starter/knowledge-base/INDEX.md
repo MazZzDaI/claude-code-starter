@@ -15,8 +15,8 @@
 
 ## Navigation
 
-1. Начни здесь
-2. Перейди в нужную категорию (`INDEX-*.md`)
-3. Открой конкретную статью
+1. Start here
+2. Go to the relevant category (`INDEX-*.md`)
+3. Open the specific article
 
-Это шаблон. Заполняй по мере добавления статей.
+This is a template. Fill it in as you add articles.

@@ -1,28 +1,28 @@
 ---
-description: Оптимизировать производительность кода
+description: Optimise code performance
 ---
 
-Помоги оптимизировать производительность указанного кода.
+Help optimise the performance of the specified code.
 
-**Области оптимизации:**
+**Optimisation areas:**
 
 ## 1. React Performance
 
-**Проверь:**
-- [ ] Нет ли лишних ре-рендеров
-- [ ] Используется ли мемоизация (`useMemo`, `useCallback`)
-- [ ] Правильно ли используются keys в списках
-- [ ] Можно ли использовать React.memo
-- [ ] Нет ли создания объектов/функций в рендере
+**Check:**
+- [ ] No unnecessary re-renders
+- [ ] Memoisation is used (`useMemo`, `useCallback`)
+- [ ] Keys are used correctly in lists
+- [ ] Whether React.memo can be used
+- [ ] No objects/functions created during render
 
-**Оптимизации:**
+**Optimisations:**
 ```typescript
-// ❌ Плохо
+// ❌ Bad
 function Component() {
   return <Child onClick={() => {}} data={{}} />
 }
 
-// ✅ Хорошо
+// ✅ Good
 const EMPTY_DATA = {}
 function Component() {
   const handleClick = useCallback(() => {}, [])
@@ -32,19 +32,19 @@ function Component() {
 
 ## 2. Database Queries
 
-**Проверь:**
-- [ ] Запрашиваются только нужные поля
-- [ ] Используются индексы
-- [ ] Нет N+1 проблем
-- [ ] Используется pagination
-- [ ] Есть ли лимиты на выборку
+**Check:**
+- [ ] Only the required fields are queried
+- [ ] Indexes are used
+- [ ] No N+1 problems
+- [ ] Pagination is used
+- [ ] There are limits on result sets
 
-**Оптимизации:**
+**Optimisations:**
 ```typescript
-// ❌ Плохо
+// ❌ Bad
 const { data } = await supabase.from('chats').select('*')
 
-// ✅ Хорошо
+// ✅ Good
 const { data } = await supabase
   .from('chats')
   .select('id, title, created_at')
@@ -54,18 +54,18 @@ const { data } = await supabase
 
 ## 3. Bundle Size
 
-**Проверь:**
-- [ ] Используются ли dynamic imports
-- [ ] Нет ли лишних зависимостей
-- [ ] Оптимизированы ли изображения
-- [ ] Используется ли tree shaking
+**Check:**
+- [ ] Dynamic imports are used
+- [ ] No unnecessary dependencies
+- [ ] Images are optimised
+- [ ] Tree shaking is used
 
-**Оптимизации:**
+**Optimisations:**
 ```typescript
-// ❌ Плохо
+// ❌ Bad
 import HeavyLibrary from 'heavy-library'
 
-// ✅ Хорошо
+// ✅ Good
 const HeavyLibrary = dynamic(() => import('heavy-library'), {
   loading: () => <Spinner />
 })
@@ -73,60 +73,60 @@ const HeavyLibrary = dynamic(() => import('heavy-library'), {
 
 ## 4. Caching
 
-**Проверь:**
-- [ ] Используется ли React cache
-- [ ] Правильно ли работает revalidation
-- [ ] Используется ли SWR/React Query
-- [ ] Кэшируются ли статические данные
+**Check:**
+- [ ] React cache is used
+- [ ] Revalidation works correctly
+- [ ] SWR/React Query is used
+- [ ] Static data is cached
 
 ## 5. Network
 
-**Проверь:**
-- [ ] Объединены ли похожие запросы
-- [ ] Используется ли параллельная загрузка
-- [ ] Есть ли prefetching
-- [ ] Оптимизирован ли размер ответов
+**Check:**
+- [ ] Similar requests are combined
+- [ ] Parallel loading is used
+- [ ] There is prefetching
+- [ ] Response size is optimised
 
 ## 6. Images & Media
 
-**Проверь:**
-- [ ] Используется ли next/image
-- [ ] Правильные ли размеры изображений
-- [ ] Используется ли lazy loading
-- [ ] Форматы оптимизированы (WebP)
+**Check:**
+- [ ] next/image is used
+- [ ] Image sizes are correct
+- [ ] Lazy loading is used
+- [ ] Formats are optimised (WebP)
 
-**Процесс оптимизации:**
+**Optimisation process:**
 
-1. **Измерь:**
-   - Используй React DevTools Profiler
-   - Проверь Network tab
-   - Запусти Lighthouse
-   - Измерь время выполнения
+1. **Measure:**
+   - Use the React DevTools Profiler
+   - Check the Network tab
+   - Run Lighthouse
+   - Measure execution time
 
-2. **Найди bottleneck:**
-   - Что занимает больше всего времени?
-   - Где происходят лишние вычисления?
-   - Где медленные запросы?
+2. **Find the bottleneck:**
+   - What takes the most time?
+   - Where are unnecessary computations happening?
+   - Where are the slow queries?
 
-3. **Оптимизируй:**
-   - Начни с самого медленного
-   - Делай по одному изменению
-   - Измеряй после каждого изменения
+3. **Optimise:**
+   - Start with the slowest
+   - Make one change at a time
+   - Measure after each change
 
-4. **Проверь:**
-   - Функциональность сохранена
-   - Производительность улучшилась
-   - Нет новых проблем
+4. **Verify:**
+   - Functionality is preserved
+   - Performance has improved
+   - No new problems
 
-**Метрики для отслеживания:**
+**Metrics to track:**
 - First Contentful Paint (FCP)
 - Largest Contentful Paint (LCP)
 - Time to Interactive (TTI)
 - Cumulative Layout Shift (CLS)
 - Total Blocking Time (TBT)
 
-**В конце дай:**
-- Список найденных проблем
-- Приоритет оптимизаций
-- Ожидаемое улучшение
-- Конкретный код для изменений
+**At the end, give:**
+- A list of the problems found
+- Optimisation priorities
+- Expected improvement
+- Concrete code for the changes

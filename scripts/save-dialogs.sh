@@ -20,7 +20,7 @@
 #
 # Usage:
 #   bash scripts/save-dialogs.sh
-#   bash scripts/save-dialogs.sh --note "тема диалога"
+#   bash scripts/save-dialogs.sh --note "dialog topic"
 #
 # Exits 0 even when source directory missing (prints a warning).
 
@@ -112,7 +112,7 @@ ensure_index_header() {
         cat > "$INDEX" <<EOF
 # Dialog Archive
 
-Сохранённые JSONL-диалоги Claude Code. Подробнее: rule \`dialog-preservation\`.
+Saved Claude Code JSONL dialogs. More detail: rule \`dialog-preservation\`.
 
 | Date | File | Session | Note |
 |------|------|---------|------|

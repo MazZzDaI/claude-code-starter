@@ -7,24 +7,24 @@ seen_in: []   # list of places (files, sessions, projects) where pattern occurre
 related: []
 ---
 
-# Pattern: [имя]
+# Pattern: [name]
 
-## Концепция
-[2-4 предложения: что это за приём]
+## Concept
+[2–4 sentences: what this technique is]
 
-## Когда применять
-- сигнал 1
-- сигнал 2
+## When to apply
+- signal 1
+- signal 2
 
-## Когда НЕ применять
-- анти-сигнал 1
+## When NOT to apply
+- anti-signal 1
 
 ## Anti-patterns
-- что выглядит похоже, но даёт другой результат
+- what looks similar but gives a different result
 
-## Примеры из практики
-- ссылка / описание 1
-- ссылка / описание 2
+## Examples from practice
+- link / description 1
+- link / description 2
 
 ---
-*Поднимать до mature, когда паттерн стабилизировался: фиксированный prompt-каркас, известные параметры, повторяемый результат.*
+*Raise to mature once the pattern has stabilised: a fixed prompt scaffold, known parameters, a repeatable result.*

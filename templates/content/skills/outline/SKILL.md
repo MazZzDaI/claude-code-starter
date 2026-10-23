@@ -1,6 +1,6 @@
 ---
 name: outline
-description: "Построение структуры книги, курса, базы знаний, документа."
+description: "Building the structure of a book, course, knowledge base or document."
 allowed-tools: Read Write Edit Glob Grep
 disable-model-invocation: false
 ---
@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 ## Purpose
 
-Сформировать content map: оглавление, программу, chapter map, registry или document structure.
+Produce a content map: table of contents, programme, chapter map, registry or document structure.
 
 ## Input
 
@@ -20,25 +20,25 @@ disable-model-invocation: false
 
 ## Process
 
-1. Определи конечный результат для читателя
-2. Разбей материал на content units
-3. Для каждого unit задай функцию: teach, prove, reference, decide, practice, archive
-4. Построй порядок: prerequisites, learning curve, narrative arc, decision flow
-5. Отметь dependencies и cross-links
-6. Проверь, что обязательные sources не потеряны
-7. Зафиксируй gaps for research/write
+1. Define the end result for the reader
+2. Break the material into content units
+3. Give each unit a function: teach, prove, reference, decide, practice, archive
+4. Build the order: prerequisites, learning curve, narrative arc, decision flow
+5. Mark dependencies and cross-links
+6. Check that mandatory sources have not been lost
+7. Record gaps for research/write
 
 ## Output
 
-- курс: `program.md`, `learning-objectives.md`, `dependencies.md`
-- книга: `arc.md`, `chapter-map.md`, `briefs/chapter-N.md`
-- база знаний: `INDEX.md`, `INDEX-*.md`, taxonomy
-- документы: `document-map.md`, canonical files list
-- транскрипты: `00-course-index.md`, section map
+- course: `program.md`, `learning-objectives.md`, `dependencies.md`
+- book: `arc.md`, `chapter-map.md`, `briefs/chapter-N.md`
+- knowledge base: `INDEX.md`, `INDEX-*.md`, taxonomy
+- documents: `document-map.md`, canonical files list
+- transcripts: `00-course-index.md`, section map
 
 ## Quality
 
-- У каждого section/unit есть цель
-- Нет циклических dependencies
-- Структура соответствует audience level
-- Навигация понятна
+- Every section/unit has a goal
+- No circular dependencies
+- The structure matches the audience level
+- Navigation is clear

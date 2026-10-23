@@ -1,6 +1,6 @@
 ---
 name: enrich
-description: "Обогащение контента примерами, упражнениями, квизами, cross-links."
+description: "Enriching content with examples, exercises, quizzes and cross-links."
 allowed-tools: Read Write Edit Glob Grep
 disable-model-invocation: false
 ---
@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 ## Purpose
 
-Сделать контент практичным, связанным и полезным без потери исходного смысла.
+Make content practical, connected and useful without losing the original meaning.
 
 ## Input
 

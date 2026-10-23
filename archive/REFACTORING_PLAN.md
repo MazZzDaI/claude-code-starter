@@ -50,91 +50,91 @@
 
 #### Section-by-Section Changes:
 
-**🚀 Быстрый старт** (lines 7-22)
+**🚀 Quick start** (lines 7-22)
 - ✅ KEEP AS IS - good navigation
 
-**📦 Bash-команды** (lines 24-44)
+**📦 Bash commands** (lines 24-44)
 - ✅ KEEP AS IS - essential reference
 
-**🎨 Кодстайл** (lines 46-65)
+**🎨 Code style** (lines 46-65)
 - ✅ KEEP AS IS - quick reference is OK
 
-**🔐 Безопасность** (lines 67-80)
+**🔐 Security** (lines 67-80)
 ❌ REMOVE detailed rules
 ✅ REPLACE with:
 ```markdown
-## 🔐 Безопасность (КРИТИЧНО!)
+## 🔐 Security (CRITICAL!)
 
-**📖 ПОЛНАЯ ПОЛИТИКА:** SECURITY.md
+**📖 FULL POLICY:** SECURITY.md
 
-**⚠️ ВСЕГДА перед кодированием:**
-1. Прочитай SECURITY.md полностью
-2. Следуй чеклисту для текущей стадии разработки (SECURITY.md → Stage X)
+**⚠️ ALWAYS before coding:**
+1. Read SECURITY.md in full
+2. Follow the checklist for the current development stage (SECURITY.md → Stage X)
 
-**Ключевые правила (подробно в SECURITY.md):**
-- ✅ Валидация входных данных → SECURITY.md Stage 3
-- ✅ Секреты в .env → SECURITY.md "Secrets Management"
-- ✅ Параметризованные запросы → SECURITY.md "SQL Injection Prevention"
-- ❌ Никогда не hardcode секреты → SECURITY.md "NEVER DO" section
-- ❌ Никогда не доверяй user input → SECURITY.md "Zero Trust"
+**Key rules (details in SECURITY.md):**
+- ✅ Input validation → SECURITY.md Stage 3
+- ✅ Secrets in .env → SECURITY.md "Secrets Management"
+- ✅ Parameterised queries → SECURITY.md "SQL Injection Prevention"
+- ❌ Never hardcode secrets → SECURITY.md "NEVER DO" section
+- ❌ Never trust user input → SECURITY.md "Zero Trust"
 
-**Для AI-агентов:** Запускай `/security` для автоматического audit
+**For AI agents:** Run `/security` for an automatic audit
 ```
 
-**🏗️ Флоу работы** (lines 82-109)
+**🏗️ Workflow** (lines 82-109)
 ❌ REMOVE all detailed checklists
 ✅ REPLACE with:
 ```markdown
-## 🏗️ Флоу работы
+## 🏗️ Workflow
 
-**📖 ПОЛНАЯ ДОКУМЕНТАЦИЯ:** WORKFLOW.md
+**📖 FULL DOCUMENTATION:** WORKFLOW.md
 
-**Быстрая навигация:**
+**Quick navigation:**
 
-### Перед началом задачи
-→ См. WORKFLOW.md → "Sprint Start" section
+### Before starting a task
+→ See WORKFLOW.md → "Sprint Start" section
 
-### Во время разработки
-→ См. WORKFLOW.md → "Implementation" section
-→ См. AGENTS.md → Project-specific patterns
+### During development
+→ See WORKFLOW.md → "Implementation" section
+→ See AGENTS.md → Project-specific patterns
 
-### После изменений
+### After changes
 → `make typecheck && make lint`
 
-### Sprint завершение
-→ См. WORKFLOW.md → "Sprint Completion Checklist" (29 пунктов!)
-→ ⚠️ КРИТИЧНО: Не пропусти Security Requirements!
+### Sprint completion
+→ See WORKFLOW.md → "Sprint Completion Checklist" (29 items!)
+→ ⚠️ CRITICAL: Don't skip the Security Requirements!
 
 ### Git workflow
-→ См. WORKFLOW.md → "Git Workflow" section
-→ Commit messages: См. WORKFLOW.md → "Commit Templates"
+→ See WORKFLOW.md → "Git Workflow" section
+→ Commit messages: see WORKFLOW.md → "Commit Templates"
 ```
 
-**🔧 Настройка окружения** (lines 111-135)
+**🔧 Environment setup** (lines 111-135)
 - ✅ KEEP AS IS - project-specific info
 
-**📋 Важные детали** (lines 137-155)
-- ✅ KEEP AS IS - [ЗАПОЛНИТЬ] sections
+**📋 Important details** (lines 137-155)
+- ✅ KEEP AS IS - [FILL IN] sections
 
-**🐛 Отладка** (lines 157-180)
+**🐛 Debugging** (lines 157-180)
 - ✅ KEEP AS IS - helpful quick reference
 
-**🎯 Приоритеты** (lines 182-189)
+**🎯 Priorities** (lines 182-189)
 - ✅ KEEP AS IS - good summary
 
-**📝 Slash-команды** (lines 191-210)
+**📝 Slash commands** (lines 191-210)
 - ✅ KEEP AS IS - essential reference
 
-**⚠️ Предупреждения** (lines 212-219)
+**⚠️ Warnings** (lines 212-219)
 - ✅ KEEP AS IS
 
-**🔄 Интеграции** (lines 221-237)
+**🔄 Integrations** (lines 221-237)
 - ✅ KEEP AS IS
 
-**📚 Полезные ссылки** (lines 239-245)
+**📚 Useful links** (lines 239-245)
 - ✅ KEEP AS IS
 
-**🎓 Для новых разработчиков** (lines 247-256)
+**🎓 For new developers** (lines 247-256)
 - ✅ KEEP AS IS - good onboarding
 
 **Expected Result:**
@@ -159,21 +159,21 @@
 ```markdown
 ### 🔐 Security (CRITICAL - READ SECURITY.md FIRST!)
 
-**📖 ПОЛНАЯ ПОЛИТИКА БЕЗОПАСНОСТИ:** SECURITY.md
+**📖 FULL SECURITY POLICY:** SECURITY.md
 
-**ДО начала любой задачи с кодом:**
-1. Прочитай SECURITY.md → Stage 1 (Planning)
-2. Следуй чеклистам для текущей стадии
-3. В случае сомнений → `/security` для audit
+**BEFORE starting any coding task:**
+1. Read SECURITY.md → Stage 1 (Planning)
+2. Follow the checklists for the current stage
+3. When in doubt → `/security` for an audit
 
-**Ключевые принципы (все детали в SECURITY.md):**
+**Key principles (all details in SECURITY.md):**
 - 🔐 Secrets management → SECURITY.md "Environment Variables"
 - 🔐 Input validation → SECURITY.md Stage 3
 - 🔐 SQL injection prevention → SECURITY.md "Database Security"
 - 🔐 XSS prevention → SECURITY.md "Output Sanitization"
 
-**AGENTS.md содержит только project-specific security patterns!**
-См. "Project Security Patterns" section ниже для специфичных правил этого проекта.
+**AGENTS.md contains only project-specific security patterns!**
+See the "Project Security Patterns" section below for rules specific to this project.
 ```
 
 **✅ ALWAYS DO → 🔐 Security (lines 173-184)**
@@ -186,29 +186,29 @@
 ```markdown
 ### 🔐 Security Review (Before Every Deploy)
 
-**📖 ИСПОЛЬЗУЙ CHECKLIST ИЗ SECURITY.md:**
-- См. SECURITY.md → Stage 5 (Pre-Deployment)
-- См. SECURITY.md → "Security Sign-Off Template"
+**📖 USE THE CHECKLIST FROM SECURITY.md:**
+- See SECURITY.md → Stage 5 (Pre-Deployment)
+- See SECURITY.md → "Security Sign-Off Template"
 
-**Или используй автоматизацию:**
+**Or use automation:**
 ```bash
-/security  # Запустить AI-guided security audit
+/security  # Run an AI-guided security audit
 ```
 ```
 
-**ADD NEW SECTION (для project-specific patterns):**
+**ADD NEW SECTION (for project-specific patterns):**
 ```markdown
 ---
 
 ## 🔐 Project Security Patterns
 
-> **Важно:** Этот раздел для СПЕЦИФИЧНЫХ для ЭТОГО проекта security patterns.
-> Общие правила безопасности см. SECURITY.md
+> **Important:** This section is for security patterns SPECIFIC to THIS project.
+> For general security rules, see SECURITY.md
 
-[ЗАПОЛНИТЬ по мере разработки проекта]
+[FILL IN as the project develops]
 
 ### Pattern 1: [Project-Specific Security Rule]
-[Описание специфичного для проекта security pattern]
+[Description of a project-specific security pattern]
 
 **Template:**
 ```markdown
@@ -237,34 +237,34 @@
 
 #### Changes:
 
-**Section 25a. Модульная структура** (lines 536-576)
+**Section 25a. Modular structure** (lines 536-576)
 ❌ REMOVE detailed 40-line explanation
 ✅ REPLACE with:
 ```markdown
-### 25a. Модульная структура (ОБЯЗАТЕЛЬНО!)
+### 25a. Modular structure (MANDATORY!)
 
-**Почему модульная архитектура критична для работы с ИИ:**
+**Why a modular architecture is critical for working with AI:**
 
-📖 **ПОЛНАЯ ФИЛОСОФИЯ:** ARCHITECTURE.md → "Module Architecture" section
+📖 **FULL PHILOSOPHY:** ARCHITECTURE.md → "Module Architecture" section
 
-**Краткое объяснение:**
-1. **Экономия токенов:** ИИ загружает только нужный модуль (100-200 строк), а не весь проект (1000+ строк)
-2. **Простота:** Каждый модуль = отдельная задача = легко проверить
-3. **Скорость:** Можно делать разные модули параллельно
+**Brief explanation:**
+1. **Token savings:** The AI loads only the module it needs (100-200 lines), not the whole project (1000+ lines)
+2. **Simplicity:** Each module = a separate task = easy to check
+3. **Speed:** Different modules can be built in parallel
 
-**Принцип:** Приложение = набор маленьких LEGO-кубиков
+**Principle:** An application = a set of small LEGO bricks
 
-📖 **Детали, примеры, диаграммы:** См. ARCHITECTURE.md → "Module Architecture"
+📖 **Details, examples, diagrams:** See ARCHITECTURE.md → "Module Architecture"
 
-**Ваш подход к модульности:**
+**Your approach to modularity:**
 
-- [ ] Да, хочу модульную структуру (рекомендовано!)
-- [ ] Нет, хочу монолитную структуру (НЕ рекомендуется для работы с ИИ)
+- [ ] Yes, I want a modular structure (recommended!)
+- [ ] No, I want a monolithic structure (NOT recommended for working with AI)
 
-**Selected:** [ОТВЕТИТЬ: Модульная (recommended)]
+**Selected:** [ANSWER: Modular (recommended)]
 
-**Как будем разрабатывать модули:**
-[ОТВЕТИТЬ: Например, "По одному модулю за раз. См. ARCHITECTURE.md для типичной последовательности"]
+**How we will develop the modules:**
+[ANSWER: For example, "One module at a time. See ARCHITECTURE.md for the typical sequence"]
 ```
 
 **Expected Result:**
@@ -416,7 +416,7 @@ These files **link to** authoritative sources. They don't duplicate.
 ### For CLAUDE.md (Navigator)
 - **DO:** Link to authoritative sources
 - **DON'T:** Duplicate details from other files
-- **Format:** "📖 См. WORKFLOW.md → Section Name"
+- **Format:** "📖 See WORKFLOW.md → Section Name"
 
 ### For AGENTS.md (Project Patterns)
 - **DO:** Document project-specific patterns
@@ -476,21 +476,21 @@ After refactoring, test that framework still works:
 
 ### 1. AI Agent Test
 ```
-Prompt: "Прочитай CLAUDE.md и объясни как начать новый sprint"
+Prompt: "Read CLAUDE.md and explain how to start a new sprint"
 
 Expected: AI finds link to WORKFLOW.md → reads Sprint Start section → explains correctly
 ```
 
 ### 2. Security Test
 ```
-Prompt: "Какие security practices нужно соблюдать при разработке?"
+Prompt: "Which security practices should be followed during development?"
 
 Expected: AI points to SECURITY.md, mentions stages, explains key principles
 ```
 
 ### 3. Modularity Test
 ```
-Prompt: "Объясни почему модульная архитектура важна"
+Prompt: "Explain why a modular architecture matters"
 
 Expected: AI finds link in CLAUDE.md → reads ARCHITECTURE.md Module section → explains with diagrams
 ```

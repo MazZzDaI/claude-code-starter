@@ -4,9 +4,9 @@
 
 ---
 
-## Архитектура
+## Architecture
 
-Система защиты credentials состоит из **4 слоев** с гибридным подходом:
+The credentials protection system consists of **4 layers** with a hybrid approach:
 - **Layers 1-3:** Automatic, fast (regex-based)
 - **Layer 4:** Smart auto-invoke (AI-based, context-aware)
 
@@ -113,12 +113,12 @@ Detected conditions:
 
 Claude AI will ask:
 
-⚠️  Обнаружены потенциальные риски безопасности:
-  • Regex cleanup нашёл 3 файла с credentials
-  • Обсуждали: ssh, production, database (12 упоминаний)
+⚠️  Potential security risks detected:
+  • Regex cleanup found 3 files with credentials
+  • Discussed: ssh, production, database (12 mentions)
 
-Рекомендую запустить deep scan изменений спринта (1-2 минуты).
-Запустить AI-агент для проверки? (y/N)
+I recommend running a deep scan of the sprint changes (1-2 minutes).
+Run the AI agent to check? (y/N)
 ```
 
 ---
@@ -142,7 +142,7 @@ Detected conditions:
   • Many new dialog files (8 uncommitted)
 
 Claude AI may mention:
-💡 Если хотите дополнительную проверку безопасности, можете запустить /security-dialogs
+💡 If you want an additional security check, you can run /security-dialogs
 ```
 
 ---
@@ -194,12 +194,12 @@ Claude AI may mention:
    reports/FRAMEWORK_*.md
 
 # NOT included:
-❌ Entire codebase (только git diff)
-❌ Old dialog files (уже почищены)
-❌ Unchanged files (нет смысла)
+❌ Entire codebase (git diff only)
+❌ Old dialog files (already cleaned)
+❌ Unchanged files (no point)
 ```
 
-**Result:** 5-10 файлов вместо 300+ (massive token savings!)
+**Result:** 5-10 files instead of 300+ (massive token savings!)
 
 ---
 
@@ -239,12 +239,12 @@ user: "/fi"
 3. Claude AI reads triggers + session context
 4. If HIGH risk → Claude ASKS user:
 
-   ⚠️  Обнаружены потенциальные риски безопасности:
-     • Regex cleanup нашёл 3 файла с credentials
-     • Обсуждали: ssh, production, database (12 mentions)
+   ⚠️  Potential security risks detected:
+     • Regex cleanup found 3 files with credentials
+     • Discussed: ssh, production, database (12 mentions)
 
-   Рекомендую запустить deep scan изменений спринта (1-2 минуты).
-   Запустить AI-агент для проверки? (y/N)
+   I recommend running a deep scan of the sprint changes (1-2 minutes).
+   Run the AI agent to check? (y/N)
 
 5. User decides:
    - "y" → Deep scan (1-2 min, thorough)
@@ -325,7 +325,7 @@ Time breakdown:
 - Claude asks user → User says "N" (skip)
 
 Total: 1-2 seconds ✅ FAST
-Token cost: Minimal (только regex)
+Token cost: Minimal (regex only)
 ```
 
 ### High-Risk Session (5% of cases - User Accepts)
@@ -356,7 +356,7 @@ Total: ~2 minutes ⚠️ MANDATORY for releases
 Token cost: Moderate (worth it for public release safety)
 ```
 
-**Trade-off:** "Лучше пусть медленно, но надёжно" — но не на каждый commit, а только когда user решает или release!
+**Trade-off:** "Better slow but reliable" — but not on every commit, only when the user decides or on release!
 
 ---
 
@@ -477,11 +477,11 @@ echo "password=test123" >> dialog/test.md
 - **Decision:** 👤 User controls (advisory mode)
 - **Scope:** 📊 Git diff + last dialog (5-10 files vs 300+)
 
-**Философия:**
-- "Лучше пусть медленно, но надёжно" — но НЕ на каждый commit
-- Advisory mode — пользователь решает, когда нужна тщательность
-- Release mode — единственный auto-invoke (public safety)
-- Token economy — анализ изменений спринта, не всей базы
+**Philosophy:**
+- "Better slow but reliable" — but NOT on every commit
+- Advisory mode — the user decides when thoroughness is needed
+- Release mode — the only auto-invoke (public safety)
+- Token economy — analyse the sprint changes, not the whole codebase
 
 **Key differentiators:**
 - ✅ User always in control (normal commits)

@@ -1,6 +1,6 @@
 ---
 name: playwright
-description: "E2E тестирование UI с Playwright. Запуск, создание тестов, анализ результатов."
+description: "E2E UI testing with Playwright. Running and creating tests, analysing results."
 paths:
   - "src/**/*.tsx"
   - "src/**/*.jsx"
@@ -16,59 +16,59 @@ disable-model-invocation: true
 
 # Skill: Playwright E2E Testing
 
-## Проверка окружения
+## Environment check
 
 ```bash
-# Проверить установлен ли Playwright
+# Check whether Playwright is installed
 npx playwright --version 2>/dev/null || echo "Playwright not installed"
 ```
 
-Если не установлен:
+If it is not installed:
 ```bash
 npm install -D @playwright/test
 npx playwright install chromium
 ```
 
-## Запуск существующих тестов
+## Running existing tests
 
 ```bash
 npx playwright test
 ```
 
-С UI отчётом:
+With a UI report:
 ```bash
 npx playwright test --reporter=html
 ```
 
-## Создание нового теста
+## Creating a new test
 
-При создании E2E теста:
+When creating an E2E test:
 
-1. Определить сценарий (user flow)
-2. Создать файл в `tests/e2e/` или `e2e/`
-3. Использовать паттерн:
+1. Define the scenario (user flow)
+2. Create a file in `tests/e2e/` or `e2e/`
+3. Use the pattern:
 
 ```typescript
 import { test, expect } from '@playwright/test';
 
-test('описание сценария', async ({ page }) => {
+test('scenario description', async ({ page }) => {
   await page.goto('/');
   // ... actions
   await expect(page.locator('selector')).toBeVisible();
 });
 ```
 
-## Когда использовать
+## When to use
 
-- После изменений UI-компонентов
-- После изменений роутинга
-- После изменений форм и интерактивных элементов
-- Перед production deploy (обязательно)
+- After changes to UI components
+- After changes to routing
+- After changes to forms and interactive elements
+- Before a production deploy (mandatory)
 
-## Анализ падений
+## Failure analysis
 
-При падении теста:
-1. Показать скриншот ошибки (если есть в `test-results/`)
-2. Показать trace (если включен)
-3. Определить: баг в коде или устаревший тест
-4. Предложить фикс
+When a test fails:
+1. Show the error screenshot (if there is one in `test-results/`)
+2. Show the trace (if enabled)
+3. Determine: a bug in the code or an outdated test
+4. Propose a fix

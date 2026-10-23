@@ -623,7 +623,7 @@ Show simple completion message:
 
 ````
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Миграция завершена!
+✅ Migration complete!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📊 Framework Upgrade:

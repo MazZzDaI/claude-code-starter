@@ -57,65 +57,65 @@
 **Decision:** Use Task tool with parallel subagents for framework file generation during migration.
 
 **Rationale:**
-- Step 6 миграции генерировал 5 файлов последовательно (200 секунд / 3+ минуты)
-- Каждый файл = одинаковый паттерн: analysis_result + template → markdown file
-- Задачи полностью независимы (SNAPSHOT не зависит от BACKLOG)
-- Task tool поддерживает параллельный запуск multiple agents в одном сообщении
+- Step 6 of the migration generated 5 files sequentially (200 seconds / 3+ minutes)
+- Each file = the same pattern: analysis_result + template → markdown file
+- The tasks are fully independent (SNAPSHOT does not depend on BACKLOG)
+- The Task tool supports launching multiple agents in parallel in a single message
 
 **Implementation:**
-- Один вызов с 5 Task tool calls одновременно
-- Каждый агент генерирует свой файл независимо
-- SHARED_CONTEXT передается всем агентам
-- Специфичные промпты для каждого типа файла
+- A single call with 5 Task tool calls at once
+- Each agent generates its own file independently
+- SHARED_CONTEXT is passed to all agents
+- Specific prompts for each file type
 
 **Alternatives Considered:**
-- Последовательная генерация → rejected (слишком медленно)
-- Написать Python-утилиту для генерации → deferred (migration используется редко)
-- Генерировать все файлы одним агентом → rejected (prompts будут огромными)
+- Sequential generation → rejected (too slow)
+- Write a Python utility for generation → deferred (migration is rarely used)
+- Generate all files with a single agent → rejected (the prompts would be enormous)
 
-**Outcome:** ✅ Implemented. Step 6 теперь 40 секунд вместо 200 секунд (5x ускорение). Общее время миграции: 9 минут → 6.7 минут (~30% ускорение).
+**Outcome:** ✅ Implemented. Step 6 now takes 40 seconds instead of 200 seconds (5x speed-up). Total migration time: 9 minutes → 6.7 minutes (~30% speed-up).
 
 ---
 
 ### 2A.1. Framework Auto-Update Regression & Fix (v3.1.1, Jan 2026)
 
-**Problem:** При переходе на Python в v3.0.0 случайно потеряли автообновление фреймворка.
+**Problem:** During the move to Python in v3.0.0, the framework's auto-update was lost by accident.
 
 **Root Cause:**
-- v2.2.4-v2.7.0: Cold Start Protocol имел Step 0.2 (Framework Version Check) с bash скриптом
-- v3.0.0: Переписали на Python utility, но только проверка версии осталась (tasks/version.py)
-- Python utility возвращает UPDATE:available, но не скачивает и не устанавливает файлы
-- Логика установки была в bash-коде Step 0.2, который удалили при переходе
+- v2.2.4-v2.7.0: the Cold Start Protocol had Step 0.2 (Framework Version Check) with a bash script
+- v3.0.0: Rewritten as a Python utility, but only the version check remained (tasks/version.py)
+- The Python utility returns UPDATE:available, but does not download or install the files
+- The installation logic lived in the bash code of Step 0.2, which was removed during the move
 
 **Impact:**
-- Хост-проекты на v3.0.0 и v3.1.0 НЕ получали обновления автоматически
-- Только ручное обновление через `quick-update.sh` работало
-- Регрессия с v2.7.0 где автообновление работало идеально
+- Host projects on v3.0.0 and v3.1.0 did NOT receive updates automatically
+- Only manual updating via `quick-update.sh` worked
+- A regression from v2.7.0, where auto-update worked perfectly
 
-**Decision:** Восстановить Phase 2.5 в Cold Start Protocol с полной реализацией автообновления.
+**Decision:** Restore Phase 2.5 in the Cold Start Protocol with a full implementation of auto-update.
 
 **Implementation:**
-- Добавлен Phase 2.5 в `.claude/protocols/cold-start-silent.md`
-- Bash скрипт после Phase 1 (Python utility execution)
-- Парсит результат version_check из JSON
-- Если UPDATE:available - скачивает CLAUDE.md + framework-commands.tar.gz
-- Заменяет файлы автоматически (aggressive strategy)
-- Self-healing: автокоррекция версии при несоответствии
-- Просит перезапустить сессию после обновления
+- Added Phase 2.5 to `.claude/protocols/cold-start-silent.md`
+- A bash script after Phase 1 (Python utility execution)
+- Parses the version_check result from JSON
+- If UPDATE:available - downloads CLAUDE.md + framework-commands.tar.gz
+- Replaces the files automatically (aggressive strategy)
+- Self-healing: automatic version correction on mismatch
+- Asks to restart the session after the update
 
 **Why Aggressive (No Confirmation):**
-- Framework updates только framework files, никогда user data
-- Безопасно: downloads сначала в temporary files, потом replace
-- Пользователи получают bugfixes немедленно
-- Reduced support burden (все на последней версии)
-- Проверено: работало надежно в v2.2.4-v2.7.0
+- Framework updates only framework files, never user data
+- Safe: downloads into temporary files first, then replaces
+- Users receive bugfixes immediately
+- Reduced support burden (everyone on the latest version)
+- Verified: worked reliably in v2.2.4-v2.7.0
 
 **Alternatives Considered:**
-- Реализовать в Python utility → deferred (bash проще и быстрее для hotfix)
-- Ask confirmation → rejected (aggressive strategy проверена, безопасна)
-- Оставить ручное обновление → rejected (плохой UX, регрессия)
+- Implement in the Python utility → deferred (bash is simpler and faster for a hotfix)
+- Ask confirmation → rejected (the aggressive strategy is proven and safe)
+- Keep manual updating → rejected (poor UX, a regression)
 
-**Outcome:** ✅ Fixed in v3.1.1. Автообновление восстановлено. Хост-проекты снова получают обновления автоматически при `start`.
+**Outcome:** ✅ Fixed in v3.1.1. Auto-update restored. Host projects once again receive updates automatically on `start`.
 
 ---
 
@@ -126,7 +126,7 @@
 **Rationale:**
 - Bash = 10 separate commands = terminal noise (task notifications spam)
 - Silent mode impossible with bash background tasks
-- User complained: "20-30% времени уходит на протоколы" - too much overhead
+- User complained: "20-30% of the time goes on protocols" - too much overhead
 - Python = 1 command, structured JSON output, true silent execution
 - Faster: parallel execution via threading, no shell overhead
 - Better debugging: proper code structure vs bash scripts
@@ -306,7 +306,7 @@
 - Simple rule outperformed complex heuristics
 - **Lesson:** Explicit > automatic for core behaviors
 
-**5. Framework Development: "Сапожник без сапог" Is Real**
+**5. Framework Development: "The Cobbler's Children Have No Shoes" Is Real**
 - Framework project itself forgot to update metafiles
 - Completion Protocol Step 0 added self-check questions
 - Issue: We're so focused on host projects, we forget our own workflow
@@ -325,7 +325,7 @@
 **Python Framework Core - Zero Terminal Noise (Phase 18):**
 
 **Problem:**
-User feedback: "20-30% времени уходит на протоколы" - protocols taking too much time and attention with terminal spam from bash background tasks.
+User feedback: "20-30% of the time goes on protocols" - protocols taking too much time and attention with terminal spam from bash background tasks.
 
 **Solution:**
 Complete rewrite of protocol execution layer from bash to Python.
@@ -394,11 +394,11 @@ $ python3 src/framework-core/main.py cold-start
 **True Silent Mode + Auto-Trigger System (Phase 17):**
 
 **Problem from User:**
-> "почти 20% времени работы над проектом, а это очень много, если не 30% времени, уходит на постоянное обслуживание протоколов старта или протоколов завершения"
+> "almost 20% of the time spent working on the project — and that's a lot — if not 30%, goes on constantly servicing the start protocols or the completion protocols"
 
-> "концепция о том, что человек должен контролировать каждый твой шаг... это нонсенс"
+> "the idea that a person has to control every single step you take... is nonsense"
 
-> "Ценность этих протоколов, ценность этого фреймворка в том, чтобы почти полностью автоматизировать рутину"
+> "The value of these protocols, the value of this framework, is in almost completely automating the routine"
 
 **Solution:**
 - Protocols now **completely invisible** to user
@@ -422,8 +422,8 @@ $ python3 src/framework-core/main.py cold-start
   - Commit: `✓ Committed (hash)` or optional 1-line confirmation
 
 **2. Auto-Trigger Detection:**
-- **Explicit keywords:** "готово", "done" → instant trigger
-- **Implicit signals:** "задача завершена", "баг исправлен" → suggest commit
+- **Explicit keywords:** "ready", "done" → instant trigger
+- **Implicit signals:** "task complete", "bug fixed" → suggest commit
 - **Git analysis:** 100+ lines changed, 5+ files modified → suggest commit
 - **Idle time:** 30+ min with uncommitted changes → suggest commit (optional, off by default)
 - **Context analysis:** AI analyzes conversation to detect completion
@@ -453,7 +453,7 @@ $ python3 src/framework-core/main.py cold-start
 **4. Presets:**
 - **"manual"** — No auto-triggers, user types `/fi` (old behavior)
 - **"assisted"** — Suggests commits, user confirms
-- **"balanced"** (default) — "готово" auto-commits, others ask
+- **"balanced"** (default) — "ready" auto-commits, others ask
 - **"autopilot"** — Fully automated (risky, for experienced users)
 
 **Time Comparison:**
@@ -622,7 +622,7 @@ claude-code-starter/
 - [x] **Loader pattern** — init-project.sh now downloads framework.tar.gz separately from GitHub Releases
 - [x] **Installation UX** — unified workflow for all scenarios (new/legacy/upgrade)
 - [x] **New project setup** — CLAUDE.md handles "mode": "new" with welcome message
-- [x] **Qualifying questions** — added explicit "Сделай, как лучше" option
+- [x] **Qualifying questions** — added explicit "Do whatever's best" option
 - [x] **Migration summary** — simplified to concise message instead of large tables
 - [x] **README updates** — simplified installation instructions for beginners
 - [x] **Two-phase CLAUDE.md** — CLAUDE.migration.md + CLAUDE.production.md
@@ -684,17 +684,17 @@ claude-code-starter/
 
 **Hotfix Release: UX Improvements**
 
-**Issue #41 - UX: Пояснение к "Continue or commit first?" в Crash Recovery:**
-- **Проблема:** Пользователь забывает что означает каждый вариант
-- **Решение:** Добавлено понятное пояснение с описанием вариантов
-- **Файл:** `.claude/protocols/cold-start.md` — Step 0.1 (Crash Recovery)
+**Issue #41 - UX: Explanation for "Continue or commit first?" in Crash Recovery:**
+- **Problem:** The user forgets what each option means
+- **Solution:** Added a clear explanation describing the options
+- **File:** `.claude/protocols/cold-start.md` — Step 0.1 (Crash Recovery)
 
 **Closed Issues:**
-- #23: Спам issue (closed as invalid)
-- #3: Documentation уже исправлена (no restart required)
+- #23: Spam issue (closed as invalid)
+- #3: Documentation already fixed (no restart required)
 
 **Impact:**
-- ✅ Понятный выбор при crash recovery
+- ✅ A clear choice during crash recovery
 - ✅ Confirmed correct installation instructions
 
 ---
@@ -703,24 +703,24 @@ claude-code-starter/
 
 **Hotfix Release: Subdirectory Scanning Fix**
 
-**Issue #7 - CRITICAL: `/migrate` пропускает docs/ с мета-документацией:**
-- **Проблема:** `/migrate-legacy` находил только файлы в корне проекта
-- **Последствия:** Пропускал docs/BACKLOG.md (491 строка!), docs/STATUS.md
-- **Результат:** .claude/BACKLOG.md оставался пустым template после миграции
-- **Нарушение:** "Single source of truth" - создавал два источника истины
-- **Решение:** Сканирование subdirectories (docs/, documentation/, notes/, wiki/, .github/)
-- **Файл:** `.claude/commands/migrate-legacy.md` — Steps 2.1, 2.3, 3, 5, 6, 9
-- **Новое:**
-  - Классификация по содержимому (мета vs code docs)
-  - Интерактивное подтверждение для ambiguous файлов
-  - Правильный mapping: docs/BACKLOG.md → .claude/BACKLOG.md
-  - Архивирование docs/ после миграции
+**Issue #7 - CRITICAL: `/migrate` skips docs/ containing meta-documentation:**
+- **Problem:** `/migrate-legacy` found only files in the project root
+- **Consequences:** It skipped docs/BACKLOG.md (491 lines!), docs/STATUS.md
+- **Result:** .claude/BACKLOG.md remained an empty template after migration
+- **Violation:** "Single source of truth" - it created two sources of truth
+- **Solution:** Scanning subdirectories (docs/, documentation/, notes/, wiki/, .github/)
+- **File:** `.claude/commands/migrate-legacy.md` — Steps 2.1, 2.3, 3, 5, 6, 9
+- **New:**
+  - Classification by content (meta vs code docs)
+  - Interactive confirmation for ambiguous files
+  - Correct mapping: docs/BACKLOG.md → .claude/BACKLOG.md
+  - Archiving of docs/ after migration
 
 **Impact:**
-- ✅ Migration находит ВСЮ мета-документацию, не только в корне
-- ✅ .claude/BACKLOG.md заполнен реальным контентом
-- ✅ Single source of truth - без путаницы
-- ✅ Token economy - AI не ищет docs/BACKLOG.md
+- ✅ Migration finds ALL the meta-documentation, not only in the root
+- ✅ .claude/BACKLOG.md is filled with real content
+- ✅ Single source of truth - no confusion
+- ✅ Token economy - the AI does not go looking for docs/BACKLOG.md
 
 ---
 
@@ -728,18 +728,18 @@ claude-code-starter/
 
 **Hotfix Release: Migration Workflow Fix**
 
-**Issue #4 - CRITICAL: init-project.sh не копирует .claude/commands/ для legacy проектов:**
-- **Проблема:** При установке в legacy проект копировались только 2 команды
-- **Последствия:** Пользователи не могли запустить `/migrate`, `/fi`, `/ui` и другие
-- **Блокировало:** Весь workflow миграции
-- **Решение:** Копирование всей структуры .claude/ (commands, dist, protocols, scripts, templates)
-- **Файл:** `init-project.sh` — lines 349-375 (LEGACY/UPGRADE mode)
-- **Теперь:** Legacy проекты получают полную функциональность сразу после установки
+**Issue #4 - CRITICAL: init-project.sh does not copy .claude/commands/ for legacy projects:**
+- **Problem:** When installing into a legacy project, only 2 commands were copied
+- **Consequences:** Users could not run `/migrate`, `/fi`, `/ui` and others
+- **Blocked:** The entire migration workflow
+- **Solution:** Copying the whole .claude/ structure (commands, dist, protocols, scripts, templates)
+- **File:** `init-project.sh` — lines 349-375 (LEGACY/UPGRADE mode)
+- **Now:** Legacy projects get full functionality straight after installation
 
 **Impact:**
-- ✅ Migration workflow теперь работает из коробки
-- ✅ Все slash команды доступны сразу после установки
-- ✅ Unified installation path для всех типов проектов
+- ✅ The migration workflow now works out of the box
+- ✅ All slash commands are available straight after installation
+- ✅ Unified installation path for all project types
 
 ---
 
@@ -747,22 +747,22 @@ claude-code-starter/
 
 **Hotfix Release: Critical Bug Fixes**
 
-**Issue #54 - CRITICAL: Dialog export с кириллицей (unicode) в пути:**
-- **Проблема:** Экспорт находил 0 сессий для проектов с кириллицей/unicode в пути
-- **Решение:** Использование `sessions-index.json` для точного сопоставления
-- **Файл:** `src/claude-export/exporter.ts` — `findClaudeProjectDir()`
-- **Метод:** Чтение `projectPath` из sessions-index.json (100% точность)
-- **Поддержка:** Любые unicode символы (кириллица, китайский, арабский)
+**Issue #54 - CRITICAL: Dialog export with Cyrillic (unicode) in the path:**
+- **Problem:** The export found 0 sessions for projects with Cyrillic/unicode in the path
+- **Solution:** Using `sessions-index.json` for exact matching
+- **File:** `src/claude-export/exporter.ts` — `findClaudeProjectDir()`
+- **Method:** Reading `projectPath` from sessions-index.json (100% accuracy)
+- **Support:** Any unicode characters (Cyrillic, Chinese, Arabic)
 
-**Issue #50 - MEDIUM: `/explain` избыточные ответы:**
-- **Проблема:** 6 разделов + 500+ строк даже для 3 строк кода
-- **Решение:** Адаптивная детализация по сложности
-- **Файл:** `.claude/commands/explain.md`
-- **Уровни:**
+**Issue #50 - MEDIUM: `/explain` excessive answers:**
+- **Problem:** 6 sections + 500+ lines even for 3 lines of code
+- **Solution:** Adaptive level of detail depending on complexity
+- **File:** `.claude/commands/explain.md`
+- **Levels:**
   - Simple (1-10 lines) → 50-100 tokens
   - Medium (10-50 lines) → 200-400 tokens
   - Complex (50+) → Full breakdown
-- **Token economy:** До 90% сокращение для простого кода
+- **Token economy:** Up to 90% reduction for simple code
 
 ---
 
@@ -1087,7 +1087,7 @@ claude-code-starter/
 
 **Completion Protocol Self-Check:**
 - [x] Step 0: Re-read Completion Protocol before execution
-- [x] Prevents "сапожник без сапог" problem (forgetting to document changes)
+- [x] Prevents the "cobbler's children have no shoes" problem (forgetting to document changes)
 - [x] Self-check questions for metafile updates
 - [x] Works for both framework and host projects
 - [x] Counters context compaction during long sessions
@@ -1133,17 +1133,17 @@ Framework is now a **meta-layer over Claude Code** that:
 *Quick-start context for AI sessions*
 
 
-## Делегирование задач субагентам
+## Delegating tasks to subagents
 
-При получении задачи от пользователя — сначала оценить:
-- **Сам:** быстрые правки (< 2 мин), обсуждения, анализ, вопросы, мелкие фиксы
-- **Субагент:** код > 50 строк, новые модули, рефакторинг, UI-изменения, исследования, любые задачи > 5 мин
+When you receive a task from the user — first assess:
+- **Yourself:** quick edits (< 2 min), discussions, analysis, questions, small fixes
+- **Subagent:** code > 50 lines, new modules, refactoring, UI changes, research, any task > 5 min
 
-При делегировании субагенту:
-- Составить детальное ТЗ с контекстом, файлами для чтения, ожидаемым результатом
-- Запустить в фоне
-- Сообщить пользователю что запущено
-- По завершении — дать краткий отчёт о результате
-- Можно запускать несколько субагентов параллельно на независимые задачи
+When delegating to a subagent:
+- Write a detailed brief with context, files to read, and the expected result
+- Run it in the background
+- Tell the user what has been launched
+- On completion — give a short report on the result
+- You can run several subagents in parallel on independent tasks
 
-Цель: максимальная параллельность и минимальное время ожидания пользователя.
+Goal: maximum parallelism and minimum waiting time for the user.

@@ -1,118 +1,118 @@
 ---
 name: start
-description: "Инициализация рабочей сессии. Построить адекватную модель проекта, заземлить её в код, доложить с глубиной по запросу."
+description: "Initialise a working session. Build an adequate model of the project, ground it in the code, report with depth matching the request."
 allowed-tools: Read Glob Grep Bash
 disable-model-invocation: true
 ---
 
 # Skill: Start Session
 
-## Назначение
+## Purpose
 
-Построить **адекватную модель проекта** — правильную по структуре, заземлённую в код, знающую свои границы. Защитить проект, пока модель строится.
+Build an **adequate model of the project** — structurally correct, grounded in the code, aware of its own limits. Protect the project while the model is being built.
 
-**Три вида ограничений в этом протоколе — намеренно разной природы:**
+**The three kinds of constraint in this protocol are deliberately different in nature:**
 
-| Вид | Где | Как трактовать |
+| Kind | Where | How to treat it |
 |-----|-----|---------------|
-| На действия (`INVARIANTS.md`, production-safety) | в коде/контракте | **жёстко** — guardrails |
-| На внимание (порядок чтения, две оси памяти) | в этом skill | **полезно** — структура делает глубину достижимой |
-| На глубину/выход доклада | — | **нет таких ограничений** — глубина диктуется запросом, не форматом |
+| On actions (`INVARIANTS.md`, production-safety) | in code/contract | **strictly** — guardrails |
+| On attention (reading order, the two memory axes) | in this skill | **helpful** — structure makes depth achievable |
+| On the depth/output of the report | — | **no such constraints** — depth is dictated by the request, not by the format |
 
-Никаких «доложи 3–5 строк». Минимум — пол адекватности, потолка нет.
+No "report in 3–5 lines". The minimum is a floor of adequacy; there is no ceiling.
 
-## Что делать
+## What to do
 
-### 1. Прочитать слои памяти — обе оси
+### 1. Read the memory layers — both axes
 
-**Контракты (что должно быть):**
+**Contracts (what should be):**
 ```
-Read .claude/ARCHITECTURE.md   (если есть)
-Read .claude/INVARIANTS.md     (если есть — нарушения = баг, не предпочтение)
-```
-
-**State (что есть сейчас):**
-```
-Read .claude/SNAPSHOT.md       (точка работы)
-Read .claude/BACKLOG.md        (если есть — план Next/Soon/Later)
+Read .claude/ARCHITECTURE.md   (if present)
+Read .claude/INVARIANTS.md     (if present — violations = a bug, not a preference)
 ```
 
-Если какие-то слои отсутствуют — это OK для старого проекта; в новом v6.2+ — сигнал неполной установки. Не паниковать, продолжить.
+**State (what is now):**
+```
+Read .claude/SNAPSHOT.md       (the current working point)
+Read .claude/BACKLOG.md        (if present — the Next/Soon/Later plan)
+```
 
-### 2. Прочитать CLAUDE.md
+If some layers are missing — that's OK for an old project; in a new v6.2+ one it's a sign of an incomplete installation. Don't panic, carry on.
+
+### 2. Read CLAUDE.md
 
 ```
 Read CLAUDE.md
 ```
 
-### 3. Заземлить карту в территорию (обязательно)
+### 3. Ground the map in the territory (mandatory)
 
-Метафайлы — это **карта, не территория**. Если SNAPSHOT/ARCHITECTURE разошлись с кодом, ты унаследуешь неточность вместе со слепыми пятнами и не заметишь этого. Цена заземления — минута, ценность — представление, которому можно верить.
+Meta-files are the **map, not the territory**. If SNAPSHOT/ARCHITECTURE have diverged from the code, you will inherit the inaccuracy along with the blind spots and won't notice. The cost of grounding is a minute; the value is a picture you can trust.
 
-Минимум:
+Minimum:
 
 ```bash
-# Хронология
+# Chronology
 git log --oneline -10
 git status --short
 
-# Объём кода/контента по основным каталогам
+# Volume of code/content in the main directories
 for d in src lib app scripts chapters lessons modules docs; do
   [ -d "$d" ] && echo "$d: $(find "$d" -type f \( -name '*.py' -o -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.sh' -o -name '*.md' \) 2>/dev/null | xargs wc -l 2>/dev/null | tail -1)"
 done
 
-# Заглушки и недоделки — где карта обещает функциональность, а в коде TODO
+# Stubs and unfinished work — where the map promises functionality but the code has a TODO
 grep -rn "TODO\|FIXME\|stub\|raise NotImplementedError\|pass *#" src/ lib/ app/ scripts/ 2>/dev/null | head -20
 ```
 
-Если обнаружишь расхождение «SNAPSHOT/ARCHITECTURE говорят X, но grep/wc показывают Y» — зафиксируй это явно при докладе, не сглаживай.
+If you find a discrepancy — "SNAPSHOT/ARCHITECTURE say X, but grep/wc show Y" — state it explicitly in the report; don't smooth it over.
 
-### 4. Проверить версию фреймворка (фоново)
+### 4. Check the framework version (in the background)
 
 ```bash
 grep -m1 'v[0-9]' README.md 2>/dev/null || true
 ```
 
-Не блокирует старт.
+Does not block the start.
 
-### 5. Создать лог сессии
+### 5. Create the session log
 
 ```bash
 mkdir -p .claude/logs/sessions
 ```
 
-Файл `.claude/logs/sessions/YYYY-MM-DD_HH-MM.md` с начальным состоянием.
+The file `.claude/logs/sessions/YYYY-MM-DD_HH-MM.md` with the initial state.
 
-### 6. Доложить — глубина по запросу
+### 6. Report — depth matching the request
 
-Доклад **масштабируется под запрос пользователя**:
+The report **scales to the user's request**:
 
-| Запрос пользователя | Эталон доклада |
+| User's request | Reference report |
 |---------------------|-----------------|
-| «start», «начать», молчаливый старт | Компактно: статус, что было в прошлой сессии, незакрытые задачи из BACKLOG.Next, открытые INVARIANTS, готовность. 5–10 строк. |
-| «разберись с проектом», «хочу убедиться что ты понял», «проанализируй» | Полный аналитический разбор: зачем существует, как устроен (модули/слои/контракты), таблица «карта vs территория» из шага 3, состояние (что сделано/что в работе/что блокирует), риски, что я понимаю и где границы знания. Объём — по теме, не по формату. |
-| Конкретная задача в первой реплике | Состояние + явная связь с задачей: какие INVARIANTS могут быть затронуты, какие слои памяти релевантны, какие подсистемы потребуют чтения кода. |
+| "start", "begin", a silent start | Compact: status, what happened in the previous session, open tasks from BACKLOG.Next, open INVARIANTS, readiness. 5–10 lines. |
+| "get to grips with the project", "I want to make sure you've understood", "analyse" | A full analytical breakdown: why it exists, how it is built (modules/layers/contracts), the "map vs territory" table from step 3, the state (what is done/what is in progress/what is blocking), risks, what I understand and where the limits of my knowledge are. Length follows the subject, not the format. |
+| A specific task in the first message | State + an explicit link to the task: which INVARIANTS may be affected, which memory layers are relevant, which subsystems will require reading code. |
 
-Минимум всегда — пол адекватности. Потолка нет. Если в шаге 3 нашёл расхождения — назвать их прямо.
+The minimum is always a floor of adequacy. There is no ceiling. If you found discrepancies in step 3 — name them directly.
 
-### 7. Пометка «карта ≠ территория»
+### 7. The "map ≠ territory" note
 
-После шагов 1–6 ты знаешь **карту** проекта, не **территорию** (код). Перед правкой конкретной подсистемы:
-- читай её код (не только метафайлы);
-- читай её локальные docs (не только корневые);
-- сверяй карту с тем, что увидел в коде.
+After steps 1–6 you know the project's **map**, not its **territory** (the code). Before editing a specific subsystem:
+- read its code (not only the meta-files);
+- read its local docs (not only the root ones);
+- check the map against what you saw in the code.
 
-Опасна не неполнота модели, а ложная уверенность в её полноте.
+The danger is not an incomplete model, but false confidence in its completeness.
 
-## Чего НЕ делать
+## What NOT to do
 
-- Не показывать содержимое файлов пользователю как сырой дамп
-- Не запускать тесты (это `/finish`)
-- Не коммитить автоматически (если есть незакоммиченное — сообщить)
-- Не кэпить глубину доклада фиксированным объёмом ради «краткости»
-- Не пропускать шаг заземления, даже если SNAPSHOT выглядит свежим
-- Не генерировать отдельный `ONBOARDING.md` — конституция живёт в `CLAUDE.md`, который харнес автозагружает
+- Don't show file contents to the user as a raw dump
+- Don't run tests (that's `/finish`)
+- Don't commit automatically (if there is uncommitted work — report it)
+- Don't cap the depth of the report at a fixed length for the sake of "brevity"
+- Don't skip the grounding step, even if SNAPSHOT looks fresh
+- Don't generate a separate `ONBOARDING.md` — the constitution lives in `CLAUDE.md`, which the harness autoloads
 
-## После выполнения
+## After running
 
-Агент готов принимать ТЗ. Если запрос пользователя в первой реплике был «разберись/проанализируй» — он уже исполнен этим skill, и сама первая реплика и есть результат.
+The agent is ready to accept a brief. If the user's request in the first message was "get to grips/analyse", it has already been fulfilled by this skill, and that first reply itself is the result.

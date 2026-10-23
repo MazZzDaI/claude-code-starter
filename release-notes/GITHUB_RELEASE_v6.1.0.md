@@ -31,7 +31,7 @@ git clone https://github.com/alexeykrol/claude-code-starter.git
 bash claude-code-starter/scripts/install-global.sh
 ```
 
-After that, in any new project folder you can just open Claude Code and say `/setup-project` (or "новый проект", "поставь фреймворк") — the framework installs itself with no download.
+After that, in any new project folder you can just open Claude Code and say `/setup-project` (or "new project", "install the framework") — the framework installs itself with no download.
 
 ## Release Assets
 

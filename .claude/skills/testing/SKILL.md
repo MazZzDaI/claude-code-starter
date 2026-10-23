@@ -1,28 +1,28 @@
 ---
 name: testing
-description: "Запуск тестов проекта: unit, integration. Определение типа проекта и выбор стратегии."
+description: "Running project tests: unit, integration. Detecting the project type and choosing a strategy."
 allowed-tools: Read Glob Grep Bash
 disable-model-invocation: true
 ---
 
 # Skill: Testing
 
-## Определение тестового окружения
+## Detecting the test environment
 
 ```bash
-# Node.js проект
+# Node.js project
 if [ -f "package.json" ]; then
   echo "node"
   cat package.json | grep -A5 '"scripts"' | grep test
 fi
 
-# Python проект
+# Python project
 if [ -f "pyproject.toml" ] || [ -f "pytest.ini" ] || [ -f "setup.py" ]; then
   echo "python"
 fi
 ```
 
-## Запуск тестов
+## Running tests
 
 ### Node.js
 ```bash
@@ -34,20 +34,20 @@ npm test
 python3 -m pytest tests/ -v
 ```
 
-## Интерпретация результатов
+## Interpreting the results
 
-- **Все зелёные:** сообщить «тесты пройдены» с количеством
-- **Есть красные:** показать список упавших тестов, предложить фикс
-- **Нет тестов:** сообщить, предложить создать базовый набор
+- **All green:** report "tests passed" with the count
+- **Some red:** show the list of failed tests, propose a fix
+- **No tests:** report it, offer to create a basic set
 
-## Когда запускать
+## When to run
 
-- После каждого серьёзного коммита
-- В составе `/finish`
-- По явному запросу пользователя
-- После работы субагента `implementer`
+- After every significant commit
+- As part of `/finish`
+- On the user's explicit request
+- After the `implementer` subagent has worked
 
-## Coverage (если настроен)
+## Coverage (if configured)
 
 ```bash
 # Node.js
@@ -57,4 +57,4 @@ npx jest --coverage 2>/dev/null || true
 python3 -m pytest --cov=src tests/ 2>/dev/null || true
 ```
 
-Показать summary coverage, если доступен.
+Show the coverage summary, if available.

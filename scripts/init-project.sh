@@ -4,18 +4,18 @@
 # Version: 6.3.0 (orchestrator model: owner above production, agent runs workers)
 #
 # Internal bootstrap used by the public root launcher.
-# Разворачивает управляющую среду Claude Code в новом проекте.
-# Не трогает существующий код. Создаёт только инфраструктуру управления.
+# Deploys the Claude Code management environment into a new project.
+# Does not touch existing code. Creates only the management infrastructure.
 #
-# Использование:
-#   bash init-project.sh                                       # Авто-определение типа
+# Usage:
+#   bash init-project.sh                                       # Auto-detect the type
 #   bash init-project.sh --name "My Project"
 #   bash init-project.sh --type code|content|hybrid|auto
 #   bash init-project.sh --content-type book|course|knowledge-base|documents|transcripts|mixed
 #   bash init-project.sh --template /path/to/framework
-#   bash init-project.sh --rollback                            # Восстановить из последнего backup
-#   bash init-project.sh --apply-proposal                      # Применить CLAUDE.md merge proposal
-#   bash init-project.sh --force                               # Перезаписать существующее (для разработчиков фреймворка)
+#   bash init-project.sh --rollback                            # Restore from the latest backup
+#   bash init-project.sh --apply-proposal                      # Apply the CLAUDE.md merge proposal
+#   bash init-project.sh --force                               # Overwrite existing files (for framework developers)
 #
 
 set -e
@@ -25,7 +25,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TEMPLATE_DIR="${SCRIPT_DIR}/.."
 PROJECT_DIR="$(pwd)"
 
-# Подключаем общую библиотеку (определения функций, цвета, TIMESTAMP, BACKUP_TAG).
+# Load the shared library (function definitions, colours, TIMESTAMP, BACKUP_TAG).
 # shellcheck source=lib/install_common.sh
 source "$SCRIPT_DIR/lib/install_common.sh"
 
@@ -97,14 +97,14 @@ case "$MODE" in
         # Git detection
         detect_git
 
-        # Project type detection (если auto)
+        # Project type detection (if auto)
         if [ "$PROJECT_TYPE" = "auto" ]; then
             log_info "Detecting project type..."
             PROJECT_TYPE=$(detect_project_type)
             log_info "Detected project type: $PROJECT_TYPE"
         fi
 
-        # Content type detection (если применимо)
+        # Content type detection (if applicable)
         if [ "$PROJECT_TYPE" = "content" ] || [ "$PROJECT_TYPE" = "hybrid" ]; then
             if [ -z "$CONTENT_TYPE" ]; then
                 CONTENT_TYPE=$(detect_content_type)
@@ -112,16 +112,16 @@ case "$MODE" in
             fi
         fi
 
-        # Unknown → fallback на code
+        # Unknown → fall back to code
         if [ "$PROJECT_TYPE" = "unknown" ]; then
             log_warning "Could not detect project type. Defaulting to 'code'. Use --type to override."
             PROJECT_TYPE="code"
         fi
 
-        # Backup до любых изменений
+        # Backup before any changes
         backup_existing
 
-        # Установка
+        # Installation
         install_common
 
         case "$PROJECT_TYPE" in
@@ -140,13 +140,13 @@ case "$MODE" in
                 ;;
         esac
 
-        # CLAUDE.md merge — выбираем правильный template через helper
+        # CLAUDE.md merge — pick the right template via a helper
         merge_claude_md "CLAUDE.md" "$(claude_md_template_for_type)"
 
-        # Manifest (с расширенными полями)
+        # Manifest (with extended fields)
         generate_manifest
 
-        # Git init (если ещё нет — detect_git мог пропустить)
+        # Git init (if not present yet — detect_git may have skipped it)
         if [ ! -d ".git" ]; then
             git init -q 2>/dev/null && log_success "Initialized git repository" || true
         fi

@@ -5,7 +5,7 @@
 
 **Purpose:** Fast sprint finalization with background processing.
 
-**Trigger:** User types "завершить", "заверши", "finish", or "done"
+**Trigger:** User types "finish up", "wrap up", "finish", or "done"
 
 **Time:** 30-60 seconds (was 5-6 minutes)
 

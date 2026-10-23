@@ -221,7 +221,7 @@
   - [ ] Init/ exists
   - [ ] PROJECT_INTAKE.md filled (not template)
   - [ ] archive/ created
-  - [ ] No template placeholders ([ОТВЕТИТЬ]) remain
+  - [ ] No template placeholders ([ANSWER]) remain
   - [ ] MIGRATION_REPORT.md exists
 
 **Priority:** P1 (High - quality assurance)

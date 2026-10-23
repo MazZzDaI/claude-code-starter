@@ -5,19 +5,19 @@ created: <YYYY-MM-DD>
 related: []   # links to other methodology files
 ---
 
-# Наблюдение: [короткое имя]
+# Observation: [short name]
 
-## Что заметил
-[1-3 предложения]
+## What I noticed
+[1–3 sentences]
 
-## В каких случаях
-[когда подход применим, контекст]
+## In which cases
+[when the approach applies, context]
 
-## Что пробовали / альтернативы
-[опционально — что НЕ работало или хуже]
+## What was tried / alternatives
+[optional — what did NOT work or worked worse]
 
-## Связь с другими наблюдениями
-[ссылки [[name]] или текстовые упоминания]
+## Links to other observations
+[links as [[name]] or text mentions]
 
 ---
-*Поднимать до pattern, когда тот же подход повторился в 3+ задачах.*
+*Raise to pattern once the same approach has recurred in 3+ tasks.*

@@ -62,7 +62,7 @@ dist-release/<version>/
 
 1. Ensure `main` is clean.
 2. **Refresh descriptive docs** so they don't drift behind the code:
-   - `README.md` — version badge, "Что устанавливается в проект", links to current release notes
+   - `README.md` — version badge, "What gets installed into the project", links to current release notes
    - `RELEASING.md` — current version examples
    - `templates/global/CLAUDE.addendum.md` — new global rules / skills / methodology
    - `CHANGELOG.md` — entry for the new version

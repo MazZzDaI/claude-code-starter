@@ -1,13 +1,13 @@
 # Brief: Chapter NN
 
-**Goal:** Что должна сделать эта глава для читателя.
+**Goal:** What this chapter should do for the reader.
 **Audience:** beginner / intermediate / advanced
-**Sources:** список ключевых источников
-**Constraints:** что нельзя
+**Sources:** list of key sources
+**Constraints:** what is not allowed
 
 ## Outline
 
 - Section 1: ...
 - Section 2: ...
 
-Это example. Удали и создай `briefs/chapter-NN.md` под конкретную главу.
+This is an example. Delete it and create `briefs/chapter-NN.md` for the specific chapter.

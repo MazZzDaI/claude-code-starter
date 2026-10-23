@@ -1,173 +1,173 @@
 ---
-description: Создать релиз фреймворка Claude Code Starter
+description: Create a release of the Claude Code Starter framework
 ---
 
-# Релиз фреймворка
+# Framework release
 
-> Используйте эту команду для создания нового релиза фреймворка с автоматическим обновлением версии, CHANGELOG, README и архивов.
+> Use this command to create a new framework release with automatic updating of the version, CHANGELOG, README and archives.
 
-## ⚠️ ВАЖНО
+## ⚠️ IMPORTANT
 
-Эта команда предназначена **ТОЛЬКО для claude-code-starter проекта**.
-Не используйте её в пользовательских проектах!
-
----
-
-## 🎯 Что делает команда
-
-1. **Анализирует изменения** с последнего релиза
-2. **Определяет тип релиза** (patch/minor/major)
-3. **Обновляет версию** во всех местах
-4. **Обновляет CHANGELOG.md** с описанием изменений
-5. **Обновляет README файлы** если нужно
-6. **Пересобирает zip-архивы**
-7. **Создает release commit**
-8. **Пушит на GitHub**
+This command is intended **ONLY for the claude-code-starter project**.
+Do not use it in user projects!
 
 ---
 
-## 📋 Процесс релиза
+## 🎯 What the command does
 
-### Шаг 1: Определить текущую версию
+1. **Analyses changes** since the last release
+2. **Determines the release type** (patch/minor/major)
+3. **Updates the version** everywhere
+4. **Updates CHANGELOG.md** with a description of the changes
+5. **Updates README files** if needed
+6. **Rebuilds the zip archives**
+7. **Creates a release commit**
+8. **Pushes to GitHub**
+
+---
+
+## 📋 Release process
+
+### Step 1: Determine the current version
 
 ```bash
-# Прочитать текущую версию из README.md
+# Read the current version from README.md
 grep "badge/version" README.md
 ```
 
-Текущая версия в формате badge: `version-<current-version>`
+Current version in badge format: `version-<current-version>`
 
-### Шаг 2: Проанализировать изменения
+### Step 2: Analyse the changes
 
 ```bash
-# Получить все коммиты с последнего release коммита
+# Get all commits since the last release commit
 git log --oneline --grep="chore: Bump version" -1
-# Получить коммиты после последнего релиза
+# Get the commits after the last release
 git log <last-release-commit>..HEAD --oneline
 ```
 
-**Проанализировать коммиты:**
-- Какие файлы изменены?
-- Новые фичи или багфиксы?
+**Analyse the commits:**
+- Which files were changed?
+- New features or bug fixes?
 - Breaking changes?
-- Изменения в шаблонах (migration/templates/)?
+- Changes to templates (migration/templates/)?
 
-### Шаг 3: Определить тип релиза
+### Step 3: Determine the release type
 
-**Спросить пользователя:**
+**Ask the user:**
 
 ```
-🎯 Анализ изменений с последнего релиза:
+🎯 Analysis of changes since the last release:
 
-Найдено коммитов: X
-Основные изменения:
-- [краткий список изменений из git log]
+Commits found: X
+Main changes:
+- [short list of changes from git log]
 
-Какой тип релиза создать?
+What type of release should be created?
 
-1. Patch (1.2.X) - багфиксы, документация, мелкие улучшения
-2. Minor (1.X.0) - новые фичи, обратно совместимые изменения
-3. Major (X.0.0) - breaking changes, крупный рефакторинг
+1. Patch (1.2.X) - bug fixes, documentation, minor improvements
+2. Minor (1.X.0) - new features, backward-compatible changes
+3. Major (X.0.0) - breaking changes, major refactoring
 
-Выберите [1/2/3]:
+Choose [1/2/3]:
 ```
 
-**Правила версионирования (Semantic Versioning):**
+**Versioning rules (Semantic Versioning):**
 
 - **Patch (X.X.N):**
-  - Исправления багов
-  - Обновления документации
-  - Мелкие улучшения без новых фич
-  - Обновления зависимостей
+  - Bug fixes
+  - Documentation updates
+  - Minor improvements without new features
+  - Dependency updates
   
 - **Minor (X.N.0):**
-  - Новые фичи
-  - Новые команды (slash commands)
-  - Новые секции в шаблонах
-  - Обратно совместимые изменения
-  - Улучшения существующих фич
+  - New features
+  - New commands (slash commands)
+  - New sections in templates
+  - Backward-compatible changes
+  - Improvements to existing features
   
 - **Major (N.0.0):**
   - Breaking changes
-  - Удаление deprecated функций
-  - Изменение структуры файлов
-  - Несовместимые изменения API
+  - Removal of deprecated functions
+  - Changes to the file structure
+  - Incompatible API changes
 
-### Шаг 4: Вычислить новую версию
+### Step 4: Calculate the new version
 
 ```bash
-# Пример: текущая 1.2.5
+# Example: current 1.2.5
 # Patch: 1.2.6
 # Minor: 1.3.0
 # Major: 2.0.0
 
 CURRENT_VERSION="1.2.5"
-# Разобрать на major.minor.patch
-# Инкрементировать нужную часть
-# Сформировать NEW_VERSION
+# Split into major.minor.patch
+# Increment the relevant part
+# Form NEW_VERSION
 ```
 
-**Подтвердить у пользователя:**
+**Confirm with the user:**
 ```
-Новая версия: ${NEW_VERSION}
-Продолжить? [y/n]
+New version: ${NEW_VERSION}
+Continue? [y/n]
 ```
 
-### Шаг 5: Собрать информацию для CHANGELOG
+### Step 5: Gather information for the CHANGELOG
 
-**Для каждого коммита с последнего релиза:**
+**For each commit since the last release:**
 
-1. Прочитать commit message
-2. Определить категорию:
+1. Read the commit message
+2. Determine the category:
    - `feat:` → Added
    - `fix:` → Fixed
    - `docs:` → Changed/Documentation
    - `refactor:` → Changed
-   - `chore:` → (пропустить или Maintenance)
-3. Извлечь ключевые изменения
+   - `chore:` → (skip or Maintenance)
+3. Extract the key changes
 
-**Сгруппировать по категориям:**
-- Added (новые фичи)
-- Fixed (исправления)
-- Changed (изменения)
-- Removed (удаления)
-- Deprecated (устаревшее)
+**Group by category:**
+- Added (new features)
+- Fixed (fixes)
+- Changed (changes)
+- Removed (removals)
+- Deprecated (deprecated items)
 
-### Шаг 6: Создать CHANGELOG секцию
+### Step 6: Create the CHANGELOG section
 
-**Шаблон:**
+**Template:**
 
 ```markdown
 ## [${NEW_VERSION}] - $(date +%Y-%m-%d)
 
-### [Краткое описание релиза]
+### [Short description of the release]
 
-**Goal:** [Главная цель этого релиза]
+**Goal:** [Main goal of this release]
 
 ### Added
 
-- [Новая фича 1]
-  - Описание
-  - Файлы: migration/templates/file.template.md
-- [Новая фича 2]
+- [New feature 1]
+  - Description
+  - Files: migration/templates/file.template.md
+- [New feature 2]
 
 ### Fixed
 
-- [Исправление 1]
-  - Проблема: [описание]
-  - Решение: [описание]
-- [Исправление 2]
+- [Fix 1]
+  - Problem: [description]
+  - Solution: [description]
+- [Fix 2]
 
 ### Changed
 
-- [Изменение 1]
-- [Изменение 2]
+- [Change 1]
+- [Change 2]
 
 ### Impact
 
 **For Users:**
-- ✅ [Польза 1]
-- ✅ [Польза 2]
+- ✅ [Benefit 1]
+- ✅ [Benefit 2]
 
 ### Files Modified
 
@@ -185,15 +185,15 @@ CURRENT_VERSION="1.2.5"
 ---
 ```
 
-**Вставить в начало CHANGELOG.md** (после заголовка, перед последней версией)
+**Insert at the top of CHANGELOG.md** (after the heading, before the latest version)
 
-### Шаг 7: Обновить версию в README файлах
+### Step 7: Update the version in README files
 
-**Файлы для обновления:**
-1. README.md - строка с badge
-2. README_RU.md - строка с badge
+**Files to update:**
+1. README.md - the badge line
+2. README_RU.md - the badge line
 
-**Использовать Edit tool:**
+**Use the Edit tool:**
 
 ```markdown
 OLD:
@@ -203,41 +203,41 @@ NEW:
 [![Version](https://img.shields.io/badge/version-${NEW_VERSION}-orange.svg)]
 ```
 
-### Шаг 8: Проверить нужны ли обновления в README
+### Step 8: Check whether README updates are needed
 
-**Спросить пользователя:**
+**Ask the user:**
 
 ```
-Нужно ли обновить описание в README файлах?
-(Например, добавить новую фичу в список "The Solution")
+Should the description in the README files be updated?
+(For example, add a new feature to the "The Solution" list)
 
 [y/n]
 ```
 
-Если yes - предложить конкретные изменения на основе CHANGELOG.
+If yes - propose concrete changes based on the CHANGELOG.
 
-### Шаг 9: Пересобрать zip-архивы
+### Step 9: Rebuild the zip archives
 
 ```bash
-# Пересобрать оба архива
+# Rebuild both archives
 cd Init && zip -r ../init-starter.zip . -x "*.DS_Store"
 cd ../init_eng && zip -r ../init-starter-en.zip . -x "*.DS_Store"
 cd ..
 ls -lh init-starter*.zip
 ```
 
-### Шаг 10: Создать release commit
+### Step 10: Create the release commit
 
-**Commit message шаблон:**
+**Commit message template:**
 
 ```
 chore: Release v${NEW_VERSION}
 
-Release v${NEW_VERSION} includes [краткое описание].
+Release v${NEW_VERSION} includes [short description].
 
 ## Highlights:
 
-[2-3 ключевых изменения]
+[2-3 key changes]
 
 ## Changes in this commit:
 
@@ -247,18 +247,18 @@ Release v${NEW_VERSION} includes [краткое описание].
 
 ### CHANGELOG.md
 Added v${NEW_VERSION} entry documenting:
-- [Категория 1]: [кратко]
-- [Категория 2]: [кратко]
+- [Category 1]: [briefly]
+- [Category 2]: [briefly]
 
 ### Archives Recreated
 - init-starter.zip (updated with all changes)
 - init-starter-en.zip (updated with all changes)
 
-[Если были изменения в README - описать]
+[If there were README changes - describe them]
 
 ## Impact:
 
-[Ключевые метрики влияния]
+[Key impact metrics]
 
 See CHANGELOG.md for full details.
 
@@ -267,162 +267,162 @@ See CHANGELOG.md for full details.
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-**Создать коммит:**
+**Create the commit:**
 
 ```bash
 git add CHANGELOG.md README.md README_RU.md init-starter.zip init-starter-en.zip
 
-# Если были другие изменения - добавить их тоже
+# If there were other changes - add them too
 git add [other files if needed]
 
 git commit -m "[message from template]"
 ```
 
-### Шаг 11: Показать diff для проверки
+### Step 11: Show the diff for review
 
 ```bash
 git show HEAD --stat
 ```
 
-**Подтвердить у пользователя:**
+**Confirm with the user:**
 ```
-Коммит создан. Проверьте изменения выше.
+Commit created. Review the changes above.
 
-Запушить на GitHub? [y/n]
+Push to GitHub? [y/n]
 ```
 
-### Шаг 12: Push на GitHub
+### Step 12: Push to GitHub
 
 ```bash
 git push origin main
 ```
 
-### Шаг 13: Создать GitHub Release (опционально)
+### Step 13: Create a GitHub Release (optional)
 
-**Спросить пользователя:**
+**Ask the user:**
 ```
-Создать GitHub Release?
+Create a GitHub Release?
 
-Это создаст:
+This will create:
 - Tag v${NEW_VERSION}
-- Release страницу на GitHub
-- Attach архивов к релизу
+- A release page on GitHub
+- Attach the archives to the release
 
 [y/n]
 ```
 
-**Если yes:**
+**If yes:**
 
 ```bash
-# Создать tag
+# Create the tag
 git tag -a "v${NEW_VERSION}" -m "Release v${NEW_VERSION}"
 git push origin "v${NEW_VERSION}"
 
-# Создать GitHub Release с помощью gh CLI
+# Create the GitHub Release using the gh CLI
 gh release create "v${NEW_VERSION}" \
   --title "v${NEW_VERSION}" \
-  --notes "[Извлечь из CHANGELOG.md секцию для этой версии]" \
+  --notes "[Extract the section for this version from CHANGELOG.md]" \
   dist-release/init-project.sh \
   dist-release/framework.tar.gz \
   dist-release/framework-commands.tar.gz \
   CLAUDE.md
 ```
 
-**Файлы в релизе:**
-- `init-project.sh` - Installer script для установки фреймворка
-- `framework.tar.gz` - Полный архив фреймворка (для установки)
-- `framework-commands.tar.gz` - Только команды (для автообновления)
-- `CLAUDE.md` - Основной протокол (для автообновления)
+**Files in the release:**
+- `init-project.sh` - Installer script for installing the framework
+- `framework.tar.gz` - Full framework archive (for installation)
+- `framework-commands.tar.gz` - Commands only (for auto-update)
+- `CLAUDE.md` - Main protocol (for auto-update)
 
-### Шаг 14: Финальный вывод
+### Step 14: Final output
 
 ```
-🎉 РЕЛИЗ v${NEW_VERSION} СОЗДАН УСПЕШНО!
+🎉 RELEASE v${NEW_VERSION} CREATED SUCCESSFULLY!
 
-✅ Что сделано:
-- ✅ CHANGELOG.md обновлен
-- ✅ Версия в README: ${CURRENT_VERSION} → ${NEW_VERSION}
-- ✅ Архивы пересобраны
-- ✅ Коммит создан и запушен
-[- ✅ GitHub Release создан (если было)]
+✅ What was done:
+- ✅ CHANGELOG.md updated
+- ✅ Version in README: ${CURRENT_VERSION} → ${NEW_VERSION}
+- ✅ Archives rebuilt
+- ✅ Commit created and pushed
+[- ✅ GitHub Release created (if applicable)]
 
-📊 Статистика:
-- Коммитов с последнего релиза: X
-- Файлов изменено: Y
-- Тип релиза: [Patch/Minor/Major]
+📊 Statistics:
+- Commits since the last release: X
+- Files changed: Y
+- Release type: [Patch/Minor/Major]
 
-🔗 Ссылки:
+🔗 Links:
 - Commit: https://github.com/alexeykrol/claude-code-starter/commit/[hash]
 [- Release: https://github.com/alexeykrol/claude-code-starter/releases/tag/v${NEW_VERSION}]
 
-📋 Следующие шаги:
-- Проверьте CHANGELOG.md на GitHub
-- Проверьте что версия обновилась в README
-- При необходимости обновите описание релиза на GitHub
+📋 Next steps:
+- Check CHANGELOG.md on GitHub
+- Check that the version has been updated in README
+- If necessary, update the release description on GitHub
 
 ---
 
-Релиз v${NEW_VERSION} готов к использованию! 🚀
+Release v${NEW_VERSION} is ready for use! 🚀
 ```
 
 ---
 
-## 🚫 Условия остановки
+## 🚫 Stop conditions
 
-Остановить релиз если:
+Stop the release if:
 
-### Критические условия:
-- ❌ Нет новых коммитов с последнего релиза
-- ❌ Working directory не чист (uncommitted changes)
-- ❌ Не в папке claude-code-starter
-- ❌ Нет прав на push
+### Critical conditions:
+- ❌ No new commits since the last release
+- ❌ Working directory is not clean (uncommitted changes)
+- ❌ Not in the claude-code-starter folder
+- ❌ No push permissions
 
-### Предупреждения (спросить пользователя):
-- ⚠️ Очень мало изменений (1-2 тривиальных коммита)
-- ⚠️ Нет тестов новых фич
-- ⚠️ Документация не обновлена для новых фич
+### Warnings (ask the user):
+- ⚠️ Very few changes (1-2 trivial commits)
+- ⚠️ No tests for new features
+- ⚠️ Documentation not updated for new features
 
-**В случае остановки:**
+**If stopped:**
 ```
-🛑 Релиз остановлен
+🛑 Release stopped
 
-Причина: [ОПИСАНИЕ]
+Reason: [DESCRIPTION]
 
-Действия для продолжения:
-1. [Действие 1]
-2. [Действие 2]
-3. Запустите /release снова
+Actions to continue:
+1. [Action 1]
+2. [Action 2]
+3. Run /release again
 ```
 
 ---
 
-## 💡 Советы
+## 💡 Tips
 
-### Хорошие практики релизов:
+### Good release practices:
 
-1. **Регулярность:**
-   - Patch релизы: как только исправлен баг
-   - Minor релизы: каждые 1-2 недели для новых фич
-   - Major релизы: редко, только для breaking changes
+1. **Regularity:**
+   - Patch releases: as soon as a bug is fixed
+   - Minor releases: every 1-2 weeks for new features
+   - Major releases: rarely, only for breaking changes
 
-2. **Качество CHANGELOG:**
-   - Пишите для пользователей, не для разработчиков
-   - Объясняйте ЗАЧЕМ, а не только ЧТО
-   - Включайте примеры влияния ("saves 60% tokens")
-   - Добавляйте migration path для breaking changes
+2. **CHANGELOG quality:**
+   - Write for users, not for developers
+   - Explain WHY, not just WHAT
+   - Include examples of impact ("saves 60% tokens")
+   - Add a migration path for breaking changes
 
-3. **Коммуникация:**
-   - Announce в Issues/Discussions для major релизов
+3. **Communication:**
+   - Announce in Issues/Discussions for major releases
    - Highlight breaking changes
    - Provide upgrade guide
 
 ---
 
-## 🔄 Интеграция с другими командами
+## 🔄 Integration with other commands
 
-- После `/feature` → Может понадобиться minor релиз
-- После `/fix` → Может понадобиться patch релиз
-- После рефакторинга → Проверить нужен ли релиз
+- After `/feature` → A minor release may be needed
+- After `/fix` → A patch release may be needed
+- After refactoring → Check whether a release is needed
 
 ---
 

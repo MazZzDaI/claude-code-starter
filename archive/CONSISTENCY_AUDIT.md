@@ -8,14 +8,14 @@
 
 ## 🎯 Executive Summary
 
-**Findings:** Массивные дублирования и потенциальные противоречия обнаружены в мета-файлах фреймворка.
+**Findings:** Massive duplication and potential contradictions have been found in the framework's metafiles.
 
-**Risk Level:** 🔴 **CRITICAL** - Высокий риск рассинхронизации документации и противоречивых инструкций для AI.
+**Risk Level:** 🔴 **CRITICAL** - High risk of the documentation drifting out of sync and of contradictory instructions for the AI.
 
 **Root Causes:**
-1. **CLAUDE.md** пытается быть одновременно: Navigator + Reference + Reminder → дублирует WORKFLOW.md, SECURITY.md
-2. **AGENTS.md** дублирует ~31 security instruction из SECURITY.md (должен содержать только project-specific patterns!)
-3. **Modularity philosophy** описана в 3 местах (237 строк total) с идентичными текстами
+1. **CLAUDE.md** tries to be all at once: Navigator + Reference + Reminder → duplicates WORKFLOW.md, SECURITY.md
+2. **AGENTS.md** duplicates ~31 security instructions from SECURITY.md (it should contain only project-specific patterns!)
+3. **Modularity philosophy** is described in 3 places (237 lines total) with identical texts
 
 **Statistics:**
 - 🔴 **6 critical duplications** found
@@ -30,44 +30,44 @@
 
 ## 🔴 Critical Duplications Found
 
-### 1. Sprint Completion Workflow - КРИТИЧНО
+### 1. Sprint Completion Workflow - CRITICAL
 
 **Severity:** 🔴 CRITICAL
 
 **Locations:**
-- `CLAUDE.md` (lines 102-108): 6-пунктовый чеклист
-- `WORKFLOW.md` (lines 89-126): 29-пунктовый детальный чеклист
+- `CLAUDE.md` (lines 102-108): a 6-item checklist
+- `WORKFLOW.md` (lines 89-126): a 29-item detailed checklist
 
 **Problem:**
 ```
-CLAUDE.md: "Sprint завершение: 6 steps"
+CLAUDE.md: "Sprint completion: 6 steps"
 WORKFLOW.md: "Sprint Completion Checklist: 29 items"
 ```
 
-**Contradiction Risk:** Высокий - если обновим один, забудем другой.
+**Contradiction Risk:** High - if we update one, we'll forget the other.
 
 **Example:**
-- CLAUDE.md не упоминает Security Requirements
-- WORKFLOW.md требует 9 security checks
-- AI может выполнить только чеклист из CLAUDE.md и пропустить security!
+- CLAUDE.md does not mention the Security Requirements
+- WORKFLOW.md requires 9 security checks
+- The AI may run only the checklist from CLAUDE.md and skip security!
 
 ---
 
-### 2. Input Validation - ТРОЙНОЕ ДУБЛИРОВАНИЕ
+### 2. Input Validation - TRIPLE DUPLICATION
 
 **Severity:** 🔴 CRITICAL
 
 **Locations:**
-- `SECURITY.md` (lines 209, 485, 493): 3 разных чеклиста!
-- `CLAUDE.md` (line 73): "Валидируй ВСЕ пользовательские входные данные"
+- `SECURITY.md` (lines 209, 485, 493): 3 different checklists!
+- `CLAUDE.md` (line 73): "Validate ALL user input"
 - `WORKFLOW.md` (line 105): "Input validation - All user inputs validated"
 
 **Problem:**
-- Одна концепция описана в 5 местах (!)
-- SECURITY.md внутри себя имеет 3 повтора
-- CLAUDE.md и WORKFLOW.md дублируют более сжато
+- One concept is described in 5 places (!)
+- SECURITY.md repeats it 3 times within itself
+- CLAUDE.md and WORKFLOW.md duplicate it more concisely
 
-**Contradiction Risk:** Средний - но высокий риск пропустить обновление.
+**Contradiction Risk:** Medium - but a high risk of missing an update.
 
 ---
 
@@ -76,22 +76,22 @@ WORKFLOW.md: "Sprint Completion Checklist: 29 items"
 **Severity:** 🟡 MEDIUM
 
 **Locations:**
-- `CLAUDE.md` (lines 96-100): Краткие правила git
-- `WORKFLOW.md` (lines 294-461): Полная git стратегия + 3 commit template
+- `CLAUDE.md` (lines 96-100): Brief git rules
+- `WORKFLOW.md` (lines 294-461): Full git strategy + 3 commit templates
 
 **Problem:**
 ```
 CLAUDE.md:
-- "Merge: для feature веток в main"
-- "Rebase: для обновления feature ветки"
+- "Merge: for feature branches into main"
+- "Rebase: for updating a feature branch"
 
 WORKFLOW.md:
-- Детальная Branch Strategy
+- Detailed Branch Strategy
 - Branch Naming Conventions
-- 3 разных commit template
+- 3 different commit templates
 ```
 
-**Contradiction Risk:** Низкий - но избыточность.
+**Contradiction Risk:** Low - but redundant.
 
 ---
 
@@ -100,103 +100,103 @@ WORKFLOW.md:
 **Severity:** 🟡 MEDIUM
 
 **Locations:**
-- `SECURITY.md`: Полная security политика (500+ строк)
-- `CLAUDE.md` (lines 72-79): 6 ALWAYS + 3 NEVER правил
-- `WORKFLOW.md` (lines 102-111): 9-пунктовый Security Requirements чеклист
-- `AGENTS.md`: Вероятно тоже есть (не проверил)
+- `SECURITY.md`: Full security policy (500+ lines)
+- `CLAUDE.md` (lines 72-79): 6 ALWAYS + 3 NEVER rules
+- `WORKFLOW.md` (lines 102-111): a 9-item Security Requirements checklist
+- `AGENTS.md`: Probably there too (not checked)
 
 **Problem:**
-- Security rules разбросаны по 3+ файлам
-- Нет single source of truth
+- Security rules are scattered across 3+ files
+- No single source of truth
 
-**Contradiction Risk:** Высокий при обновлениях.
+**Contradiction Risk:** High during updates.
 
 ---
 
-### 5. Security Rules in AGENTS.md - МАССИВНОЕ ДУБЛИРОВАНИЕ
+### 5. Security Rules in AGENTS.md - MASSIVE DUPLICATION
 
 **Severity:** 🔴 CRITICAL
 
 **Locations:**
 - `AGENTS.md` (lines 143-184): **21 security rule** (10 NEVER DO + 11 ALWAYS DO)
-- `AGENTS.md` (lines 230-241): Security Review checklist (10 шагов)
-- `SECURITY.md`: Полная политика (500+ строк)
+- `AGENTS.md` (lines 230-241): Security Review checklist (10 steps)
+- `SECURITY.md`: Full policy (500+ lines)
 - `CLAUDE.md`: Summary (9 rules)
 - `WORKFLOW.md`: Checklist (9 items)
 
 **Problem:**
 ```
-AGENTS.md дублирует ПОЧТИ ВСЮ SECURITY.md!
+AGENTS.md duplicates ALMOST ALL of SECURITY.md!
 
 Lines 143-154: 10 NEVER DO rules
 Lines 173-184: 11 ALWAYS DO rules
 Lines 230-241: Security Review steps
 
-Это 21+10 = 31 security instruction в AGENTS.md!
+That makes 21+10 = 31 security instructions in AGENTS.md!
 ```
 
-**Contradiction Risk:** 🔴 КРИТИЧЕСКИ ВЫСОКИЙ
+**Contradiction Risk:** 🔴 CRITICALLY HIGH
 
 **Impact:**
-- AGENTS.md предназначен для специфичных паттернов проекта
-- НО содержит универсальные security правила из SECURITY.md
-- При обновлении SECURITY.md придется обновлять и AGENTS.md
-- Риск расхождений ОЧЕНЬ высок
+- AGENTS.md is intended for project-specific patterns
+- BUT it contains universal security rules from SECURITY.md
+- When SECURITY.md is updated, AGENTS.md will have to be updated too
+- The risk of divergence is VERY high
 
 ---
 
-### 6. Modularity Philosophy - ТРОЙНОЕ ДУБЛИРОВАНИЕ
+### 6. Modularity Philosophy - TRIPLE DUPLICATION
 
 **Severity:** 🔴 CRITICAL
 
 **Locations:**
-- `CLAUDE.md` (line 21): Краткое упоминание "критично для экономии токенов"
-- `PROJECT_INTAKE.md` (section 25a, lines 536-576): Детальное объяснение (40+ строк)
-- `ARCHITECTURE.md` (Module Architecture, lines 235-431): Полная философия + диаграммы (196 строк!)
+- `CLAUDE.md` (line 21): A brief mention, "critical for token savings"
+- `PROJECT_INTAKE.md` (section 25a, lines 536-576): A detailed explanation (40+ lines)
+- `ARCHITECTURE.md` (Module Architecture, lines 235-431): The full philosophy + diagrams (196 lines!)
 
 **Problem:**
 ```
-Философия модульности объясняется ТРИЖДЫ:
-1. CLAUDE.md: 1 строка (mention)
-2. PROJECT_INTAKE.md: 40 строк (detailed explanation)
-3. ARCHITECTURE.md: 196 строк (FULL philosophy + diagrams + examples)
+The modularity philosophy is explained THREE TIMES:
+1. CLAUDE.md: 1 line (mention)
+2. PROJECT_INTAKE.md: 40 lines (detailed explanation)
+3. ARCHITECTURE.md: 196 lines (FULL philosophy + diagrams + examples)
 ```
 
 **Duplication Examples:**
 
 PROJECT_INTAKE.md:
 ```
-"Экономия токенов: ИИ загружает только нужный модуль (100-200 строк),
-а не весь проект (1000+ строк)"
+"Token savings: The AI loads only the module it needs (100-200 lines),
+not the whole project (1000+ lines)"
 ```
 
 ARCHITECTURE.md:
 ```
-"ИИ загружает только нужный модуль (100-200 строк)
-Вместо всего проекта (1000+ строк)"
+"The AI loads only the module it needs (100-200 lines)
+Instead of the whole project (1000+ lines)"
 ```
 
 **Identical text!**
 
-**Contradiction Risk:** Средний - но высокий объем дублирования
+**Contradiction Risk:** Medium - but a high volume of duplication
 
 **Impact:**
-- Одна концепция занимает 196+40+1 = 237 строк в 3 файлах
-- При обновлении философии нужно обновлять в 3 местах
-- ARCHITECTURE.md - authoritative, но PROJECT_INTAKE.md тоже детальный
+- One concept takes up 196+40+1 = 237 lines across 3 files
+- When the philosophy is updated, it has to be updated in 3 places
+- ARCHITECTURE.md is authoritative, but PROJECT_INTAKE.md is detailed too
 
 ---
 
 ### 7. User Personas References
 
-**Severity:** 🟢 LOW (не дублирование, а множественные ссылки)
+**Severity:** 🟢 LOW (not duplication, but multiple references)
 
 **Locations:**
-- `CLAUDE.md` (line 18): Упоминание важности
-- `PROJECT_INTAKE.md`: Полное описание с шаблоном
-- `MIGRATION.md`: Инструкции по миграции User Personas
+- `CLAUDE.md` (line 18): A mention of its importance
+- `PROJECT_INTAKE.md`: A full description with a template
+- `MIGRATION.md`: Instructions for migrating User Personas
 
-**Problem:** Нет - это правильное разделение (references vs definition).
+**Problem:** None - this is the correct separation (references vs definition).
 
 **Status:** ✅ OK
 
@@ -208,40 +208,40 @@ ARCHITECTURE.md:
 
 **Current State:**
 CLAUDE.md tries to be:
-1. **Navigator** ✅ - "Читай эти файлы в таком порядке"
-2. **Quick Reference** ⚠️ - Краткие чеклисты
-3. **Reminder** ⚠️ - "Не забудь сделать X"
-4. **Rules Duplicate** ❌ - Дублирует WORKFLOW.md и SECURITY.md
+1. **Navigator** ✅ - "Read these files in this order"
+2. **Quick Reference** ⚠️ - Brief checklists
+3. **Reminder** ⚠️ - "Don't forget to do X"
+4. **Rules Duplicate** ❌ - Duplicates WORKFLOW.md and SECURITY.md
 
 **Problem:**
-- Roles 2-4 создают дублирования
-- Каждый раз добавляя в WORKFLOW.md, нужно обновлять CLAUDE.md
-- Риск забыть обновить
+- Roles 2-4 create duplication
+- Every time something is added to WORKFLOW.md, CLAUDE.md has to be updated
+- Risk of forgetting to update it
 
 **Recommendation:**
-CLAUDE.md должен быть **ТОЛЬКО навигатором**:
-- "Для security читай SECURITY.md"
-- "Для sprint completion читай WORKFLOW.md section X"
-- Минимум дублирований, максимум ссылок
+CLAUDE.md should be **ONLY a navigator**:
+- "For security, read SECURITY.md"
+- "For sprint completion, read WORKFLOW.md section X"
+- Minimum duplication, maximum references
 
 ---
 
 ### SECURITY.md Internal Duplications
 
 **Found:**
-"Input validation" упоминается в SECURITY.md трижды:
+"Input validation" is mentioned in SECURITY.md three times:
 - Line 209: Stage 3 checklist
 - Line 485: Stage 4 testing checklist
 - Line 493: Stage 4 testing details
 
 **Analysis:**
-Это может быть **OK** если:
-- Каждое упоминание в разном контексте
+This may be **OK** if:
+- Each mention is in a different context
 - Line 209: "Implement validation"
 - Line 485: "Test validation"
 - Line 493: "Input validation tested"
 
-**Verdict:** 🟡 Borderline - не критично, но можно улучшить.
+**Verdict:** 🟡 Borderline - not critical, but could be improved.
 
 ---
 
@@ -256,7 +256,7 @@ CLAUDE.md должен быть **ТОЛЬКО навигатором**:
 | Security Checks | 6+3 rules | 9 items | ~70% |
 | Documentation Updates | 5 files list | 6 files list | ~90% |
 
-**Total Overlap:** ~75% содержания CLAUDE.md "Флоу работы" дублирует WORKFLOW.md.
+**Total Overlap:** ~75% of the content of CLAUDE.md "Workflow" duplicates WORKFLOW.md.
 
 ---
 
@@ -265,11 +265,11 @@ CLAUDE.md должен быть **ТОЛЬКО навигатором**:
 ### Sprint Completion Lists Divergence
 
 **Risk Scenario:**
-1. Developer adds new requirement to WORKFLOW.md (например, "Run security audit")
+1. Developer adds new requirement to WORKFLOW.md (for example, "Run security audit")
 2. Forgets to update CLAUDE.md
-3. AI reads CLAUDE.md (автозагружается)
+3. AI reads CLAUDE.md (auto-loaded)
 4. AI follows 6-item checklist from CLAUDE.md
-5. Skips security audit (есть только в WORKFLOW.md)
+5. Skips security audit (exists only in WORKFLOW.md)
 6. **Security vulnerability ships to production**
 
 **Probability:** MEDIUM-HIGH
@@ -283,13 +283,13 @@ CLAUDE.md должен быть **ТОЛЬКО навигатором**:
 ### Security Rules Fragmentation
 
 **Current State:**
-Security practices описаны в:
+Security practices are described in:
 - SECURITY.md (authoritative, 500+ lines)
 - CLAUDE.md (summary, 9 rules)
 - WORKFLOW.md (checklist, 9 items)
 
 **Risk Scenario:**
-1. Update security policy in SECURITY.md (например, add new validation rule)
+1. Update security policy in SECURITY.md (for example, add new validation rule)
 2. Forget to update summary in CLAUDE.md
 3. AI reads CLAUDE.md (auto-loads)
 4. AI follows outdated rules from CLAUDE.md
@@ -308,22 +308,22 @@ Security practices описаны в:
 ### If Not Fixed
 
 **Short-term (1-2 months):**
-- Низкий риск - файлы еще свежие, помним что где
+- Low risk - the files are still fresh, we remember what is where
 
 **Medium-term (3-6 months):**
-- Средний риск - начнутся расхождения при обновлениях
-- Забудем какой файл authoritative
+- Medium risk - divergence will start during updates
+- We'll forget which file is authoritative
 
 **Long-term (6+ months):**
-- Высокий риск - противоречивые инструкции
-- AI и разработчики в замешательстве
-- "Какому файлу верить?"
+- High risk - contradictory instructions
+- The AI and developers are confused
+- "Which file should we trust?"
 
 **Worst Case:**
-- Критическая security или workflow инструкция обновлена в WORKFLOW.md
-- НО не обновлена в CLAUDE.md
-- AI следует CLAUDE.md (автозагрузка!)
-- **Нарушение важного процесса**
+- A critical security or workflow instruction is updated in WORKFLOW.md
+- BUT not updated in CLAUDE.md
+- The AI follows CLAUDE.md (auto-loaded!)
+- **An important process is violated**
 
 ---
 
@@ -353,26 +353,26 @@ Security practices описаны в:
 
 **Changes:**
 ```markdown
-## 🏗️ Флоу работы
+## 🏗️ Workflow
 
 ❌ CURRENT (27 lines of duplicated workflow):
-### Перед началом задачи:
-1. Прочитай ARCHITECTURE.md
-2. Проверь BACKLOG.md
+### Before starting a task:
+1. Read ARCHITECTURE.md
+2. Check BACKLOG.md
 ...
-### Sprint завершение:
-1. Убедись что все тесты проходят
+### Sprint completion:
+1. Make sure all tests pass
 ...
 
 ✅ TARGET (5 lines with links):
-### Флоу работы
+### Workflow
 
-**Полная документация:** WORKFLOW.md
+**Full documentation:** WORKFLOW.md
 
-**Краткий справочник:**
-- Перед началом: См. WORKFLOW.md → "Sprint Start"
-- Sprint completion: См. WORKFLOW.md → "Sprint Completion Checklist"
-- Git workflow: См. WORKFLOW.md → "Git Workflow"
+**Quick reference:**
+- Before starting: See WORKFLOW.md → "Sprint Start"
+- Sprint completion: See WORKFLOW.md → "Sprint Completion Checklist"
+- Git workflow: See WORKFLOW.md → "Git Workflow"
 ```
 
 **Reduction:** 27 lines → 5 lines
@@ -384,22 +384,22 @@ Security practices описаны в:
 **In CLAUDE.md, replace details with links:**
 
 ```markdown
-## 🔐 Безопасность (КРИТИЧНО!)
+## 🔐 Security (CRITICAL!)
 
-**📖 ПОЛНАЯ ПОЛИТИКА:** SECURITY.md
+**📖 FULL POLICY:** SECURITY.md
 
-**⚠️ ВСЕГДА перед кодированием читай SECURITY.md!**
+**⚠️ ALWAYS read SECURITY.md before coding!**
 
-**Ключевые принципы (детали в SECURITY.md):**
-- ✅ Валидируй входные данные → См. SECURITY.md Stage 3
-- ✅ Храни секреты в .env → См. SECURITY.md "Secrets Management"
-- ❌ Никогда не hardcode секреты → См. SECURITY.md "NEVER DO"
+**Key principles (details in SECURITY.md):**
+- ✅ Validate input → See SECURITY.md Stage 3
+- ✅ Keep secrets in .env → See SECURITY.md "Secrets Management"
+- ❌ Never hardcode secrets → See SECURITY.md "NEVER DO"
 ```
 
 **Benefits:**
-- CLAUDE.md остается кратким (navigation)
-- Все детали в SECURITY.md (single source of truth)
-- Ссылки явные, не забудем обновить
+- CLAUDE.md stays brief (navigation)
+- All details in SECURITY.md (single source of truth)
+- Explicit references, so we won't forget to update
 
 ---
 
@@ -496,7 +496,7 @@ New file: `DOCS_MAP.md`
    - Approve CLAUDE.md refactoring approach?
    - Any other files to audit?
 
-2. ❗ **REFACTOR CLAUDE.md** (если одобрено):
+2. ❗ **REFACTOR CLAUDE.md** (if approved):
    - Remove duplicated workflow
    - Remove duplicated security rules
    - Keep only navigation + essential links
@@ -504,7 +504,7 @@ New file: `DOCS_MAP.md`
 
 3. ❗ **ADD CROSS-REFERENCES:**
    - Every section in CLAUDE.md links to authoritative source
-   - Format: "См. WORKFLOW.md → Section X"
+   - Format: "See WORKFLOW.md → Section X"
 
 ### Short-term (This Week)
 4. **REFACTOR AGENTS.md** (critical!):
@@ -527,19 +527,19 @@ New file: `DOCS_MAP.md`
 
 ## 💭 Discussion Questions for User
 
-1. **Согласен ли ты с таблицей "Single Source of Truth"?**
-   - Или есть другие предложения?
+1. **Do you agree with the "Single Source of Truth" table?**
+   - Or do you have other suggestions?
 
-2. **CLAUDE.md должен быть только навигатором?**
-   - Или оставить краткие reminders (с риском дублирования)?
+2. **Should CLAUDE.md be only a navigator?**
+   - Or keep brief reminders (at the risk of duplication)?
 
-3. **Каких дублирований НЕ стоит бояться?**
-   - Например, "читай SECURITY.md" упоминается везде - это OK?
+3. **Which duplications should we NOT worry about?**
+   - For example, "read SECURITY.md" is mentioned everywhere - is that OK?
 
-4. **Как часто проверять консистентность?**
-   - Вручную раз в N релизов?
-   - Автоматический скрипт?
-   - Не нужно?
+4. **How often should consistency be checked?**
+   - Manually once every N releases?
+   - An automated script?
+   - Not needed?
 
 ---
 
@@ -547,14 +547,14 @@ New file: `DOCS_MAP.md`
 
 **Why This Matters:**
 
-Фреймворк для AI-агентов должен быть **внутренне консистентным**, иначе:
-- AI получит противоречивые инструкции
-- Непонятно какому файлу верить
-- При обновлениях забудем синхронизировать
+A framework for AI agents must be **internally consistent**, otherwise:
+- The AI will receive contradictory instructions
+- It is unclear which file to trust
+- We'll forget to synchronise during updates
 
-**Первые версии ВСЕГДА избыточны** - это нормально!
+**First versions are ALWAYS redundant** - that's normal!
 
-Сейчас правильное время для рефакторинга, пока фреймворк молодой и пользователей немного.
+Now is the right time to refactor, while the framework is young and there are few users.
 
 ---
 

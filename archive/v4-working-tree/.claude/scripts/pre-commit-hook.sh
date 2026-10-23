@@ -83,7 +83,7 @@ if [ ${#BLOCKED_FILES[@]} -gt 0 ]; then
   done
 
   echo ""
-  echo -e "${YELLOW}These files match COMMIT_POLICY 'НИКОГДА' patterns.${NC}"
+  echo -e "${YELLOW}These files match COMMIT_POLICY 'NEVER' patterns.${NC}"
   echo ""
   echo "To fix:"
   echo "  1. Review .claude/COMMIT_POLICY.md"

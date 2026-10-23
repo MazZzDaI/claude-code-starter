@@ -64,36 +64,36 @@ export function requestSummary(dialogPath: string, verbose: boolean = false, isF
 
   // Different prompts for interim vs final summary
   const prompt = isFinal
-    ? `Прочитай файл ${dialogPath} — это завершённый диалог с Claude Code.
+    ? `Read the file ${dialogPath} — it is a completed dialog with Claude Code.
 
-Создай ДВА саммари на русском языке:
+Create TWO summaries in Russian:
 
-1. КОРОТКОЕ (для списка диалогов) - одно предложение:
-   - Суть изменений или проблемы
-   - Конкретные файлы/модули если есть
-   Пример: "Исправлена логика чекбоксов visibility в index.html"
+1. SHORT (for the dialog list) - one sentence:
+   - The essence of the changes or the problem
+   - Specific files/modules, if any
+   Example: "Fixed the visibility checkbox logic in index.html"
 
-2. ПОЛНОЕ (для детального просмотра) - 3-5 предложений:
-   - Главная цель/задача
-   - Что конкретно сделано (файлы, методы, изменения)
-   - Технические решения
-   - Итоговый статус
+2. FULL (for the detailed view) - 3-5 sentences:
+   - The main goal/task
+   - What exactly was done (files, methods, changes)
+   - Technical decisions
+   - Final status
 
-Затем используй Edit чтобы ЗАМЕНИТЬ существующее саммари в начале файла в формате:
-<!-- SUMMARY_SHORT: короткое саммари -->
-<!-- SUMMARY_FULL: полное детальное саммари -->`
-    : `Прочитай файл ${dialogPath}.
+Then use Edit to REPLACE the existing summary at the start of the file in the format:
+<!-- SUMMARY_SHORT: short summary -->
+<!-- SUMMARY_FULL: full detailed summary -->`
+    : `Read the file ${dialogPath}.
 
-Создай ДВА саммари на русском:
+Create TWO summaries in Russian:
 
-1. КОРОТКОЕ - одно предложение с конкретикой (файлы/функции/модули)
-   Пример: "Добавлен watcher для автоэкспорта диалогов в dialog/"
+1. SHORT - one sentence with specifics (files/functions/modules)
+   Example: "Added a watcher for auto-exporting dialogs to dialog/"
 
-2. ПОЛНОЕ - 2-3 предложения с деталями и техническими решениями
+2. FULL - 2-3 sentences with details and technical decisions
 
-Затем используй Edit чтобы добавить саммари в начало файла в формате:
-<!-- SUMMARY_SHORT: короткое -->
-<!-- SUMMARY_FULL: полное -->`;
+Then use Edit to add the summary at the start of the file in the format:
+<!-- SUMMARY_SHORT: short -->
+<!-- SUMMARY_FULL: full -->`;
 
   const claude = spawn('claude', [
     '-p',

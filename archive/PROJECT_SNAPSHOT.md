@@ -1,157 +1,157 @@
-# PROJECT SNAPSHOT — Текущее состояние Claude Code Starter
+# PROJECT SNAPSHOT — Current state of Claude Code Starter
 
-*Последнее обновление: 2025-10-24*
+*Last updated: 2025-10-24*
 
-> 📋 **Это репозиторий ФРЕЙМВОРКА мета-документации, а не обычный проект**
+> 📋 **This is the repository of a meta-documentation FRAMEWORK, not an ordinary project**
 >
-> **⚠️ ВАЖНО:** Обновляй этот файл после каждого релиза!
+> **⚠️ IMPORTANT:** Update this file after every release!
 
 ---
 
-## 📊 Статус разработки
+## 📊 Development status
 
-**Version 1.0.0: Initial Release** [статус: ✅]
-**Version 1.1.x: Migration System** [статус: ✅]
-**Version 1.2.0: Deduplication** [статус: ✅]
-**Version 1.3.x: Documentation Clarity** [статус: ✅]
-**Version 1.4.x: Cold Start Optimization** [статус: ✅]
-**Version 2.0.0: Future Enhancements** [статус: ⏳]
+**Version 1.0.0: Initial Release** [status: ✅]
+**Version 1.1.x: Migration System** [status: ✅]
+**Version 1.2.0: Deduplication** [status: ✅]
+**Version 1.3.x: Documentation Clarity** [status: ✅]
+**Version 1.4.x: Cold Start Optimization** [status: ✅]
+**Version 2.0.0: Future Enhancements** [status: ⏳]
 
-**Текущая версия:** 1.4.3 (Released: 2025-10-24)
+**Current version:** 1.4.3 (Released: 2025-10-24)
 
-**Общий прогресс:** ~75% (основные функции готовы, Sprint Completion Enforcement реализован)
+**Overall progress:** ~75% (core features ready, Sprint Completion Enforcement implemented)
 
-**Текущая фаза:** Мониторинг v1.4.3 + Planning v1.5.0 (/finalize command)
+**Current phase:** Monitoring v1.4.3 + Planning v1.5.0 (/finalize command)
 
 ---
 
-## 🎯 Текущие задачи
+## 🎯 Current tasks
 
-### В работе (2025-10)
-- 🔄 Мониторинг v1.4.3 в реальных проектах
-- 🔄 Сбор обратной связи от пользователей
-- 🔄 Планирование v1.5.0 (GitHub Issue #11)
+### In progress (2025-10)
+- 🔄 Monitoring v1.4.3 in real projects
+- 🔄 Gathering user feedback
+- 🔄 Planning v1.5.0 (GitHub Issue #11)
 
-### Следующие задачи
+### Next tasks
 - ⏳ Priority 1 - /finalize slash command (Issue #11):
-  - Создать Init/.claude/commands/finalize.md
-  - Реализовать проверку мета-файлов
-  - Тестирование на реальных проектах
-- ⏳ Priority 2 improvements (см. FUTURE_IMPROVEMENTS.md):
-  - Добавить секцию "Common Mistakes" в DOCS_MAP.md
-  - Добавить Best Practices примеры в README
+  - Create Init/.claude/commands/finalize.md
+  - Implement the metafile check
+  - Testing on real projects
+- ⏳ Priority 2 improvements (see FUTURE_IMPROVEMENTS.md):
+  - Add a "Common Mistakes" section to DOCS_MAP.md
+  - Add Best Practices examples to the README
 
 ---
 
-## 📦 Структура репозитория
+## 📦 Repository structure
 
 ```
 Project_init/
-├── Init/                      ✅ 21 файл (русские шаблоны)
-├── init_eng/                  ✅ 21 файл (английские шаблоны)
-├── dev/                       ✅ Dev/testing директория
-├── init-project.sh            ✅ 183 строки (установочный скрипт)
-├── init-starter.zip           ✅ 138KB (русские шаблоны)
-├── init-starter-en.zip        ✅ 114KB (английские шаблоны)
-├── CLAUDE.md                  ✅ Контекст для AI (НОВЫЙ!)
-├── PROJECT_SNAPSHOT.md        ✅ Этот файл (НОВЫЙ!)
-├── BACKLOG.md                 🔄 В работе (создается)
-├── README.md                  ✅ Английская документация
-├── README_RU.md               ✅ Русская документация
-├── CHANGELOG.md               ✅ 1714 строк (история версий)
-├── DOCS_MAP.md                ✅ Навигация
-├── FUTURE_IMPROVEMENTS.md     ✅ Запланированные улучшения
-├── MIGRATION_ANALYSIS.md      ✅ Результаты тестирования
-├── CONSISTENCY_AUDIT.md       ✅ Аудит дублирований (архив)
-├── REFACTORING_PLAN.md        ✅ План дедупликации (архив)
-└── .gitignore                 🔄 Модифицирован
+├── Init/                      ✅ 21 files (Russian templates)
+├── init_eng/                  ✅ 21 files (English templates)
+├── dev/                       ✅ Dev/testing directory
+├── init-project.sh            ✅ 183 lines (installation script)
+├── init-starter.zip           ✅ 138KB (Russian templates)
+├── init-starter-en.zip        ✅ 114KB (English templates)
+├── CLAUDE.md                  ✅ Context for the AI (NEW!)
+├── PROJECT_SNAPSHOT.md        ✅ This file (NEW!)
+├── BACKLOG.md                 🔄 In progress (being created)
+├── README.md                  ✅ English documentation
+├── README_RU.md               ✅ Russian documentation
+├── CHANGELOG.md               ✅ 1714 lines (version history)
+├── DOCS_MAP.md                ✅ Navigation
+├── FUTURE_IMPROVEMENTS.md     ✅ Planned improvements
+├── MIGRATION_ANALYSIS.md      ✅ Testing results
+├── CONSISTENCY_AUDIT.md       ✅ Duplication audit (archive)
+├── REFACTORING_PLAN.md        ✅ Deduplication plan (archive)
+└── .gitignore                 🔄 Modified
 
-Легенда:
-✅ — реализовано и протестировано
-🔄 — в процессе разработки
-⏳ — ожидает выполнения
+Legend:
+✅ — implemented and tested
+🔄 — in development
+⏳ — pending
 ```
 
 ---
 
-## ✅ Завершенные релизы
+## ✅ Completed releases
 
 ### v1.4.3 (2025-10-24) - Sprint Completion Enforcement
-1. ✅ Создана 5-уровневая система напоминаний для AI
-2. ✅ Новый файл: SPRINT_COMPLETION_CHECKLIST.md
-3. ✅ Обновлены: CLAUDE.md, AGENTS.md, PROCESS.md, SECURITY.md
-4. ✅ Добавлена .gitignore validation checklist
-5. ✅ GitHub Issue #11 создан для /finalize команды
-6. ✅ Dogfooding: фреймворк применяет собственные принципы
+1. ✅ Created a 5-level reminder system for the AI
+2. ✅ New file: SPRINT_COMPLETION_CHECKLIST.md
+3. ✅ Updated: CLAUDE.md, AGENTS.md, PROCESS.md, SECURITY.md
+4. ✅ Added a .gitignore validation checklist
+5. ✅ GitHub Issue #11 created for the /finalize command
+6. ✅ Dogfooding: the framework applies its own principles
 
 ### v1.4.2 (2025-10-13) - Migration UX Improvements
-1. ✅ Добавлена секция Prerequisites в MIGRATION.md
-2. ✅ Уточнение про slash-команды (prompt expansions)
-3. ✅ Обновление на базе реального тестирования multiagents
+1. ✅ Added a Prerequisites section to MIGRATION.md
+2. ✅ Clarification about slash commands (prompt expansions)
+3. ✅ Update based on real testing on multiagents
 
 ### v1.4.1 (2025-10-11) - Token Economics & Navigation
-1. ✅ Добавлена секция "Token Economics & ROI" в README
-2. ✅ Table of Contents в README файлах
-3. ✅ Конкретные цифры экономии ($43.20/год)
+1. ✅ Added a "Token Economics & ROI" section to the README
+2. ✅ Table of Contents in the README files
+3. ✅ Concrete savings figures ($43.20/year)
 
 ### v1.4.0 (2025-10-11) - Cold Start Enhancement
-1. ✅ PROJECT_SNAPSHOT.md для instant project state
-2. ✅ Модульный фокус: экономия 85% токенов
-3. ✅ PROCESS.md для синхронизации документации
-4. ✅ DEVELOPMENT_PLAN_TEMPLATE.md для методологии
+1. ✅ PROJECT_SNAPSHOT.md for instant project state
+2. ✅ Modular focus: 85% token savings
+3. ✅ PROCESS.md for documentation synchronisation
+4. ✅ DEVELOPMENT_PLAN_TEMPLATE.md for the methodology
 
 ### v1.3.1 (2025-10-11) - File Purpose Separation
-1. ✅ Разделение ARCHITECTURE.md vs BACKLOG.md
-2. ✅ Предотвращение confusion с operational checklists
-3. ✅ Обновление AGENTS.md с "Where to Get Checklists"
+1. ✅ Separation of ARCHITECTURE.md vs BACKLOG.md
+2. ✅ Prevention of confusion with operational checklists
+3. ✅ AGENTS.md updated with "Where to Get Checklists"
 
 ### v1.3.0 (2025-10-10) - Documentation Improvements
-1. ✅ Улучшение README структуры
-2. ✅ Проактивное поведение AI агентов
-3. ✅ FUTURE_IMPROVEMENTS.md для отслеживания
+1. ✅ Improved README structure
+2. ✅ Proactive behaviour of AI agents
+3. ✅ FUTURE_IMPROVEMENTS.md for tracking
 
 ### v1.2.0 (2025-10-10) - Major Deduplication
-1. ✅ Устранение ~500 строк дублирований
-2. ✅ Single Source of Truth паттерн
-3. ✅ 50% уменьшение CLAUDE.md
+1. ✅ Removal of ~500 lines of duplication
+2. ✅ Single Source of Truth pattern
+3. ✅ 50% reduction of CLAUDE.md
 
 ### v1.1.3 (2025-10-09) - Migration Enhancements
-1. ✅ .migrationignore для исключений
-2. ✅ Улучшения UX миграции
-3. ✅ Rollback функциональность
+1. ✅ .migrationignore for exclusions
+2. ✅ Migration UX improvements
+3. ✅ Rollback functionality
 
 ### v1.1.0 (2025-10-09) - Migration System
-1. ✅ Двухэтапная миграция legacy проектов
-2. ✅ Slash-команды: /migrate, /migrate-resolve, /migrate-finalize
-3. ✅ Conflict detection и resolution
+1. ✅ Two-stage migration of legacy projects
+2. ✅ Slash commands: /migrate, /migrate-resolve, /migrate-finalize
+3. ✅ Conflict detection and resolution
 
 ### v1.0.0 (2025-10-08) - Initial Release
 1. ✅ 11 core template files
-2. ✅ Билингвальная поддержка (RU/EN)
-3. ✅ 11 slash-команд
-4. ✅ Модульная архитектура философия
+2. ✅ Bilingual support (RU/EN)
+3. ✅ 11 slash commands
+4. ✅ Modular architecture philosophy
 
 ---
 
-## 🔜 Следующий этап: v2.0.0 Modular Context Management
+## 🔜 Next stage: v2.0.0 Modular Context Management
 
-**Статус:** ✅ Roadmap готов, разбит на GitHub Issues #13-#17
+**Status:** ✅ Roadmap ready, split into GitHub Issues #13-#17
 
 ### Roadmap:
 - **v1.5.0** - /finalize Slash Command (Issue #11) - Priority 1
 - **v1.6.0** - Post-Compact Hook (Issue #12) - Priority 1B
-- **v2.0.0** - Hierarchical CLAUDE.md (Issues #13, #15) - 6-8 часов
-- **v2.1.0** - Sprint Focus Declaration (Issue #14) - 4-6 часов
-- **v2.2.0** - Checkpoint Workflow (Issue #16) - 3-4 часа
-- **v2.3.0** - Best Practices Documentation (Issue #17) - 8-10 часов
+- **v2.0.0** - Hierarchical CLAUDE.md (Issues #13, #15) - 6-8 hours
+- **v2.1.0** - Sprint Focus Declaration (Issue #14) - 4-6 hours
+- **v2.2.0** - Checkpoint Workflow (Issue #16) - 3-4 hours
+- **v2.3.0** - Best Practices Documentation (Issue #17) - 8-10 hours
 
-**Vision:** От "project-level" к "module-level" управлению контекстом
+**Vision:** From "project-level" to "module-level" context management
 
-**Цель:** Работа с проектами 50k+ lines без context pollution
+**Goal:** Working with 50k+ line projects without context pollution
 
-**ROI:** ~87% экономия токенов на больших проектах
+**ROI:** ~87% token savings on large projects
 
-**Timeline:** Q4 2025 - Q1 2026 (21-28 часов total)
+**Timeline:** Q4 2025 - Q1 2026 (21-28 hours total)
 
 **GitHub Issues:**
 - [Issue #11](https://github.com/alexeykrol/claude-code-starter/issues/11) - /finalize command
@@ -162,140 +162,140 @@ Project_init/
 - [Issue #16](https://github.com/alexeykrol/claude-code-starter/issues/16) - Checkpoint Workflow
 - [Issue #17](https://github.com/alexeykrol/claude-code-starter/issues/17) - Best Practices
 
-**Детали:** См. FUTURE_IMPROVEMENTS.md и BACKLOG.md Phase 4
+**Details:** See FUTURE_IMPROVEMENTS.md and BACKLOG.md Phase 4
 
 ---
 
-## 🔧 Технологии
+## 🔧 Technologies
 
-- **Шаблоны:** Markdown (GitHub Flavored Markdown)
-- **Скрипты:** Bash (init-project.sh - 183 lines)
-- **AI Integration:** Claude Code (автозагрузка CLAUDE.md)
-- **Версионирование:** Git + GitHub
-- **Автоматизация:** 18 slash-команд в `.claude/commands/`
-- **Архивирование:** ZIP (init-starter.zip, init-starter-en.zip)
-- **CI/CD:** Ручной процесс через `/release` команду
+- **Templates:** Markdown (GitHub Flavored Markdown)
+- **Scripts:** Bash (init-project.sh - 183 lines)
+- **AI Integration:** Claude Code (auto-loading of CLAUDE.md)
+- **Versioning:** Git + GitHub
+- **Automation:** 18 slash commands in `.claude/commands/`
+- **Archiving:** ZIP (init-starter.zip, init-starter-en.zip)
+- **CI/CD:** Manual process via the `/release` command
 
 ---
 
-## 📝 Важные файлы и процессы
+## 📝 Important files and processes
 
-### Ключевые документы:
-- `CHANGELOG.md` — единственный источник истории версий (1714 строк!)
-- `README_RU.md` / `README.md` — документация для пользователей
-- `DOCS_MAP.md` — навигация по фреймворку
-- `FUTURE_IMPROVEMENTS.md` — roadmap на базе user feedback
-- `MIGRATION_ANALYSIS.md` — результаты тестирования на multiagents
+### Key documents:
+- `CHANGELOG.md` — the single source of version history (1714 lines!)
+- `README_RU.md` / `README.md` — user documentation
+- `DOCS_MAP.md` — navigation through the framework
+- `FUTURE_IMPROVEMENTS.md` — roadmap based on user feedback
+- `MIGRATION_ANALYSIS.md` — testing results on multiagents
 
-### Процесс релиза:
-1. Используй `/release` (НЕ вручную!)
-2. Slash-команда обновит:
-   - Version в README.md и README_RU.md
+### Release process:
+1. Use `/release` (NOT manually!)
+2. The slash command will update:
+   - Version in README.md and README_RU.md
    - CHANGELOG.md
-   - Пересоздаст ZIP архивы
-   - Создаст git tag
-   - Создаст GitHub release
+   - Recreate the ZIP archives
+   - Create a git tag
+   - Create a GitHub release
 
-### Синхронизация языков:
-- Изменения в `Init/` → дублировать в `init_eng/`
-- Структура ДОЛЖНА быть идентичной
-- Только содержимое на разных языках
+### Language synchronisation:
+- Changes in `Init/` → duplicate in `init_eng/`
+- The structure MUST be identical
+- Only the content is in different languages
 
-### Тестирование:
+### Testing:
 ```bash
 bash init-project.sh --target=dev
 ```
 
 ---
 
-## 🎯 Цель фреймворка (MVP достигнут ✅)
+## 🎯 Framework goal (MVP achieved ✅)
 
-**MVP был достигнут в v1.0.0:**
+**The MVP was achieved in v1.0.0:**
 - ✅ 11+ core template files
-- ✅ Автозагрузка контекста через CLAUDE.md
-- ✅ Slash-команды для автоматизации
-- ✅ Билингвальная поддержка
-- ✅ Установочный скрипт
+- ✅ Context auto-loading via CLAUDE.md
+- ✅ Slash commands for automation
+- ✅ Bilingual support
+- ✅ Installation script
 
-**Текущая цель (v1.4.x - v2.0.0):**
-- 🔄 Оптимизация token usage (Cold Start Protocol)
-- 🔄 Сбор user feedback
-- 🔄 Итеративные улучшения на базе реального использования
-- ⏳ Видео-туториалы и визуальная документация
+**Current goal (v1.4.x - v2.0.0):**
+- 🔄 Token usage optimisation (Cold Start Protocol)
+- 🔄 Gathering user feedback
+- 🔄 Iterative improvements based on real usage
+- ⏳ Video tutorials and visual documentation
 
 ---
 
-## 🔄 История последних обновлений
+## 🔄 History of recent updates
 
 ### 2025-10-24 - v2.0.0 Roadmap Complete
-- Реализовано: Comprehensive v2.0.0 Modular Context Management roadmap
-- GitHub Issues: Создано 5 issues (#13-#17) с детальными спецификациями
-- Документация: ~280 строк в FUTURE_IMPROVEMENTS.md, обновлен BACKLOG.md
-- Vision: "AI не должен помнить всё, а только релевантное СЕЙЧАС"
-- ROI: ~87% экономия токенов на проектах 50k+ lines
-- Timeline: Q4 2025 - Q1 2026 (21-28 часов)
-- Философия: "проблема философски тоже баг" - системные решения для философских проблем
+- Implemented: Comprehensive v2.0.0 Modular Context Management roadmap
+- GitHub Issues: 5 issues created (#13-#17) with detailed specifications
+- Documentation: ~280 lines in FUTURE_IMPROVEMENTS.md, BACKLOG.md updated
+- Vision: "The AI should not remember everything, only what is relevant NOW"
+- ROI: ~87% token savings on 50k+ line projects
+- Timeline: Q4 2025 - Q1 2026 (21-28 hours)
+- Philosophy: "a philosophical problem is a bug too" - systemic solutions for philosophical problems
 
 ### 2025-10-24 - v1.4.3 Released
-- Реализовано: Sprint Completion Enforcement (5-уровневая система)
-- Прогресс: 75% (v1.4.3 complete, /finalize planned)
-- Следующий этап: v1.5.0 с /finalize командой
-- Детали: 12 файлов изменено, ~1010 строк добавлено
-- Проблема решена: AI забывает обновлять мета-файлы
+- Implemented: Sprint Completion Enforcement (5-level system)
+- Progress: 75% (v1.4.3 complete, /finalize planned)
+- Next stage: v1.5.0 with the /finalize command
+- Details: 12 files changed, ~1010 lines added
+- Problem solved: the AI forgets to update metafiles
 
 ### 2025-10-23 - Dogfooding Complete
-- Создан CLAUDE.md для самого репозитория
-- Создан PROJECT_SNAPSHOT.md
-- Создан BACKLOG.md
-- Применение собственных принципов к фреймворку
+- Created CLAUDE.md for the repository itself
+- Created PROJECT_SNAPSHOT.md
+- Created BACKLOG.md
+- Applying the framework's own principles to itself
 
 ### 2025-10-13 - v1.4.2 Released
-- Реализовано: Migration UX improvements
-- Обновлено: MIGRATION.md с prerequisites
-- Добавлено: Уточнения про slash-команды
-- Основано на: Реальном тестировании multiagents проекта
+- Implemented: Migration UX improvements
+- Updated: MIGRATION.md with prerequisites
+- Added: Clarifications about slash commands
+- Based on: Real testing on the multiagents project
 
 ### 2025-10-11 - v1.4.1 Released
-- Реализовано: Token Economics & ROI секция
-- Добавлено: Table of Contents в README
-- Улучшено: Навигация и понимание ценности
+- Implemented: Token Economics & ROI section
+- Added: Table of Contents in the README
+- Improved: Navigation and understanding of the value
 
 ### 2025-10-11 - v1.4.0 Released
-- Реализовано: Cold Start Protocol с PROJECT_SNAPSHOT.md
-- Достигнуто: 85% экономия токенов (5x дешевле!)
-- Добавлено: Модульный фокус и PROCESS.md
+- Implemented: Cold Start Protocol with PROJECT_SNAPSHOT.md
+- Achieved: 85% token savings (5x cheaper!)
+- Added: Modular focus and PROCESS.md
 
 ---
 
-## 📊 Компоненты фреймворка и их статус
+## 📊 Framework components and their status
 
-| Компонент | Статус | Версия | Тестирование |
+| Component | Status | Version | Testing |
 |-----------|--------|--------|--------------|
-| Core Templates (14 files) | ✅ Готов | 1.4.2 | ✅ Tested |
-| Migration System | ✅ Готов | 1.1.3 | ✅ Tested (multiagents) |
-| Slash Commands (18) | ✅ Готов | 1.4.0 | ✅ Tested |
-| Cold Start Protocol | ✅ Готов | 1.4.0 | ✅ Validated |
-| Bilingual Support | ✅ Готов | 1.0.0 | ✅ Synced |
-| Installation Script | ✅ Готов | 1.0.0 | ✅ Tested |
-| Token Optimization | ✅ Готов | 1.4.0 | ✅ Validated (85%) |
-| Documentation | ✅ Готов | 1.4.2 | ✅ Complete |
+| Core Templates (14 files) | ✅ Ready | 1.4.2 | ✅ Tested |
+| Migration System | ✅ Ready | 1.1.3 | ✅ Tested (multiagents) |
+| Slash Commands (18) | ✅ Ready | 1.4.0 | ✅ Tested |
+| Cold Start Protocol | ✅ Ready | 1.4.0 | ✅ Validated |
+| Bilingual Support | ✅ Ready | 1.0.0 | ✅ Synced |
+| Installation Script | ✅ Ready | 1.0.0 | ✅ Tested |
+| Token Optimization | ✅ Ready | 1.4.0 | ✅ Validated (85%) |
+| Documentation | ✅ Ready | 1.4.2 | ✅ Complete |
 | Video Tutorials | ⏳ Planned | 2.0.0 | ⏳ Pending |
 | Anti-patterns Guide | ⏳ Planned | 1.5.0 | ⏳ Pending |
 
 ---
 
-## 🚨 Текущие блокеры и заметки
+## 🚨 Current blockers and notes
 
-### Текущие блокеры:
-*Нет критических блокеров*
+### Current blockers:
+*No critical blockers*
 
-### Важные заметки:
-- 📌 Issue #1 создан для Priority 2-3 improvements
-- 📌 Ожидание user feedback перед Priority 2 реализацией
-- 📌 .gitignore модифицирован (pending commit)
-- 📌 Dogfooding в процессе (применение фреймворка к себе)
+### Important notes:
+- 📌 Issue #1 created for Priority 2-3 improvements
+- 📌 Waiting for user feedback before implementing Priority 2
+- 📌 .gitignore modified (pending commit)
+- 📌 Dogfooding in progress (applying the framework to itself)
 
-### Решенные проблемы:
+### Resolved problems:
 - [x] AI skipping nested checklist items → Fixed in v1.3.1
 - [x] Token waste on cold starts → Fixed in v1.4.0 (85% savings!)
 - [x] Migration friction → Fixed in v1.4.2 (prerequisites added)
@@ -303,41 +303,41 @@ bash init-project.sh --target=dev
 
 ---
 
-## 🔗 Связанные ресурсы
+## 🔗 Related resources
 
 ### GitHub:
 - Repository: https://github.com/alexeykrol/claude-code-starter
 - Issue #1: Priority 2-3 improvements tracking
 
-### Документация:
-- CHANGELOG.md - полная история (1714 строк)
+### Documentation:
+- CHANGELOG.md - full history (1714 lines)
 - FUTURE_IMPROVEMENTS.md - roadmap
 - MIGRATION_ANALYSIS.md - real-world testing results
 
-### Курсы:
-- Полный курс: https://alexeykrol.com/courses/ai_full/
-- Для начинающих: https://alexeykrol.com/courses/ai_intro/
+### Courses:
+- Full course: https://alexeykrol.com/courses/ai_full/
+- For beginners: https://alexeykrol.com/courses/ai_intro/
 
 ---
 
-## 💡 Метрики успеха
+## 💡 Success metrics
 
-**Использование:**
-- Студенты курсов alexeykrol.com
-- GitHub stars/forks (растет)
-- User feedback (положительный)
+**Usage:**
+- Students of the alexeykrol.com courses
+- GitHub stars/forks (growing)
+- User feedback (positive)
 
-**Token Economics (подтверждено):**
-- 85% экономия на cold starts ✅
-- 5x дешевле vs традиционного подхода ✅
-- ~$43.20/год экономия per project ✅
+**Token Economics (confirmed):**
+- 85% savings on cold starts ✅
+- 5x cheaper vs the traditional approach ✅
+- ~$43.20/year savings per project ✅
 
-**Качество:**
-- Migration протестирована на реальном проекте (multiagents) ✅
-- 40 минут migration (56% быстрее ожидаемого) ✅
-- 25k токенов (29% эффективнее ожидаемого) ✅
+**Quality:**
+- Migration tested on a real project (multiagents) ✅
+- 40-minute migration (56% faster than expected) ✅
+- 25k tokens (29% more efficient than expected) ✅
 
 ---
 
-*Этот файл — SINGLE SOURCE OF TRUTH для текущего состояния фреймворка*
-*Обновляй после каждого релиза!*
+*This file is the SINGLE SOURCE OF TRUTH for the current state of the framework*
+*Update it after every release!*

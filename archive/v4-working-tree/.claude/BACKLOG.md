@@ -1,16 +1,16 @@
 # BACKLOG — Claude Code Starter Framework
 
-*Последнее обновление: 2026-01-21*
+*Last updated: 2026-01-21*
 
-> 📋 **SINGLE SOURCE OF TRUTH для текущих задач**
+> 📋 **SINGLE SOURCE OF TRUTH for current tasks**
 >
-> Этот файл содержит только конкретные согласованные задачи, которые точно делаем.
+> This file contains only concrete, agreed tasks that we are definitely doing.
 >
 > **Workflow:**
-> - 💡 Сырые идеи → [IDEAS.md](./IDEAS.md)
-> - 🗺️ Структурированные фичи (v2.2+) → [ROADMAP.md](./ROADMAP.md)
-> - 🎯 Конкретные задачи (сейчас) → **BACKLOG.md** (этот файл)
-> - ✅ Завершенное → Архив (внизу)
+> - 💡 Raw ideas → [IDEAS.md](./IDEAS.md)
+> - 🗺️ Structured features (v2.2+) → [ROADMAP.md](./ROADMAP.md)
+> - 🎯 Concrete tasks (now) → **BACKLOG.md** (this file)
+> - ✅ Completed → Archive (below)
 
 ---
 
@@ -132,30 +132,30 @@
 
 ---
 
-*В данный момент нет активных задач. См. архив ниже для завершенных фаз.*
+*There are no active tasks at the moment. See the archive below for completed phases.*
 
 ---
 
-## 📚 Архив (завершённые фазы)
+## 📚 Archive (completed phases)
 
 ### Phase 19.2: Security Audit Fixes ✅ (2026-02-10)
 
-**Завершено:** 7 багов найдены внешним security audit, все исправлены
+**Completed:** 7 bugs found by an external security audit, all fixed
 
-**Проблема:**
-- Security advisory chain полностью нерабочая (set -e, parser mismatch, wrong glob)
-- Path traversal в API server.ts (3 эндпоинта)
-- Синтаксические ошибки в initial-scan.sh
-- Испорченная строка в .gitignore
+**Problem:**
+- Security advisory chain completely broken (set -e, parser mismatch, wrong glob)
+- Path traversal in API server.ts (3 endpoints)
+- Syntax errors in initial-scan.sh
+- A corrupted line in .gitignore
 
-**Задачи:**
-- [x] auto-invoke-agent.sh: убрать set -e (убивало скрипт при non-zero от check-triggers)
-- [x] cleanup-dialogs.sh: исправить опечатку REDACTED_COUNT → REDACTION_COUNT
-- [x] security.py: синхронизировать Python parser с реальным bash output
-- [x] check-triggers.sh: исправить glob *cleanup-report* → cleanup-*.txt
-- [x] server.ts: добавить safePath() для защиты от path traversal (3 эндпоинта)
-- [x] initial-scan.sh: экранировать \) в find-группах
-- [x] .gitignore: разделить склеенную строку (newline)
+**Tasks:**
+- [x] auto-invoke-agent.sh: remove set -e (it killed the script on a non-zero exit from check-triggers)
+- [x] cleanup-dialogs.sh: fix the typo REDACTED_COUNT → REDACTION_COUNT
+- [x] security.py: synchronise the Python parser with the real bash output
+- [x] check-triggers.sh: fix the glob *cleanup-report* → cleanup-*.txt
+- [x] server.ts: add safePath() to protect against path traversal (3 endpoints)
+- [x] initial-scan.sh: escape \) in find groups
+- [x] .gitignore: split the concatenated line (newline)
 
 **Files:**
 - `security/auto-invoke-agent.sh` — removed set -e
@@ -167,51 +167,51 @@
 - `.gitignore` — split concatenated line
 
 **Impact:**
-- ✅ Security advisory chain восстановлена (была полностью мертва)
-- ✅ Path traversal закрыт в API
-- ✅ Все bash скрипты проходят bash -n
-- ✅ Build и py_compile — чисто
+- ✅ Security advisory chain restored (it was completely dead)
+- ✅ Path traversal closed in the API
+- ✅ All bash scripts pass bash -n
+- ✅ Build and py_compile — clean
 
 ---
 
 ### Phase 19: Migration Optimization v3.1.0 ✅ (2026-01-21)
 
-**Завершено:** Parallel file generation в миграции legacy проектов — 5x ускорение Step 6
+**Completed:** Parallel file generation in the migration of legacy projects — 5x speed-up of Step 6
 
-**Проблема:**
-- Migration Step 6 генерирует 5 framework файлов последовательно
-- Каждый файл = одинаковый паттерн: analysis_result + template → markdown
-- Время выполнения: 5 файлов × 40s = 200s (~3+ минуты)
-- Общее время миграции: ~9 минут (Step 6 составляет 40% времени)
+**Problem:**
+- Migration Step 6 generates 5 framework files sequentially
+- Each file = the same pattern: analysis_result + template → markdown
+- Execution time: 5 files × 40s = 200s (~3+ minutes)
+- Total migration time: ~9 minutes (Step 6 accounts for 40% of the time)
 
-**Решение:**
-- Параллельная генерация через Task tool с субагентами general-purpose
-- SHARED_CONTEXT pattern — analysis result подготавливается один раз
-- ONE message с 5 Task tool calls (не последовательно!)
-- Каждый агент генерирует один файл независимо
+**Solution:**
+- Parallel generation via the Task tool with general-purpose subagents
+- SHARED_CONTEXT pattern — the analysis result is prepared once
+- ONE message with 5 Task tool calls (not sequentially!)
+- Each agent generates one file independently
 
-**Задачи:**
-- [x] Переработать Step 6 в `.claude/commands/migrate-legacy.md`
-- [x] Разделить на 3 subsections: Prepare Context, Launch Parallel, Verify
-- [x] Добавить detailed prompt templates для каждого файла
-- [x] Обновить версию на v3.1.0 (8+ файлов)
-- [x] Обновить metafiles (CHANGELOG, SNAPSHOT, BACKLOG)
+**Tasks:**
+- [x] Rework Step 6 in `.claude/commands/migrate-legacy.md`
+- [x] Split into 3 subsections: Prepare Context, Launch Parallel, Verify
+- [x] Add detailed prompt templates for each file
+- [x] Update the version to v3.1.0 (8+ files)
+- [x] Update metafiles (CHANGELOG, SNAPSHOT, BACKLOG)
 
-**Ключевые достижения:**
-- ✅ Step 6: 200s → 40s (5x ускорение)
-- ✅ Total migration: 9 min → 6.7 min (~30% ускорение)
-- ✅ Parallel execution pattern для Task tool
+**Key achievements:**
+- ✅ Step 6: 200s → 40s (5x speed-up)
+- ✅ Total migration: 9 min → 6.7 min (~30% speed-up)
+- ✅ Parallel execution pattern for the Task tool
 - ✅ SHARED_CONTEXT — zero duplication
-- ✅ Backward compatible (не breaking change)
+- ✅ Backward compatible (not a breaking change)
 
 **Files:**
-- `.claude/commands/migrate-legacy.md` — Step 6 полностью переписан
+- `.claude/commands/migrate-legacy.md` — Step 6 completely rewritten
 - `package.json`, `CLAUDE.md`, `README.md`, `README_RU.md` — version bumped
 - `init-project.sh`, `migration/build-distribution.sh` — version bumped
 - `src/framework-core/` — version bumped to 3.1.0 (__init__.py, main.py, logger.py)
-- `CHANGELOG.md` — v3.1.0 entry с performance metrics
+- `CHANGELOG.md` — v3.1.0 entry with performance metrics
 - `.claude/SNAPSHOT.md` — Decision Log + version update
-- `.claude/BACKLOG.md` — этот файл
+- `.claude/BACKLOG.md` — this file
 
 **Performance:**
 ```
@@ -227,8 +227,8 @@ Improvement: 5x faster Step 6, 30% faster total
 ```
 
 **Impact:**
-- ✅ Better UX — миграция заметно быстрее
-- ✅ User feedback driven — решение предложено пользователем
+- ✅ Better UX — migration is noticeably faster
+- ✅ User feedback driven — the solution was proposed by the user
 - ✅ Architectural insight — parallel pattern applicable to other operations
 - ✅ Token economy preserved — no additional context loading
 
@@ -236,50 +236,50 @@ Improvement: 5x faster Step 6, 30% faster total
 
 ### Phase 19.1: Hotfix - Framework Auto-Update v3.1.1 ✅ (2026-01-21)
 
-**Завершено:** Восстановлено автообновление фреймворка после регрессии в v3.0.0
+**Completed:** Framework auto-update restored after a regression in v3.0.0
 
-**Проблема:**
-- v3.0.0: При переходе на Python случайно потеряли автообновление
-- Python utility только проверяет версию, но НЕ скачивает/не устанавливает
-- Хост-проекты на v3.0.0-v3.1.0 НЕ получали обновления автоматически
-- Регрессия: в v2.2.4-v2.7.0 автообновление работало идеально
-- Только ручное обновление через `quick-update.sh` работало
+**Problem:**
+- v3.0.0: Auto-update was accidentally lost in the move to Python
+- The Python utility only checks the version, but does NOT download/install
+- Host projects on v3.0.0-v3.1.0 did NOT receive updates automatically
+- Regression: in v2.2.4-v2.7.0 auto-update worked perfectly
+- Only manual updating via `quick-update.sh` worked
 
 **Root Cause:**
-- v2.2.4-v2.7.0: Cold Start Protocol имел Step 0.2 (bash скрипт с full implementation)
-- v3.0.0: Переписали на Python, но только проверка версии осталась (tasks/version.py)
-- Логика скачивания/установки была в Step 0.2, который удалили при переходе
+- v2.2.4-v2.7.0: The Cold Start Protocol had Step 0.2 (a bash script with the full implementation)
+- v3.0.0: Rewritten in Python, but only the version check remained (tasks/version.py)
+- The download/install logic was in Step 0.2, which was removed during the move
 
-**Решение:**
-- Восстановлен Phase 2.5 в `.claude/protocols/cold-start-silent.md`
-- Bash скрипт запускается после Phase 1 (Python utility execution)
-- Парсит результат version_check из JSON
-- Если UPDATE:available - скачивает CLAUDE.md + framework-commands.tar.gz
-- Aggressive strategy - автоматическая установка без подтверждения
+**Solution:**
+- Restored Phase 2.5 in `.claude/protocols/cold-start-silent.md`
+- The bash script runs after Phase 1 (Python utility execution)
+- Parses the version_check result from the JSON
+- If UPDATE:available - downloads CLAUDE.md + framework-commands.tar.gz
+- Aggressive strategy - automatic installation without confirmation
 
-**Задачи:**
-- [x] Изучить реализацию из v2.2.4 (git show коммитов)
-- [x] Добавить Phase 2.5 в cold-start-silent.md
-- [x] Self-healing логика (автокоррекция версии)
+**Tasks:**
+- [x] Study the implementation from v2.2.4 (git show of the commits)
+- [x] Add Phase 2.5 to cold-start-silent.md
+- [x] Self-healing logic (automatic version correction)
 - [x] Safety checks (download to temp, verify before replace)
-- [x] Обновить версию на v3.1.1 (8+ файлов)
-- [x] Обновить metafiles (CHANGELOG, SNAPSHOT, BACKLOG)
+- [x] Update the version to v3.1.1 (8+ files)
+- [x] Update metafiles (CHANGELOG, SNAPSHOT, BACKLOG)
 
-**Ключевые достижения:**
-- ✅ Автообновление восстановлено (hotfix)
-- ✅ Aggressive strategy - безопасна, проверена в v2.2.4-v2.7.0
-- ✅ Self-healing - автокоррекция версии при несоответствии
-- ✅ Только framework files обновляются, user data не трогается
-- ✅ Backward compatible - работает на v3.0.0 и v3.1.0
+**Key achievements:**
+- ✅ Auto-update restored (hotfix)
+- ✅ Aggressive strategy - safe, proven in v2.2.4-v2.7.0
+- ✅ Self-healing - automatic version correction on mismatch
+- ✅ Only framework files are updated, user data is not touched
+- ✅ Backward compatible - works on v3.0.0 and v3.1.0
 
 **Files:**
 - `.claude/protocols/cold-start-silent.md` — Phase 2.5 added (120+ lines)
 - `package.json`, `CLAUDE.md`, `README.md`, `README_RU.md` — version 3.1.1
 - `init-project.sh`, `migration/build-distribution.sh` — version 3.1.1
 - `src/framework-core/` — version 3.1.1 (__init__.py, main.py, logger.py)
-- `CHANGELOG.md` — v3.1.1 entry с root cause analysis
+- `CHANGELOG.md` — v3.1.1 entry with root cause analysis
 - `.claude/SNAPSHOT.md` — Decision Log 2A.1 + version update
-- `.claude/BACKLOG.md` — этот файл
+- `.claude/BACKLOG.md` — this file
 
 **What Gets Updated:**
 - CLAUDE.md (framework instructions)
@@ -293,50 +293,50 @@ Improvement: 5x faster Step 6, 30% faster total
 - Source code (src/)
 
 **Impact:**
-- ✅ Regression fixed - хост-проекты снова получают обновления автоматически
+- ✅ Regression fixed - host projects receive updates automatically again
 - ✅ Seamless experience - users don't think about updates
 - ✅ Reduced support - everyone on latest version
-- ✅ Critical bugfix - v3.0.0 и v3.1.0 теперь обновятся при следующем `start`
+- ✅ Critical bugfix - v3.0.0 and v3.1.0 will now update on the next `start`
 
 ---
 
 ### Phase 18: Python Framework Core v3.0.0 ✅ (2026-01-20)
 
-**Завершено:** Полная переписка protocol execution layer с bash на Python
+**Completed:** A complete rewrite of the protocol execution layer from bash to Python
 
-**Проблема:**
-- User feedback: "20-30% времени уходит на протоколы"
-- Terminal spam от 10 bash background tasks (task notifications)
-- Невозможность true silent mode с bash
-- Медленное выполнение (минуты)
+**Problem:**
+- User feedback: "20-30% of the time goes on the protocols"
+- Terminal spam from 10 bash background tasks (task notifications)
+- True silent mode impossible with bash
+- Slow execution (minutes)
 
-**Решение:**
-- Создана Python утилита `src/framework-core/`
-- Все 10 задач реализованы в Python
-- Parallel execution через threading
-- JSON output вместо terminal spam
+**Solution:**
+- Created the Python utility `src/framework-core/`
+- All 10 tasks implemented in Python
+- Parallel execution via threading
+- JSON output instead of terminal spam
 
-**Задачи:**
-- [x] Спроектировать архитектуру Python утилиты
-- [x] Создать структуру проекта src/framework-core/
-- [x] Реализовать cold-start команду (10 задач)
-- [x] Реализовать completion команду
-- [x] Интегрировать в protocols (cold-start-silent.md)
-- [x] Обновить metafiles (SNAPSHOT, BACKLOG, CHANGELOG)
+**Tasks:**
+- [x] Design the architecture of the Python utility
+- [x] Create the project structure src/framework-core/
+- [x] Implement the cold-start command (10 tasks)
+- [x] Implement the completion command
+- [x] Integrate into the protocols (cold-start-silent.md)
+- [x] Update metafiles (SNAPSHOT, BACKLOG, CHANGELOG)
 
-**Ключевые достижения:**
+**Key achievements:**
 - ✅ Zero terminal noise (JSON output)
-- ✅ 1000x быстрее (359ms vs минуты)
+- ✅ 1000x faster (359ms vs minutes)
 - ✅ Parallel execution (Python threading)
 - ✅ Cross-platform (Windows native)
 - ✅ Zero dependencies (stdlib only)
 - ✅ Structured logging (`.claude/logs/framework-core/`)
 
 **Files:**
-- `src/framework-core/` - Python утилита (16 файлов, 931 строка)
+- `src/framework-core/` - Python utility (16 files, 931 lines)
   - `main.py` - CLI entry point
   - `commands/cold_start.py`, `commands/completion.py`
-  - `tasks/` - 6 модулей (config, session, git, version, security, hooks)
+  - `tasks/` - 6 modules (config, session, git, version, security, hooks)
   - `utils/` - logger, result, parallel
 - `.claude/protocols/cold-start-silent.md` - updated to v3.0.0
 - `.claude/analysis/python-framework-core-design.md` - architecture doc
@@ -371,17 +371,17 @@ $ python3 src/framework-core/main.py cold-start
 
 ### Phase 16: Hotfix - UX Improvements v2.4.5 ✅ (2026-01-17)
 
-**Завершено:** Quick wins - минорные UX улучшения
+**Completed:** Quick wins - minor UX improvements
 
-**Задачи:**
-- [x] Issue #41: Добавить пояснение к "Continue or commit first?"
-- [x] Issue #23: Закрыть спам issue
-- [x] Issue #3: Подтвердить что документация уже исправлена
+**Tasks:**
+- [x] Issue #41: Add an explanation to "Continue or commit first?"
+- [x] Issue #23: Close the spam issue
+- [x] Issue #3: Confirm that the documentation has already been fixed
 
-**Ключевые достижения:**
-- Добавлено понятное пояснение в Crash Recovery
-- Варианты теперь описаны: "Continue" vs "Commit first"
-- Закрыты 3 issues (#41, #23, #3)
+**Key achievements:**
+- Added a clear explanation in Crash Recovery
+- The options are now described: "Continue" vs "Commit first"
+- Closed 3 issues (#41, #23, #3)
 
 **Files:**
 - `.claude/protocols/cold-start.md` — Step 0.1 (Crash Recovery)
@@ -389,38 +389,38 @@ $ python3 src/framework-core/main.py cold-start
 - Version bump: 2.4.4 → 2.4.5
 
 **Impact:**
-- ✅ Лучший UX при crash recovery
-- ✅ Меньше путаницы для пользователей
+- ✅ Better UX during crash recovery
+- ✅ Less confusion for users
 
 ---
 
 ### Phase 15: Hotfix - Subdirectory Scanning v2.4.4 ✅ (2026-01-17)
 
-**Завершено:** Исправлен критический баг - `/migrate` пропускает docs/ с мета-документацией
+**Completed:** Fixed a critical bug - `/migrate` skips docs/ containing meta-documentation
 
-**Проблема:**
-- Issue #7: `/migrate-legacy` находил только файлы в корне проекта
-- Пропускал docs/BACKLOG.md (491 строка roadmap!), docs/STATUS.md
-- Результат: .claude/BACKLOG.md оставался пустым template
-- **Нарушал обещание "single source of truth"** - создавал два источника истины
+**Problem:**
+- Issue #7: `/migrate-legacy` found only files in the project root
+- It skipped docs/BACKLOG.md (a 491-line roadmap!), docs/STATUS.md
+- Result: .claude/BACKLOG.md remained an empty template
+- **It broke the "single source of truth" promise** - it created two sources of truth
 
-**Решение:**
-- Переписан Step 2.1, 2.3, 3, 5, 6, 9 в `.claude/commands/migrate-legacy.md`
-- Сканирование subdirectories: docs/, documentation/, notes/, wiki/, .github/
-- Классификация по содержимому (мета-документация vs code documentation)
-- Интерактивное подтверждение для ambiguous файлов
-- Правильный mapping: docs/BACKLOG.md → .claude/BACKLOG.md
-- Архивирование docs/ после миграции
+**Solution:**
+- Rewrote Steps 2.1, 2.3, 3, 5, 6, 9 in `.claude/commands/migrate-legacy.md`
+- Scanning of subdirectories: docs/, documentation/, notes/, wiki/, .github/
+- Classification by content (meta-documentation vs code documentation)
+- Interactive confirmation for ambiguous files
+- Correct mapping: docs/BACKLOG.md → .claude/BACKLOG.md
+- Archiving docs/ after migration
 
-**Ключевые достижения:**
-- [x] Обновлена логика сканирования в Step 2.1 (subdirectories)
-- [x] Добавлена классификация по содержимому (meta vs code docs)
-- [x] Обновлен Step 2.3 (Discovery Results с классификацией)
-- [x] Обновлен Step 3 (чтение файлов из subdirectories)
-- [x] Обновлен Step 5 (Report показывает docs/ файлы)
-- [x] Обновлен Step 6 (BACKLOG.md приоритизация sources)
-- [x] Добавлен Step 9.4 (архивирование subdirectories)
-- [x] Обновлены metafiles (CHANGELOG.md, SNAPSHOT.md, BACKLOG.md)
+**Key achievements:**
+- [x] Updated the scanning logic in Step 2.1 (subdirectories)
+- [x] Added classification by content (meta vs code docs)
+- [x] Updated Step 2.3 (Discovery Results with classification)
+- [x] Updated Step 3 (reading files from subdirectories)
+- [x] Updated Step 5 (the Report shows docs/ files)
+- [x] Updated Step 6 (BACKLOG.md prioritisation of sources)
+- [x] Added Step 9.4 (archiving subdirectories)
+- [x] Updated metafiles (CHANGELOG.md, SNAPSHOT.md, BACKLOG.md)
 - [x] Version bump: 2.4.3 → 2.4.4
 
 **Files:**
@@ -429,34 +429,34 @@ $ python3 src/framework-core/main.py cold-start
 - Version files: init-project.sh, build-distribution.sh, README.md, README_RU.md
 
 **Impact:**
-- ✅ Migration находит ВСЮ мета-документацию (не только в корне)
-- ✅ .claude/BACKLOG.md заполнен реальным контентом после миграции
-- ✅ Single source of truth - без путаницы двух источников
-- ✅ Token economy - AI не ищет docs/BACKLOG.md после миграции
+- ✅ Migration finds ALL meta-documentation (not only in the root)
+- ✅ .claude/BACKLOG.md is filled with real content after migration
+- ✅ Single source of truth - no confusion from two sources
+- ✅ Token economy - the AI doesn't look for docs/BACKLOG.md after migration
 
 ---
 
 ### Phase 14: Hotfix - Migration Workflow Fix v2.4.3 ✅ (2026-01-17)
 
-**Завершено:** Исправлен критический баг, блокирующий миграцию legacy проектов
+**Completed:** Fixed a critical bug blocking the migration of legacy projects
 
-**Проблема:**
-- Issue #4: init-project.sh не копировал .claude/commands/ для legacy/upgrade проектов
-- Копировались только 2 команды: migrate-legacy.md, upgrade-framework.md
-- Пользователи не могли запустить `/migrate`, `/fi`, `/ui` и другие команды
-- Полностью блокировался workflow миграции
+**Problem:**
+- Issue #4: init-project.sh did not copy .claude/commands/ for legacy/upgrade projects
+- Only 2 commands were copied: migrate-legacy.md, upgrade-framework.md
+- Users could not run `/migrate`, `/fi`, `/ui` and other commands
+- The migration workflow was completely blocked
 
-**Решение:**
-- Переписан else block в init-project.sh (lines 349-375)
-- Теперь копируется вся структура .claude/ (commands, dist, protocols, scripts, templates)
-- Unified installation path для всех типов проектов (new, legacy, upgrade)
-- Legacy проекты получают полную функциональность сразу после установки
+**Solution:**
+- Rewrote the else block in init-project.sh (lines 349-375)
+- The whole .claude/ structure is now copied (commands, dist, protocols, scripts, templates)
+- Unified installation path for all project types (new, legacy, upgrade)
+- Legacy projects get full functionality straight after installation
 
-**Ключевые достижения:**
-- [x] Исправлен init-project.sh (source + dist-release)
-- [x] Обновлен CHANGELOG.md с описанием Issue #4
-- [x] Version bump: 2.4.2 → 2.4.3 (все файлы)
-- [x] Обновлены metafiles (SNAPSHOT.md, BACKLOG.md)
+**Key achievements:**
+- [x] Fixed init-project.sh (source + dist-release)
+- [x] Updated CHANGELOG.md with a description of Issue #4
+- [x] Version bump: 2.4.2 → 2.4.3 (all files)
+- [x] Updated metafiles (SNAPSHOT.md, BACKLOG.md)
 
 **Files:**
 - `init-project.sh` — lines 349-375 (LEGACY/UPGRADE mode rewritten)
@@ -465,22 +465,22 @@ $ python3 src/framework-core/main.py cold-start
 - `README.md`, `README_RU.md` — version badges updated
 
 **Impact:**
-- ✅ Migration workflow работает из коробки
-- ✅ Все slash команды доступны с первого запуска
+- ✅ The migration workflow works out of the box
+- ✅ All slash commands are available from the first run
 - ✅ No more chicken-and-egg problem
 
 ---
 
 ### Phase 13: Hotfix - Critical Bugs v2.4.2 ✅ (2026-01-16)
 
-**Завершено:** Исправлены критические баги для internationalization и UX
+**Completed:** Fixed critical bugs for internationalisation and UX
 
-**Ключевые достижения:**
-- Issue #54: Dialog export с кириллицей (sessions-index.json, 100% точность)
-- Issue #50: Adaptive /explain (90% token savings для simple code)
-- Framework работает с любыми языками в путях
-- UX improvement: адекватные ответы от /explain
-- Обратная совместимость сохранена
+**Key achievements:**
+- Issue #54: Dialog export with Cyrillic (sessions-index.json, 100% accuracy)
+- Issue #50: Adaptive /explain (90% token savings for simple code)
+- The framework works with any languages in paths
+- UX improvement: sensible answers from /explain
+- Backward compatibility preserved
 
 **Files:**
 - `src/claude-export/exporter.ts` — findClaudeProjectDir() rewrite
@@ -490,105 +490,105 @@ $ python3 src/framework-core/main.py cold-start
 
 ### Phase 12: Hybrid Protocol Files Architecture v2.4.1 ✅
 
-**Статус:** Завершено
-**Цель:** Модульная архитектура протоколов, immune to context compaction
+**Status:** Completed
+**Goal:** A modular protocol architecture, immune to context compaction
 
-**Проблема:**
-- После долгих сессий происходит context compaction, что может сжимать содержимое CLAUDE.md
-- Монолитный CLAUDE.md (~1000 строк) трудно поддерживать и навигировать
-- Смешивание протокольных шагов с документацией создаёт cognitive overhead
-- Token cost: CLAUDE.md постоянно в контексте (~8.7k tokens)
+**Problem:**
+- After long sessions, context compaction occurs, which can compress the contents of CLAUDE.md
+- A monolithic CLAUDE.md (~1000 lines) is hard to maintain and navigate
+- Mixing protocol steps with documentation creates cognitive overhead
+- Token cost: CLAUDE.md is permanently in context (~8.7k tokens)
 
-**Решение: Hybrid Protocol Files**
+**Solution: Hybrid Protocol Files**
 
-**Принципы:**
-1. **Модульность** — каждый протокол в отдельном файле
-2. **Guaranteed fresh** — протоколы читаются с диска, не compactизируются
-3. **Router pattern** — CLAUDE.md как роутер (~330 строк), протоколы отдельно
-4. **Token economy** — протоколы загружаются только при необходимости (~3-4k vs 8.7k)
+**Principles:**
+1. **Modularity** — each protocol in a separate file
+2. **Guaranteed fresh** — protocols are read from disk and are not compacted
+3. **Router pattern** — CLAUDE.md as a router (~330 lines), protocols separate
+4. **Token economy** — protocols are loaded only when needed (~3-4k vs 8.7k)
 
-**Задачи: Protocol Files Creation**
-- [x] Создать `.claude/protocols/cold-start.md` (600+ строк, 15.7KB)
-- [x] Создать `.claude/protocols/completion.md` (490+ строк, 14.2KB)
-- [x] Извлечь все шаги протоколов из CLAUDE.md
-- [x] Добавить versioning и timestamps в protocol files
-- [x] Включить полные bash команды и инструкции
+**Tasks: Protocol Files Creation**
+- [x] Create `.claude/protocols/cold-start.md` (600+ lines, 15.7KB)
+- [x] Create `.claude/protocols/completion.md` (490+ lines, 14.2KB)
+- [x] Extract all protocol steps from CLAUDE.md
+- [x] Add versioning and timestamps to the protocol files
+- [x] Include the full bash commands and instructions
 
-**Задачи: CLAUDE.md Router Architecture**
-- [x] Переработать CLAUDE.md в router (~330 строк vs ~1000)
-- [x] Добавить триггеры для чтения protocol files
+**Tasks: CLAUDE.md Router Architecture**
+- [x] Rework CLAUDE.md into a router (~330 lines vs ~1000)
+- [x] Add triggers for reading the protocol files
 - [x] Cold Start trigger → read `.claude/protocols/cold-start.md`
 - [x] Completion trigger → use Skill tool to load `/fi` fresh
-- [x] Документировать Hybrid Architecture в CLAUDE.md
+- [x] Document the Hybrid Architecture in CLAUDE.md
 
-**Задачи: Integration**
-- [x] Обновить `.claude/commands/fi.md` для чтения protocol file
-- [x] Синхронизировать `migration/CLAUDE.production.md`
-- [x] Обновить `migration/build-distribution.sh` (Step 6.5: copy protocols)
-- [x] Обновить `init-project.sh` version to 2.4.1
-- [x] Добавить protocols/ в Repository Structure
+**Tasks: Integration**
+- [x] Update `.claude/commands/fi.md` to read the protocol file
+- [x] Synchronise `migration/CLAUDE.production.md`
+- [x] Update `migration/build-distribution.sh` (Step 6.5: copy protocols)
+- [x] Update `init-project.sh` version to 2.4.1
+- [x] Add protocols/ to the Repository Structure
 
-**Задачи: Documentation & Metafiles**
-- [x] Обновить FRAMEWORK_IMPROVEMENTS.md (Section 8: Hybrid Protocol Files)
-- [x] Обновить CHANGELOG.md (v2.4.1 entry)
-- [x] Обновить README.md + README_RU.md (version badges 2.4.0 → 2.4.1)
-- [x] Обновить .claude/SNAPSHOT.md (version, status, structure)
-- [x] Обновить .claude/BACKLOG.md (этот файл)
+**Tasks: Documentation & Metafiles**
+- [x] Update FRAMEWORK_IMPROVEMENTS.md (Section 8: Hybrid Protocol Files)
+- [x] Update CHANGELOG.md (v2.4.1 entry)
+- [x] Update README.md + README_RU.md (version badges 2.4.0 → 2.4.1)
+- [x] Update .claude/SNAPSHOT.md (version, status, structure)
+- [x] Update .claude/BACKLOG.md (this file)
 
-**Задачи: Testing & Validation**
-- [ ] Тестировать Cold Start с protocol file read
-- [ ] Тестировать Completion `/fi` с Skill tool
-- [ ] Verify protocol files в distribution (tar -tzf)
-- [ ] Test на host project
+**Tasks: Testing & Validation**
+- [ ] Test Cold Start with the protocol file read
+- [ ] Test Completion `/fi` with the Skill tool
+- [ ] Verify protocol files in distribution (tar -tzf)
+- [ ] Test on host project
 
-**Результаты:**
+**Results:**
 
-| Метрика | До (v2.4.0) | После (v2.4.1) |
+| Metric | Before (v2.4.0) | After (v2.4.1) |
 |---------|-------------|----------------|
-| Размер CLAUDE.md | ~1000 строк | **~330 строк** (router) |
-| Модульность | Монолит | **3 файла** (CLAUDE.md + 2 protocols) |
-| Token cost (loading) | ~8.7k (всегда) | **~3.5k** (router only) |
+| CLAUDE.md size | ~1000 lines | **~330 lines** (router) |
+| Modularity | Monolith | **3 files** (CLAUDE.md + 2 protocols) |
+| Token cost (loading) | ~8.7k (always) | **~3.5k** (router only) |
 | Protocols token cost | N/A | **~3-4k** (on demand) |
-| Immunity to compaction | Нет | **Да** (files read fresh) |
+| Immunity to compaction | No | **Yes** (files read fresh) |
 
-**Преимущества:**
-- ✅ **Модульность:** Легко поддерживать и расширять
+**Advantages:**
+- ✅ **Modularity:** Easy to maintain and extend
 - ✅ **Token economy:** 60% reduction (8.7k → 3.5k router + 3-4k on demand)
-- ✅ **Guaranteed fresh:** Протоколы всегда читаются с диска
-- ✅ **Better UX:** CLAUDE.md теперь понятный router, не монолит
-- ✅ **Maintainability:** Каждый протокол в своём файле
+- ✅ **Guaranteed fresh:** Protocols are always read from disk
+- ✅ **Better UX:** CLAUDE.md is now a clear router, not a monolith
+- ✅ **Maintainability:** Each protocol in its own file
 
 ---
 
 ### Phase 11: Security Layer 4 — Advisory Mode + Smart Triggers v2.4.1 ✅
 
-**Статус:** Завершено
-**Цель:** Advisory система для умного вызова AI-агента sec24 (не автоматика)
+**Status:** Completed
+**Goal:** An advisory system for smart invocation of the sec24 AI agent (not automation)
 
-**Проблема:**
-- Regex (Layer 2) покрывает 95% кейсов, но пропускает edge cases
-- Layer 4 (AI agent) нужен для thorough check, но медленный (1-2 min)
-- **Автоматический вызов агента на каждый commit = маразм** (траты токенов)
-- Нужна **advisory система**: триггеры → Claude спрашивает → user решает
+**Problem:**
+- Regex (Layer 2) covers 95% of cases, but misses edge cases
+- Layer 4 (AI agent) is needed for a thorough check, but is slow (1-2 min)
+- **Automatically invoking the agent on every commit = madness** (wasted tokens)
+- What is needed is an **advisory system**: triggers → Claude asks → user decides
 
-**Специфика проектов с DevOps (supabase-bridge):**
-- Не только код, но и управление production
-- SSH к серверам, database credentials, API keys — рабочая реальность
-- Credentials не только в dialogs, но и в коде/config
-- **Sprint changes** могут содержать production secrets
+**Specifics of projects with DevOps (supabase-bridge):**
+- Not just code, but also managing production
+- SSH to servers, database credentials, API keys — the working reality
+- Credentials not only in dialogs, but also in code/config
+- **Sprint changes** may contain production secrets
 
-**Решение: Advisory Mode + Smart Triggers**
+**Solution: Advisory Mode + Smart Triggers**
 
-**Принципы:**
-1. **Advisory, не автоматика** — триггеры дают рекомендации Claude (AI)
-2. **Claude спрашивает user** — пользователь решает запускать deep scan или нет
-3. **Scope оптимизация** — анализ git diff + last dialog, НЕ весь codebase
-4. **Release mode = исключение** — единственный случай auto-invoke (git tag v2.x.x)
-5. **Token economy** — анализ 5-10 файлов вместо 300+
+**Principles:**
+1. **Advisory, not automation** — triggers give recommendations to Claude (AI)
+2. **Claude asks the user** — the user decides whether to run a deep scan or not
+3. **Scope optimisation** — analysis of git diff + last dialog, NOT the whole codebase
+4. **Release mode = the exception** — the only case of auto-invoke (git tag v2.x.x)
+5. **Token economy** — analysis of 5-10 files instead of 300+
 
-**Задачи: Trigger Detection System**
-- [x] Создать `security/check-triggers.sh` (trigger detection logic)
-- [x] Реализовать 10 триггеров с приоритетами:
+**Tasks: Trigger Detection System**
+- [x] Create `security/check-triggers.sh` (trigger detection logic)
+- [x] Implement 10 triggers with priorities:
   - [x] CRITICAL: Production credentials file exists
   - [x] CRITICAL: Git release tag detected
   - [x] CRITICAL: Release workflow in recent dialogs
@@ -599,80 +599,80 @@ $ python3 src/framework-core/main.py cold-start
   - [x] MEDIUM: Many new dialogs (>5 uncommitted)
   - [x] MEDIUM: Security config files modified
   - [x] LOW: Long session (>2 hours)
-- [x] JSON output с trigger level и reasons
+- [x] JSON output with trigger level and reasons
 - [x] Exit codes (0=none, 1=critical, 2=high, 3=medium, 4=low)
 
-**Задачи: Advisory System (не auto-invoke)**
-- [x] Переделать `security/auto-invoke-agent.sh` в advisory mode
-- [x] Release mode (git tag) → auto-invoke (единственный случай)
-- [x] CRITICAL/HIGH triggers → Claude спрашивает user
+**Tasks: Advisory System (not auto-invoke)**
+- [x] Rework `security/auto-invoke-agent.sh` into advisory mode
+- [x] Release mode (git tag) → auto-invoke (the only case)
+- [x] CRITICAL/HIGH triggers → Claude asks the user
 - [x] MEDIUM triggers → optional mention
 - [x] LOW triggers → informational only
-- [x] Exit codes для Claude: 0, 1 (auto), 10 (ask), 11 (ask), 12 (optional)
+- [x] Exit codes for Claude: 0, 1 (auto), 10 (ask), 11 (ask), 12 (optional)
 
-**Задачи: Protocol Integration**
-- [x] Обновить CLAUDE.md Step 3.5 (advisory mode, Claude asks user)
-- [x] Обновить migration/CLAUDE.production.md Step 3.5 (same changes)
-- [x] Обновить `/security-dialogs` команду (scope: git diff + last dialog)
-- [x] Step 2 в /security-dialogs (identify sprint changes, not all files)
+**Tasks: Protocol Integration**
+- [x] Update CLAUDE.md Step 3.5 (advisory mode, Claude asks user)
+- [x] Update migration/CLAUDE.production.md Step 3.5 (same changes)
+- [x] Update the `/security-dialogs` command (scope: git diff + last dialog)
+- [x] Step 2 in /security-dialogs (identify sprint changes, not all files)
 - [x] Agent prompt: analyze git diff + last dialog only
 
-**Задачи: Scope Optimization**
-- [x] Агент анализирует git diff (last 5 commits), не весь codebase
-- [x] Агент анализирует last dialog, не все 300+ dialogs
-- [x] Token economy: 5-10 файлов вместо 300+
+**Tasks: Scope Optimization**
+- [x] The agent analyses git diff (last 5 commits), not the whole codebase
+- [x] The agent analyses the last dialog, not all 300+ dialogs
+- [x] Token economy: 5-10 files instead of 300+
 
-**Задачи: Documentation**
-- [x] Обновить SNAPSHOT.md (advisory mode, release exception)
-- [x] Обновить BACKLOG.md (этот файл)
-- [x] Таблица "When to Use Each Layer" в SNAPSHOT.md
-- [x] Обновить security/README.md (advisory mode, не auto-invoke)
-- [x] Создать security/README.md с полным описанием архитектуры
-- [ ] Обновить CHANGELOG.md (v2.4.1 entry)
-- [ ] Тестирование на примерах (сейчас тестируем!)
+**Tasks: Documentation**
+- [x] Update SNAPSHOT.md (advisory mode, release exception)
+- [x] Update BACKLOG.md (this file)
+- [x] A "When to Use Each Layer" table in SNAPSHOT.md
+- [x] Update security/README.md (advisory mode, not auto-invoke)
+- [x] Create security/README.md with a full description of the architecture
+- [ ] Update CHANGELOG.md (v2.4.1 entry)
+- [ ] Testing on examples (we're testing now!)
 
-**Задачи: Testing & Validation**
-- [ ] Тестировать CRITICAL trigger (.production-credentials file)
-- [ ] Тестировать HIGH trigger (regex found secrets)
-- [ ] Тестировать MEDIUM trigger (large diff)
-- [ ] Verify agent invokes correctly через Task tool
-- [ ] Test на santacruz host project
+**Tasks: Testing & Validation**
+- [ ] Test CRITICAL trigger (.production-credentials file)
+- [ ] Test HIGH trigger (regex found secrets)
+- [ ] Test MEDIUM trigger (large diff)
+- [ ] Verify the agent invokes correctly via the Task tool
+- [ ] Test on santacruz host project
 
-**Результат:**
-- **95% coverage (regex)** для normal sessions (fast, automatic)
-- **99% coverage (AI agent)** для high-risk situations (advisory mode)
-- **Advisory mode:** триггеры → Claude спрашивает → user решает
-- **Token economy:** анализ git diff + last dialog (5-10 files vs 300+)
-- **User control:** пользователь всегда решает (кроме release mode)
+**Result:**
+- **95% coverage (regex)** for normal sessions (fast, automatic)
+- **99% coverage (AI agent)** for high-risk situations (advisory mode)
+- **Advisory mode:** triggers → Claude asks → user decides
+- **Token economy:** analysis of git diff + last dialog (5-10 files vs 300+)
+- **User control:** the user always decides (except in release mode)
 - **Release mode exception:** git tag v2.x.x → auto-invoke (mandatory)
-- "Лучше пусть медленно, но надёжно" — но не на каждый commit (умно)
+- "Better slow but reliable" — but not on every commit (smart)
 
 ---
 
 ### Phase 10: Security Hardening — Dialog Credential Cleanup v2.4.0 ✅
 
-**Статус:** Завершено
-**Цель:** Предотвратить утечку credentials из dialog files в GitHub
+**Status:** Completed
+**Goal:** Prevent credentials leaking from dialog files to GitHub
 
-**Проблема:**
-- Dialogs в `dialog/` могут содержать credentials из conversations
-- SSH keys, API tokens, passwords, DB URLs упомянутые в диалогах с AI
-- Если проект коммитит `dialog/` в git → credentials утекают в GitHub
-- v2.3.3 fix покрывал только in-flight redaction, не committed files
-- Reports и improvement files также содержат примеры кода с secrets
+**Problem:**
+- Dialogs in `dialog/` may contain credentials from conversations
+- SSH keys, API tokens, passwords, DB URLs mentioned in dialogs with the AI
+- If a project commits `dialog/` to git → credentials leak to GitHub
+- The v2.3.3 fix covered only in-flight redaction, not committed files
+- Reports and improvement files also contain code examples with secrets
 
-**Решение: Multi-Layer Security System**
+**Solution: Multi-Layer Security System**
 
-**Задачи Layer 1: .gitignore Protection**
-- [x] Проанализировать всю поверхность атаки
-- [x] Заменить manual file list на pattern-based ignore для `dialog/`
-- [x] Добавить `reports/` в gitignore (bug reports с credential examples)
-- [x] Добавить `.production-credentials` в gitignore (production SSH keys/tokens)
-- [x] Добавить `security/reports/` в gitignore (cleanup scan reports)
+**Layer 1 tasks: .gitignore Protection**
+- [x] Analyse the whole attack surface
+- [x] Replace the manual file list with a pattern-based ignore for `dialog/`
+- [x] Add `reports/` to gitignore (bug reports with credential examples)
+- [x] Add `.production-credentials` to gitignore (production SSH keys/tokens)
+- [x] Add `security/reports/` to gitignore (cleanup scan reports)
 
-**Задачи Layer 2: Credential Cleanup Script**
-- [x] Создать `security/cleanup-dialogs.sh` (200+ lines bash script)
-- [x] Реализовать 10 redaction patterns:
+**Layer 2 tasks: Credential Cleanup Script**
+- [x] Create `security/cleanup-dialogs.sh` (200+ lines bash script)
+- [x] Implement 10 redaction patterns:
   - [x] SSH credentials (user@host, IP addresses, SSH key paths)
   - [x] IPv4 addresses (standalone: 192.168.x.x, 45.145.x.x)
   - [x] SSH private key paths (~/.ssh/id_rsa, ~/.ssh/claude_prod_new)
@@ -683,44 +683,44 @@ $ python3 src/framework-core/main.py cold-start
   - [x] Passwords (password=xxx, pwd=xxx, user_password=xxx)
   - [x] SSH ports (-p 65002, --port 22000)
   - [x] Private key content (PEM format)
-- [x] Добавить --last flag для производительности (50x faster)
-- [x] Exit code 1 блокирует git commit при обнаружении credentials
-- [x] Report generation в `security/reports/cleanup-*.txt`
-- [x] Тестирование с fake credentials (8/10 patterns работают)
+- [x] Add a --last flag for performance (50x faster)
+- [x] Exit code 1 blocks git commit when credentials are detected
+- [x] Report generation in `security/reports/cleanup-*.txt`
+- [x] Testing with fake credentials (8/10 patterns work)
 
-**Задачи Layer 3: Protocol Integration**
-- [x] Обновить Cold Start Step 0.5 (clean PREVIOUS session перед export)
-- [x] Добавить Completion Step 3.5 (clean CURRENT session перед commit)
-- [x] Обновить CLAUDE.md с security steps
-- [x] Обновить migration/CLAUDE.production.md с security steps
+**Layer 3 tasks: Protocol Integration**
+- [x] Update Cold Start Step 0.5 (clean the PREVIOUS session before export)
+- [x] Add Completion Step 3.5 (clean the CURRENT session before commit)
+- [x] Update CLAUDE.md with the security steps
+- [x] Update migration/CLAUDE.production.md with the security steps
 - [x] Double protection: previous (0.5) + current (3.5) = no gaps
 
-**Задачи Metafiles & Release**
-- [x] Обновить SNAPSHOT.md с v2.4.0 описанием
-- [x] Обновить CHANGELOG.md с detailed v2.4.0 entry
-- [x] Version bump во всех файлах (v2.3.3 → v2.4.0)
-- [x] Обновить BACKLOG.md (этот файл)
+**Metafiles & Release tasks**
+- [x] Update SNAPSHOT.md with the v2.4.0 description
+- [x] Update CHANGELOG.md with a detailed v2.4.0 entry
+- [x] Version bump in all files (v2.3.3 → v2.4.0)
+- [x] Update BACKLOG.md (this file)
 
-**Результат:**
-- **CRITICAL:** Предотвращение production credential leaks в GitHub
+**Result:**
+- **CRITICAL:** Prevention of production credential leaks to GitHub
 - Automatic operation — no manual intervention needed
 - Fast performance (--last flag: 1 file vs 300+)
 - Comprehensive coverage (dialog/, reports/, .production-credentials)
-- Auditable (все redactions в security/reports/)
+- Auditable (all redactions in security/reports/)
 - Battle-tested (ported from supabase-bridge production)
 
 ---
 
 ### Phase 9: Security Fix — Auto-Redact Sensitive Data v2.3.3 ✅
 
-**Статус:** Завершено
-**Цель:** Исправить Issue #47 - автоматическая redaction чувствительных данных в dialog exports
+**Status:** Completed
+**Goal:** Fix Issue #47 - automatic redaction of sensitive data in dialog exports
 
-**Задачи:**
-- [x] Проанализировать Issue #47 (OAuth tokens в dialog exports)
-- [x] Спроектировать систему redaction для exporter.ts
-- [x] Создать функцию `redactSensitiveData(content: string): string`
-- [x] Реализовать паттерны для 11 типов sensitive data:
+**Tasks:**
+- [x] Analyse Issue #47 (OAuth tokens in dialog exports)
+- [x] Design a redaction system for exporter.ts
+- [x] Create the function `redactSensitiveData(content: string): string`
+- [x] Implement patterns for 11 types of sensitive data:
   - [x] OAuth/Bearer tokens
   - [x] JWT tokens (eyJ... format)
   - [x] API keys (Stripe, Google, AWS, GitHub)
@@ -730,179 +730,179 @@ $ python3 src/framework-core/main.py cold-start
   - [x] Passwords in URLs/config
   - [x] Email addresses in auth contexts
   - [x] Credit card numbers
-- [x] Применить redaction к dialog messages
-- [x] Применить redaction к summaries
-- [x] Протестировать с 11 test cases (100% success rate)
-- [x] Исправить Stripe key pattern (sk-test_...)
-- [x] Исправить bearer token separator preservation
-- [x] Обновить SNAPSHOT.md, BACKLOG.md, CHANGELOG.md
+- [x] Apply redaction to dialog messages
+- [x] Apply redaction to summaries
+- [x] Test with 11 test cases (100% success rate)
+- [x] Fix the Stripe key pattern (sk-test_...)
+- [x] Fix bearer token separator preservation
+- [x] Update SNAPSHOT.md, BACKLOG.md, CHANGELOG.md
 
-**Результат:**
-- Автоматическая защита от случайного exposure токенов
-- Не требуется manual sed/grep redaction
-- GitHub Secret Scanning не блокирует pushes
-- Безопасно для commit dialog exports
-- Privacy и security для всех пользователей
+**Result:**
+- Automatic protection against accidental exposure of tokens
+- No manual sed/grep redaction required
+- GitHub Secret Scanning does not block pushes
+- Safe to commit dialog exports
+- Privacy and security for all users
 
 ---
 
 ### Phase 8: Bug Fix — Missing public/ Folder v2.3.2 ✅
 
-**Статус:** Завершено
-**Цель:** Исправить Issue #48 - `/ui` command fails with missing public/ folder
+**Status:** Completed
+**Goal:** Fix Issue #48 - `/ui` command fails with missing public/ folder
 
-**Задачи:**
-- [x] Проанализировать Issue #48 (Windows 11, Framework v2.2)
-- [x] Проверить наличие public/ в v2.2.0 release (CONFIRMED - присутствует)
-- [x] Проверить build-distribution.sh (работает правильно)
-- [x] Проверить init-project.sh (копирует public/ корректно)
-- [x] Добавить проверку public/ в server.ts перед запуском UI
-- [x] Реализовать user-friendly error message с recovery options
-- [x] Протестировать локально (удалить public/ и запустить UI)
-- [x] Обновить SNAPSHOT.md, BACKLOG.md, CHANGELOG.md
+**Tasks:**
+- [x] Analyse Issue #48 (Windows 11, Framework v2.2)
+- [x] Check for public/ in the v2.2.0 release (CONFIRMED - present)
+- [x] Check build-distribution.sh (works correctly)
+- [x] Check init-project.sh (copies public/ correctly)
+- [x] Add a public/ check in server.ts before starting the UI
+- [x] Implement a user-friendly error message with recovery options
+- [x] Test locally (delete public/ and start the UI)
+- [x] Update SNAPSHOT.md, BACKLOG.md, CHANGELOG.md
 
-**Результат:**
-- Пользователи получают понятное сообщение об ошибке
-- Два варианта восстановления (auto-install и manual fix)
-- Copy-paste команды для быстрого решения
-- Предотвращение crash с ENOENT error
-- Reduced support burden для Windows users
+**Result:**
+- Users get a clear error message
+- Two recovery options (auto-install and manual fix)
+- Copy-paste commands for a quick fix
+- Prevention of a crash with an ENOENT error
+- Reduced support burden for Windows users
 
 ---
 
 ### Phase 7: Bug Reporting System — Phase 2 & 3 v2.3.1 ✅
 
-**Статус:** Завершено
-**Цель:** Завершить bug reporting систему — централизованная коллекция и аналитика
+**Status:** Completed
+**Goal:** Complete the bug reporting system — centralised collection and analytics
 
-**Задачи:**
+**Tasks:**
 - [x] **Phase 2: Centralized Collection**
-  - [x] Создать submit-bug-report.sh для автоматической отправки в GitHub Issues
-  - [x] Создать GitHub issue template (.github/ISSUE_TEMPLATE/bug_report.yml)
-  - [x] Обновить CLAUDE.md Step 6.5 — два этапа подтверждения (create → submit)
-  - [x] Обновить build-distribution.sh для копирования submit script
-  - [x] Тестирование: syntax check, gh CLI availability
-  - [x] Fix: CLAUDE.md Step 6.5 — bug reports ALWAYS создаются (не только при ошибках)
+  - [x] Create submit-bug-report.sh for automatic submission to GitHub Issues
+  - [x] Create a GitHub issue template (.github/ISSUE_TEMPLATE/bug_report.yml)
+  - [x] Update CLAUDE.md Step 6.5 — two confirmation stages (create → submit)
+  - [x] Update build-distribution.sh to copy the submit script
+  - [x] Testing: syntax check, gh CLI availability
+  - [x] Fix: CLAUDE.md Step 6.5 — bug reports are ALWAYS created (not only on errors)
   - [x] Fix: Auto-create "bug-report" label if missing
   - [x] Fix: Smart title generation `[Bug Report][Protocol Type] vX.Y.Z - Status`
 - [x] **Phase 3: Analytics & Pattern Detection**
-  - [x] Создать analyze-bug-patterns.sh (bash 3.2 compatible)
-  - [x] Реализовать анализ: версии, протоколы, ошибки, шаги
-  - [x] Генерация recommendations и summary файлов
-  - [x] Создать /analyze-local-bugs command
-  - [x] Обновить build-distribution.sh для копирования analyze script
-  - [x] Тестирование: работает с пустыми и заполненными логами
+  - [x] Create analyze-bug-patterns.sh (bash 3.2 compatible)
+  - [x] Implement analysis: versions, protocols, errors, steps
+  - [x] Generation of recommendations and summary files
+  - [x] Create the /analyze-local-bugs command
+  - [x] Update build-distribution.sh to copy the analyze script
+  - [x] Testing: works with empty and populated logs
 - [x] **Quick Update Utility**
-  - [x] Создать quick-update.sh для быстрого обновления фреймворка
-  - [x] Smart detection — auto-download init-project.sh если framework отсутствует
-  - [x] Добавить в distribution (build-distribution.sh)
+  - [x] Create quick-update.sh for quickly updating the framework
+  - [x] Smart detection — auto-download init-project.sh if the framework is missing
+  - [x] Add to the distribution (build-distribution.sh)
 - [x] **Framework Developer Mode (Step 0.4)**
-  - [x] Добавить Step 0.4 в Cold Start Protocol
-  - [x] Автоматическая проверка GitHub Issues с bug-report label
-  - [x] Показ count и recent reports (last 7 days)
+  - [x] Add Step 0.4 to the Cold Start Protocol
+  - [x] Automatic check of GitHub Issues with the bug-report label
+  - [x] Show the count and recent reports (last 7 days)
   - [x] List 5 most recent bug reports
-  - [x] Предложение запустить /analyze-bugs
-  - [x] Обновить migration/CLAUDE.production.md
+  - [x] Offer to run /analyze-bugs
+  - [x] Update migration/CLAUDE.production.md
   - [x] Rebuild distribution
 - [x] **Completion Protocol Self-Check (Step 0)**
-  - [x] Добавить Step 0 в Completion Protocol
-  - [x] Re-read protocol section перед выполнением /fi
-  - [x] Self-check questions для metafile updates
-  - [x] Обновить .claude/commands/fi.md
-  - [x] Обновить migration/CLAUDE.production.md
-  - [x] Исправить "сапожник без сапог" проблему
+  - [x] Add Step 0 to the Completion Protocol
+  - [x] Re-read the protocol section before running /fi
+  - [x] Self-check questions for metafile updates
+  - [x] Update .claude/commands/fi.md
+  - [x] Update migration/CLAUDE.production.md
+  - [x] Fix the "cobbler's children have no shoes" problem
 
-**Результат:**
-- Полная 3-фазная система bug reporting (Local → Centralized → Analytics)
-- Bug reports как analytics/telemetry (не только ошибки)
-- Автоматическое обнаружение паттернов и рекомендации
-- Smart quick-update.sh — предотвращает путаницу между update и install
-- Framework Developer Mode — автоматическое оповещение о bug reports
-- Completion Protocol Self-Check — предотвращает забывание документации
-- Privacy-first с двойным подтверждением
-- Совместимость с bash 3.2+ (macOS)
+**Result:**
+- A complete 3-phase bug reporting system (Local → Centralized → Analytics)
+- Bug reports as analytics/telemetry (not only errors)
+- Automatic pattern detection and recommendations
+- Smart quick-update.sh — prevents confusion between update and install
+- Framework Developer Mode — automatic notification about bug reports
+- Completion Protocol Self-Check — prevents documentation being forgotten
+- Privacy-first with double confirmation
+- Compatibility with bash 3.2+ (macOS)
 
 ---
 
-## 📚 Архив (завершённые фазы)
+## 📚 Archive (completed phases)
 
 ### Phase 6: Bug Reporting & Logging System v2.3.0 ✅
 
-**Статус:** Завершено
-**Цель:** Добавить систему логирования протоколов и анонимных bug reports
+**Status:** Completed
+**Goal:** Add a protocol logging system and anonymous bug reports
 
-**Задачи:**
-- [x] Спроектировать систему bug reporting
+**Tasks:**
+- [x] Design the bug reporting system
   - [x] Opt-in consent dialog (privacy-first)
-  - [x] Anonymization стратегия (paths, keys, emails, IPs)
-  - [x] Framework Developer Mode для сбора отчетов
-- [x] Реализовать Step 0.15: Bug Reporting Consent
+  - [x] Anonymisation strategy (paths, keys, emails, IPs)
+  - [x] Framework Developer Mode for collecting reports
+- [x] Implement Step 0.15: Bug Reporting Consent
   - [x] First-run consent dialog
-  - [x] .framework-config структура
-  - [x] Opt-in по умолчанию (disabled)
-- [x] Реализовать Step 0.3: Protocol Logging
-  - [x] Cold Start logging с timestamps
-  - [x] log_step() и log_error() функции
-  - [x] Лог файлы в .claude/logs/cold-start/
-- [x] Реализовать Completion Protocol Logging
+  - [x] .framework-config structure
+  - [x] Opt-in by default (disabled)
+- [x] Implement Step 0.3: Protocol Logging
+  - [x] Cold Start logging with timestamps
+  - [x] log_step() and log_error() functions
+  - [x] Log files in .claude/logs/cold-start/
+- [x] Implement Completion Protocol Logging
   - [x] Step 0: Initialize Completion Logging
   - [x] Step 6.5: Finalize Log & Create Bug Report
-  - [x] Автоматическое обнаружение ошибок
-- [x] Создать /bug-reporting command
-  - [x] enable/disable/status/test подкоманды
-  - [x] Показывать статистику логов
-- [x] Создать anonymization script
+  - [x] Automatic error detection
+- [x] Create the /bug-reporting command
+  - [x] enable/disable/status/test subcommands
+  - [x] Show log statistics
+- [x] Create an anonymisation script
   - [x] .claude/scripts/anonymize-report.sh
-  - [x] Удаление paths, API keys, tokens, emails, IPs
-  - [x] Замена project name на {project}_anon
-- [x] Реализовать Framework Developer Mode
+  - [x] Removal of paths, API keys, tokens, emails, IPs
+  - [x] Replacement of the project name with {project}_anon
+- [x] Implement Framework Developer Mode
   - [x] Step 0.4: Read Bug Reports from Host Projects
-  - [x] Проверка открытых Issues с label "bug-report"
-  - [x] Активируется только на framework project
-- [x] Создать /analyze-bugs command
+  - [x] Check for open Issues with the "bug-report" label
+  - [x] Activates only on the framework project
+- [x] Create the /analyze-bugs command
   - [x] Fetch reports from GitHub Issues
-  - [x] Группировка по типу ошибок
-  - [x] Генерация analysis файлов
-- [x] Обновить build system
-  - [x] build-distribution.sh копирует scripts и templates
-  - [x] init-project.sh генерирует .framework-config
-  - [x] .gitignore для .claude/logs/
-- [x] Тестирование на santacruz
+  - [x] Grouping by error type
+  - [x] Generation of analysis files
+- [x] Update the build system
+  - [x] build-distribution.sh copies scripts and templates
+  - [x] init-project.sh generates .framework-config
+  - [x] .gitignore for .claude/logs/
+- [x] Testing on santacruz
   - [x] Config creation ✅
   - [x] Cold Start logging ✅
   - [x] /bug-reporting status ✅
   - [x] Anonymization script ✅
-  - [x] Все файлы на месте ✅
+  - [x] All files in place ✅
 
 ---
 
-## 📚 Архив (завершённые фазы)
+## 📚 Archive (completed phases)
 
 <details>
 <summary>Phase 5: Auto-Update Framework v2.2.4 ✅ (2025-12-16)</summary>
 
-**Завершено:** Система автоматического обновления фреймворка
+**Completed:** Automatic framework update system
 
-**Ключевые достижения:**
-- Step 0.2: Framework Version Check в Cold Start Protocol
-- Парсинг версии из CLAUDE.md и GitHub API
-- Aggressive update strategy (без подтверждения пользователя)
-- framework-commands.tar.gz для быстрых обновлений
-- Обновление только framework файлов, данные проекта не затрагиваются
-- Тестирование на santacruz: v2.2 → v2.2.4 успешно
+**Key achievements:**
+- Step 0.2: Framework Version Check in the Cold Start Protocol
+- Parsing the version from CLAUDE.md and the GitHub API
+- Aggressive update strategy (without user confirmation)
+- framework-commands.tar.gz for fast updates
+- Only framework files are updated; project data is not touched
+- Testing on santacruz: v2.2 → v2.2.4 successful
 
 </details>
 
 <details>
 <summary>Phase 4: Distribution v2.2.3 ✅ (2025-12-16)</summary>
 
-**Завершено:** Финализация v2.2.3 с критическими исправлениями
+**Completed:** Finalisation of v2.2.3 with critical fixes
 
-**Ключевые достижения:**
-- Успешная миграция santacruz v1.x → v2.2
-- Исправлены 4 критических бага (BUG-001 до BUG-004)
-- Migration reports теперь обязательны
-- Упрощенные qualifying questions
+**Key achievements:**
+- Successful migration of santacruz v1.x → v2.2
+- Fixed 4 critical bugs (BUG-001 to BUG-004)
+- Migration reports are now mandatory
+- Simplified qualifying questions
 - Corrected GitHub Release v2.2.3
 
 </details>
@@ -910,7 +910,7 @@ $ python3 src/framework-core/main.py cold-start
 <details>
 <summary>Phase 3.5: Bug Fixes v2.1.1 ✅ (2025-12-08)</summary>
 
-### Исправленные баги:
+### Fixed bugs:
 1. **watcher.ts parasitic folders** — Fixed cwd to prevent `project-name-dialog` folders
 2. **sed escaping** — Added `sed_escape()` function for special characters
 3. **Token economy** — Redesigned to loader pattern (88KB → 5.3KB, 16.6x!)
@@ -970,7 +970,7 @@ $ python3 src/framework-core/main.py cold-start
 
 ---
 
-## 📊 Структура текущей версии (v2.1.1)
+## 📊 Structure of the current version (v2.1.1)
 
 ```
 claude-code-starter/
@@ -994,29 +994,29 @@ claude-code-starter/
 
 ---
 
-## 🔗 Связанные документы
+## 🔗 Related documents
 
-- [SNAPSHOT.md](./.claude/SNAPSHOT.md) — текущее состояние
-- [ARCHITECTURE.md](./.claude/ARCHITECTURE.md) — структура кода
-- [CLAUDE.md](../CLAUDE.md) — протоколы AI
-- [CHANGELOG.md](../CHANGELOG.md) — полная история
-- [GitHub Issues](https://github.com/alexeykrol/claude-code-starter/issues) — детальные обсуждения
-
----
-
-## 📝 Процесс работы с BACKLOG
-
-### Для разработчика:
-1. **Начало работы:** Проверить "Текущие задачи"
-2. **Новая идея:** Добавить в "Идеи и пожелания"
-3. **Приоритизация:** Переместить из идей в задачи когда готовы
-4. **Завершение:** Переместить в архив, обновить CHANGELOG
-
-### Для AI:
-1. **Cold Start:** Читать "Текущие задачи" для контекста
-2. **Planning:** Превращать идеи в конкретные задачи по запросу
-3. **Completion:** Обновлять статусы, переносить в архив
+- [SNAPSHOT.md](./.claude/SNAPSHOT.md) — current state
+- [ARCHITECTURE.md](./.claude/ARCHITECTURE.md) — code structure
+- [CLAUDE.md](../CLAUDE.md) — AI protocols
+- [CHANGELOG.md](../CHANGELOG.md) — full history
+- [GitHub Issues](https://github.com/alexeykrol/claude-code-starter/issues) — detailed discussions
 
 ---
 
-*Обновляй после каждой завершенной задачи или новой идеи!*
+## 📝 Working process for the BACKLOG
+
+### For the developer:
+1. **Starting work:** Check "Current tasks"
+2. **New idea:** Add it to "Ideas and wishes"
+3. **Prioritisation:** Move from ideas to tasks when ready
+4. **Completion:** Move to the archive, update the CHANGELOG
+
+### For the AI:
+1. **Cold Start:** Read "Current tasks" for context
+2. **Planning:** Turn ideas into concrete tasks on request
+3. **Completion:** Update statuses, move to the archive
+
+---
+
+*Update after every completed task or new idea!*

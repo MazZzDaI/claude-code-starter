@@ -4,8 +4,8 @@
 **Brief:** `briefs/chapter-01.md`
 **Sources:** `source/...`
 
-Это example. Удали этот файл и создай `chapters/01-name.md` из `templates/chapter.md`.
+This is an example. Delete this file and create `chapters/01-name.md` from `templates/chapter.md`.
 
 ## Notes
 
-Этот файл — placeholder, чтобы структура `chapters/` оказалась в git.
+This file is a placeholder so that the `chapters/` structure ends up in git.

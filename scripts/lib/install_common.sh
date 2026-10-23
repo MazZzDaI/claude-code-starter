@@ -3,20 +3,20 @@
 # Claude Code Starter — Shared install/migration library
 # Version: 6.3.0
 #
-# Общая библиотека функций для install (init-project.sh) и migration (migrate.sh).
-# Caller'ы делают `source` этого файла, парсят аргументы и вызывают функции.
+# Shared function library for install (init-project.sh) and migration (migrate.sh).
+# Callers `source` this file, parse arguments and call the functions.
 #
-# Соглашения:
-# - В этом файле ТОЛЬКО определения функций + общая конфигурация (цвета, timestamp).
-# - Никакого set -e — это решает caller.
-# - Никакого парсинга аргументов или dispatch — это решает caller.
-# - Caller обязан задать перед вызовом функций следующие переменные:
-#     SCRIPT_DIR        — каталог запуска скрипта-caller'а
-#     TEMPLATE_DIR      — корень framework checkout (по умолчанию SCRIPT_DIR/..)
-#     PROJECT_DIR       — корень целевого проекта (обычно $(pwd))
-#     PROJECT_NAME      — имя проекта
+# Conventions:
+# - This file contains ONLY function definitions + shared configuration (colours, timestamp).
+# - No set -e — that is the caller's decision.
+# - No argument parsing or dispatch — that is the caller's decision.
+# - Before calling the functions, the caller must set the following variables:
+#     SCRIPT_DIR        — directory the caller script was launched from
+#     TEMPLATE_DIR      — root of the framework checkout (defaults to SCRIPT_DIR/..)
+#     PROJECT_DIR       — root of the target project (usually $(pwd))
+#     PROJECT_NAME      — project name
 #     PROJECT_TYPE      — code | content | hybrid
-#     CONTENT_TYPE      — book | course | knowledge-base | documents | transcripts | mixed (опционально)
+#     CONTENT_TYPE      — book | course | knowledge-base | documents | transcripts | mixed (optional)
 #     MODE              — install | migrate | rollback | apply-proposal
 #     FORCE             — 0 | 1
 #
@@ -38,13 +38,13 @@ log_success() { echo -e "${GREEN}✓${NC} $1"; }
 log_warning() { echo -e "${YELLOW}⚠${NC} $1"; }
 log_error()   { echo -e "${RED}✗${NC} $1"; }
 
-# CONTENT_TEMPLATE_DIR и MERGER_PY вычисляем лениво через геттеры,
-# потому что TEMPLATE_DIR может быть переопределён caller'ом после source.
+# CONTENT_TEMPLATE_DIR and MERGER_PY are computed lazily via getters,
+# because TEMPLATE_DIR may be overridden by the caller after source.
 content_template_dir() { echo "$TEMPLATE_DIR/templates/content"; }
 merger_py()            { echo "$SCRIPT_DIR/lib/merge_claude_md.py"; }
 
-# Возвращает путь к шаблону CLAUDE.md в зависимости от PROJECT_TYPE.
-# Для hybrid берём content (он шире и включает code-секции по convention).
+# Returns the path to the CLAUDE.md template depending on PROJECT_TYPE.
+# For hybrid we take content (it is broader and includes code sections by convention).
 claude_md_template_for_type() {
     local ct
     ct="$(content_template_dir)"
@@ -73,7 +73,7 @@ claude_md_template_for_type() {
 # Helper functions
 # ============================================================================
 
-# Создаёт директорию, если её нет.
+# Creates the directory if it does not exist.
 create_dir() {
     if [ ! -d "$1" ]; then
         mkdir -p "$1"
@@ -81,7 +81,7 @@ create_dir() {
     fi
 }
 
-# Копирует файл, если целевого файла ещё нет (или установлен FORCE).
+# Copies a file if the target file does not exist yet (or FORCE is set).
 copy_if_missing() {
     local src="$1"
     local dst="$2"
@@ -96,7 +96,7 @@ copy_if_missing() {
     fi
 }
 
-# Копирует файл с backup'ом существующего и принудительной перезаписью.
+# Copies a file, backing up the existing one and forcing an overwrite.
 copy_with_backup() {
     local src="$1"
     local dst="$2"
@@ -113,8 +113,8 @@ copy_with_backup() {
     log_success "Installed (with backup): $dst"
 }
 
-# Подставляет плейсхолдеры в файл: {{PROJECT_NAME}}, {{DATE}}, {{CONTENT_TYPE}}.
-# Остальные плейсхолдеры остаются как есть — пользователь заполнит вручную.
+# Substitutes placeholders in a file: {{PROJECT_NAME}}, {{DATE}}, {{CONTENT_TYPE}}.
+# Other placeholders are left as they are — the user will fill them in by hand.
 substitute_placeholders() {
     local src="$1"
     local dst="$2"
@@ -137,7 +137,7 @@ substitute_placeholders() {
 # Git detection
 # ============================================================================
 
-# Проверяет наличие .git и при необходимости предлагает инициализацию.
+# Checks for .git and offers to initialise it if necessary.
 detect_git() {
     if [ -d ".git" ]; then
         return 0
@@ -163,10 +163,10 @@ detect_git() {
 # Project type detection
 # ============================================================================
 
-# Считает количество content и code файлов в проекте, определяет project_type.
-# Возвращает одно из: code, content, hybrid, unknown.
+# Counts content and code files in the project and determines project_type.
+# Returns one of: code, content, hybrid, unknown.
 detect_project_type() {
-    # Если папка свежая, ничего нет — unknown
+    # If the folder is fresh and empty — unknown
     local total_files
     total_files=$(find . -maxdepth 4 -type f \
         -not -path './.git/*' \
@@ -245,7 +245,7 @@ detect_project_type() {
         code_ratio_pct=$(( (code_count * 100) / total_signal ))
     fi
 
-    # Логи в stderr, чтобы не сломать stdout-возврат
+    # Logs go to stderr so as not to break the stdout return value
     {
         echo "  scan: content=$content_count code=$code_count" \
              "content_dirs=$content_dirs_score code_dirs=$code_dirs_score" \
@@ -253,13 +253,13 @@ detect_project_type() {
              "manifest=$has_code_manifest content_entry=$has_content_entry"
     } >&2
 
-    # Унknown сигналов очень мало
+    # Unknown: very few signals
     if [ "$total_signal" -lt 10 ] && [ "$content_dirs_score" -lt 2 ] && [ "$code_dirs_score" -lt 2 ]; then
         echo "unknown"
         return 0
     fi
 
-    # Hybrid: оба сильные
+    # Hybrid: both are strong
     if [ "$content_ratio_pct" -ge 20 ] && [ "$code_ratio_pct" -ge 20 ]; then
         echo "hybrid"
         return 0
@@ -296,12 +296,12 @@ detect_project_type() {
         return 0
     fi
 
-    # Дефолт: нет уверенного сигнала
+    # Default: no confident signal
     echo "unknown"
 }
 
-# Определяет content_type на основе структуры папок.
-# Возвращает: book, course, knowledge-base, documents, transcripts, mixed.
+# Determines content_type from the folder structure.
+# Returns: book, course, knowledge-base, documents, transcripts, mixed.
 detect_content_type() {
     local has_chapters=0 has_briefs=0 has_bible=0
     local has_modules=0 has_lessons=0 has_lesson_files=0
@@ -330,7 +330,7 @@ detect_content_type() {
     has_lecture_files=$(find . -maxdepth 4 -type f -name '*Lecture-*.md' \
         -not -path './.claude/*' 2>/dev/null | head -1 | wc -l | tr -d ' ')
 
-    # docs/ без chapters/, modules/
+    # docs/ without chapters/, modules/
     if [ -d "docs" ] && [ "$has_chapters" = "0" ] && [ "$has_modules" = "0" ] \
        && [ "$has_lessons" = "0" ] && [ "$has_articles" = "0" ]; then
         has_docs_only=1
@@ -369,7 +369,7 @@ detect_content_type() {
 # Backup / rollback
 # ============================================================================
 
-# Создаёт snapshot текущих файлов, которые могут быть изменены установкой.
+# Creates a snapshot of the current files that the installation may change.
 backup_existing() {
     BACKUP_DIR=".claude/backup-$BACKUP_TAG"
     mkdir -p "$BACKUP_DIR"
@@ -423,7 +423,7 @@ backup_existing() {
     fi
 }
 
-# Восстанавливает файлы из последнего backup (.claude/backup-*).
+# Restores files from the latest backup (.claude/backup-*).
 rollback() {
     if [ ! -d ".claude" ]; then
         log_error "No .claude/ directory found — nothing to rollback"
@@ -480,9 +480,9 @@ rollback() {
     log_info "Backup directory preserved: $last_backup"
 }
 
-# Применяет CLAUDE.md.merge-proposal.md.
-# MVP: вызывает merger Python с режимом apply-proposal, если он поддерживает,
-# иначе печатает инструкцию для ручного резолвинга.
+# Applies CLAUDE.md.merge-proposal.md.
+# MVP: calls the Python merger in apply-proposal mode if it supports it,
+# otherwise prints instructions for manual resolution.
 apply_proposal() {
     local proposal=".claude/CLAUDE.md.merge-proposal.md"
     local merger
@@ -500,7 +500,7 @@ apply_proposal() {
     fi
 
     if python3 "$merger" apply-proposal "CLAUDE.md" "$proposal" > "CLAUDE.md.merged.tmp" 2>/dev/null; then
-        # Бэкапим текущий CLAUDE.md в свежий backup
+        # Back up the current CLAUDE.md into a fresh backup
         BACKUP_DIR=".claude/backup-$BACKUP_TAG"
         mkdir -p "$BACKUP_DIR"
         [ -f "CLAUDE.md" ] && cp "CLAUDE.md" "$BACKUP_DIR/CLAUDE.md"
@@ -518,8 +518,8 @@ apply_proposal() {
 # CLAUDE.md merging
 # ============================================================================
 
-# Аддитивно сливает существующий CLAUDE.md с template.
-# При hard conflict генерирует merge-proposal и завершает работу с exit 2.
+# Additively merges the existing CLAUDE.md with the template.
+# On a hard conflict generates a merge proposal and exits with code 2.
 merge_claude_md() {
     local existing="$1"
     local template="$2"
@@ -531,14 +531,14 @@ merge_claude_md() {
         return 0
     fi
 
-    # Нет существующего — просто подставляем плейсхолдеры
+    # No existing file — just substitute the placeholders
     if [ ! -f "$existing" ]; then
         substitute_placeholders "$template" "$existing"
         log_success "Created: $existing"
         return 0
     fi
 
-    # Если merger недоступен (параллельный агент ещё не отработал) — fallback
+    # If the merger is unavailable (a parallel agent has not finished yet) — fallback
     if [ ! -f "$merger" ]; then
         log_warning "Merger not available — keeping existing $existing untouched"
         log_info "Template available at: $template"
@@ -546,9 +546,9 @@ merge_claude_md() {
         return 0
     fi
 
-    # Проверка конфликтов
+    # Conflict check
     if python3 "$merger" check "$existing" "$template" >/dev/null 2>&1; then
-        # Чистый merge
+        # Clean merge
         if python3 "$merger" merge "$existing" "$template" > "$existing.merged.tmp" 2>/dev/null; then
             substitute_placeholders "$existing.merged.tmp" "$existing.subst.tmp"
             mv "$existing.subst.tmp" "$existing"
@@ -576,7 +576,7 @@ merge_claude_md() {
 # Manifest generation
 # ============================================================================
 
-# Генерирует manifest.md с расширенными полями (project_type, content_type).
+# Generates manifest.md with extended fields (project_type, content_type).
 generate_manifest() {
     local target="manifest.md"
 
@@ -598,11 +598,11 @@ EOF
 # Common installation (any project type)
 # ============================================================================
 
-# Устанавливает общие файлы — каркас, не зависящий от типа проекта.
+# Installs the shared files — the scaffold that does not depend on the project type.
 install_common() {
     log_info "Installing common framework files..."
 
-    # Каркас директорий
+    # Directory scaffold
     create_dir ".claude"
     create_dir ".claude/rules"
     create_dir ".claude/hooks"
@@ -630,7 +630,7 @@ install_common() {
     # .gitignore — merge missing entries
     install_gitignore
 
-    # Universal rules (всегда)
+    # Universal rules (always)
     for rule in autonomy delegation context-management production-safety local-first logging dialog-preservation; do
         copy_if_missing "$TEMPLATE_DIR/.claude/rules/${rule}.md" ".claude/rules/${rule}.md"
     done
@@ -645,12 +645,12 @@ install_common() {
         copy_if_missing "$TEMPLATE_DIR/.claude/dialogs/README.md" ".claude/dialogs/README.md"
     fi
 
-    # Methodology scaffold (универсальный для всех типов проектов)
+    # Methodology scaffold (universal for all project types)
     install_methodology_scaffold
 }
 
-# Копирует каркас methodology/ (templates + draft/patterns/mature subdirs).
-# Не перезаписывает существующие пользовательские файлы.
+# Copies the methodology/ scaffold (templates + draft/patterns/mature subdirs).
+# Does not overwrite existing user files.
 install_methodology_scaffold() {
     local src="$TEMPLATE_DIR/templates/methodology"
     if [ ! -d "$src" ]; then
@@ -679,10 +679,10 @@ install_methodology_scaffold() {
     done
 }
 
-# Копирует слои памяти (ARCHITECTURE / BACKLOG / INVARIANTS) — два варианта:
-# из root .claude/ для code, из templates/content/ для content. Не перезаписывает.
+# Copies the memory layers (ARCHITECTURE / BACKLOG / INVARIANTS) — two variants:
+# from the root .claude/ for code, from templates/content/ for content. Does not overwrite.
 install_memory_layers() {
-    local src_dir="$1"  # каталог-источник, например $TEMPLATE_DIR/.claude или $ct
+    local src_dir="$1"  # source directory, e.g. $TEMPLATE_DIR/.claude or $ct
     if [ ! -d "$src_dir" ]; then
         return 0
     fi
@@ -697,7 +697,7 @@ install_memory_layers() {
     done
 }
 
-# Устанавливает settings.json: создаёт или мержит секцию hooks.
+# Installs settings.json: creates it or merges the hooks section.
 install_settings_json() {
     if [ ! -f ".claude/settings.json" ]; then
         if [ -f "$TEMPLATE_DIR/.claude/settings.json" ]; then
@@ -751,7 +751,7 @@ with open('.claude/settings.json', 'w') as f:
     fi
 }
 
-# Устанавливает или обновляет .gitignore.
+# Installs or updates .gitignore.
 install_gitignore() {
     if [ ! -f ".gitignore" ]; then
         if [ -f "$TEMPLATE_DIR/.gitignore" ]; then
@@ -791,10 +791,10 @@ install_gitignore() {
 }
 
 # ============================================================================
-# Code installation (стандартный путь, как раньше)
+# Code installation (the standard path, as before)
 # ============================================================================
 
-# Устанавливает code-template: code-rules, code-skills, code-agents.
+# Installs the code template: code-rules, code-skills, code-agents.
 install_code() {
     log_info "Installing code framework..."
 
@@ -827,10 +827,10 @@ install_code() {
                         ".claude/agents/${agent}/${agent}.md"
     done
 
-    # SNAPSHOT.md — блан-шаблон из templates/global/.claude/, а не живой
-    # .claude/SNAPSHOT.md фреймворка: тот несёт СОБСТВЕННОЕ состояние
-    # Project_init (текущий релиз, что в работе у него), и его копирование
-    # в хост-проект утекает чужой снимок вместо пустого каркаса.
+    # SNAPSHOT.md — the blank template from templates/global/.claude/, not the framework's
+    # live .claude/SNAPSHOT.md: that one carries Project_init's OWN state
+    # (the current release, what it has in progress), and copying it
+    # into a host project leaks someone else's snapshot instead of an empty scaffold.
     if [ ! -f ".claude/SNAPSHOT.md" ]; then
         if [ -f "$TEMPLATE_DIR/templates/global/.claude/SNAPSHOT.md" ]; then
             substitute_placeholders "$TEMPLATE_DIR/templates/global/.claude/SNAPSHOT.md" ".claude/SNAPSHOT.md"
@@ -860,8 +860,8 @@ install_code() {
 # Content installation
 # ============================================================================
 
-# Устанавливает content-template: content-rules, content-skills, content-agents,
-# content-templates, опциональный starter каркас по content_type.
+# Installs the content template: content-rules, content-skills, content-agents,
+# content-templates, and an optional starter scaffold by content_type.
 install_content() {
     log_info "Installing content framework..."
 
@@ -875,12 +875,12 @@ install_content() {
         exit 3
     fi
 
-    # Skills и agents — структура
+    # Skills and agents — structure
     for skill in research outline write-content review-content enrich content-index housekeeping save-dialog start finish; do
         create_dir ".claude/skills/${skill}"
     done
 
-    # Code-side skills (start, finish, save-dialog) приходят из root шаблона
+    # Code-side skills (start, finish, save-dialog) come from the root template
     for skill in start finish save-dialog; do
         copy_if_missing "$TEMPLATE_DIR/.claude/skills/${skill}/SKILL.md" \
                         ".claude/skills/${skill}/SKILL.md"
@@ -898,7 +898,7 @@ install_content() {
             [ -f "$rf" ] || continue
             local base
             base=$(basename "$rf")
-            # content-commit-policy → ставится как основной commit-policy в content-mode
+            # content-commit-policy → installed as the main commit-policy in content mode
             if [ "$base" = "content-commit-policy.md" ]; then
                 copy_if_missing "$rf" ".claude/rules/commit-policy.md"
             else
@@ -915,7 +915,7 @@ install_content() {
             sname=$(basename "$sdir")
             create_dir ".claude/skills/${sname}"
             if [ -f "$sdir/SKILL.md" ]; then
-                # housekeeping в content-mode заменяет code-версию (с backup)
+                # housekeeping in content mode replaces the code version (with backup)
                 if [ "$sname" = "housekeeping" ] && [ -f ".claude/skills/housekeeping/SKILL.md" ]; then
                     copy_with_backup "$sdir/SKILL.md" ".claude/skills/housekeeping/SKILL.md"
                 else
@@ -933,7 +933,7 @@ install_content() {
         fi
     done
 
-    # reviewer — content-версия (если есть конфликт с code-reviewer — backup)
+    # reviewer — the content version (if it conflicts with code-reviewer — backup)
     local content_reviewer_src="$ct/agents/reviewer/reviewer.md"
     if [ -f "$content_reviewer_src" ]; then
         if [ -f ".claude/agents/reviewer/reviewer.md" ] && [ "$FORCE" = "0" ]; then
@@ -944,13 +944,13 @@ install_content() {
         fi
     fi
 
-    # researcher — generic (берём из code-template, он подходит content)
+    # researcher — generic (taken from the code template; it suits content)
     if [ ! -f ".claude/agents/researcher/researcher.md" ]; then
         copy_if_missing "$TEMPLATE_DIR/.claude/agents/researcher/researcher.md" \
                         ".claude/agents/researcher/researcher.md"
     fi
 
-    # Content templates → templates/ корня проекта
+    # Content templates → the project root's templates/
     if [ -d "$ct/content-templates" ]; then
         for tf in "$ct/content-templates"/*.md; do
             [ -f "$tf" ] || continue
@@ -960,7 +960,7 @@ install_content() {
         done
     fi
 
-    # Starter structure по content_type
+    # Starter structure by content_type
     install_content_starter
 
     # SNAPSHOT.md (content version) — same live-state leak guard as the code
@@ -985,7 +985,7 @@ install_content() {
     install_memory_layers "$ct"
 }
 
-# Копирует starter-структуру для конкретного content_type, если её ещё нет.
+# Copies the starter structure for a specific content_type if it does not exist yet.
 install_content_starter() {
     local ct
     ct="$(content_template_dir)"
@@ -1002,7 +1002,7 @@ install_content_starter() {
 
     log_info "Installing starter structure for: $CONTENT_TYPE"
 
-    # Сначала: создаём директории (включая пустые)
+    # First: create the directories (including empty ones)
     (
         cd "$starter_root"
         find . -type d -not -name '.' 2>/dev/null
@@ -1015,7 +1015,7 @@ install_content_starter() {
         fi
     done
 
-    # Потом: копируем файлы, которых ещё нет
+    # Then: copy the files that do not exist yet
     (
         cd "$starter_root"
         find . -type f -not -name '.DS_Store' 2>/dev/null
@@ -1037,14 +1037,14 @@ install_content_starter() {
 # Hybrid installation
 # ============================================================================
 
-# Устанавливает code framework + content overlay.
+# Installs the code framework + content overlay.
 install_hybrid() {
     log_info "Installing hybrid framework (code + content overlay)..."
 
     local ct
     ct="$(content_template_dir)"
 
-    # Сначала код — стандартный путь
+    # Code first — the standard path
     install_code
 
     if [ ! -d "$ct" ]; then
@@ -1053,7 +1053,7 @@ install_hybrid() {
         return 0
     fi
 
-    # Теперь content overlay
+    # Now the content overlay
     create_dir "templates"
 
     for skill in research outline write-content review-content enrich content-index; do
@@ -1064,18 +1064,18 @@ install_hybrid() {
         create_dir ".claude/agents/${agent}"
     done
 
-    # Content rules: ставим всё, кроме content-commit-policy — он остаётся как доп. файл
+    # Content rules: install everything except content-commit-policy — it stays as an extra file
     if [ -d "$ct/rules" ]; then
         for rf in "$ct/rules"/*.md; do
             [ -f "$rf" ] || continue
             local base
             base=$(basename "$rf")
-            # В hybrid: content-commit-policy сохраняется отдельно (как саплимент)
+            # In hybrid: content-commit-policy is kept separately (as a supplement)
             copy_if_missing "$rf" ".claude/rules/${base}"
         done
     fi
 
-    # Content skills, кроме housekeeping (housekeeping заменяет code-версию)
+    # Content skills, except housekeeping (housekeeping replaces the code version)
     if [ -d "$ct/skills" ]; then
         for sdir in "$ct/skills"/*/; do
             [ -d "$sdir" ] || continue
@@ -1084,7 +1084,7 @@ install_hybrid() {
             create_dir ".claude/skills/${sname}"
             if [ -f "$sdir/SKILL.md" ]; then
                 if [ "$sname" = "housekeeping" ]; then
-                    # Hybrid: content-housekeeping универсальнее, заменяем code-версию (backup)
+                    # Hybrid: content-housekeeping is more universal, replace the code version (backup)
                     copy_with_backup "$sdir/SKILL.md" ".claude/skills/housekeeping/SKILL.md"
                 else
                     copy_if_missing "$sdir/SKILL.md" ".claude/skills/${sname}/SKILL.md"
@@ -1093,7 +1093,7 @@ install_hybrid() {
         done
     fi
 
-    # Content agents: writer, editor — добавляем
+    # Content agents: writer, editor — add them
     for agent in writer editor; do
         local src="$ct/agents/${agent}/${agent}.md"
         if [ -f "$src" ]; then
@@ -1101,7 +1101,7 @@ install_hybrid() {
         fi
     done
 
-    # content-reviewer — НЕ заменяет code-reviewer, ставится как content-reviewer
+    # content-reviewer — does NOT replace code-reviewer, installed as content-reviewer
     local content_reviewer_src="$ct/agents/reviewer/reviewer.md"
     if [ -f "$content_reviewer_src" ]; then
         copy_if_missing "$content_reviewer_src" ".claude/agents/content-reviewer/content-reviewer.md"
@@ -1117,7 +1117,7 @@ install_hybrid() {
         done
     fi
 
-    # Starter (только если CONTENT_TYPE задан)
+    # Starter (only if CONTENT_TYPE is set)
     install_content_starter
 }
 
@@ -1125,22 +1125,22 @@ install_hybrid() {
 # Final summaries
 # ============================================================================
 
-# Выводит финальный отчёт об установке (init-project).
+# Prints the final installation report (init-project).
 print_summary() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo -e "${GREEN}Готово. Тип: ${PROJECT_TYPE}${CONTENT_TYPE:+ ($CONTENT_TYPE)}. Mode: install.${NC}"
+    echo -e "${GREEN}Done. Type: ${PROJECT_TYPE}${CONTENT_TYPE:+ ($CONTENT_TYPE)}. Mode: install.${NC}"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
 
     if [ -n "$BACKUP_DIR" ] && [ -d "$BACKUP_DIR" ]; then
         echo "Backup: $BACKUP_DIR"
-        echo "Откат:  bash $0 --rollback"
+        echo "Rollback: bash $0 --rollback"
         echo ""
     fi
 
     echo "Next steps:"
-    echo "  1. Edit CLAUDE.md — заполни плейсхолдеры (если есть)"
+    echo "  1. Edit CLAUDE.md — fill in the placeholders (if any)"
     echo "  2. Edit manifest.md — repo_access, project_type, content_type"
     if [ "$PROJECT_TYPE" = "code" ] || [ "$PROJECT_TYPE" = "hybrid" ]; then
         echo "  3. If repo_access is public/private-shared, run scripts/switch-repo-access.sh BEFORE first framework commit"
@@ -1151,8 +1151,8 @@ print_summary() {
     echo ""
 }
 
-# Анализирует существующий проект перед миграцией: показывает что найдено,
-# что будет сохранено как есть, какие framework-элементы уже присутствуют.
+# Analyses the existing project before migration: shows what was found,
+# what will be kept as is, and which framework elements are already present.
 analyze_existing_project() {
     # Count documentation files (untouched)
     local doc_count
@@ -1183,7 +1183,7 @@ analyze_existing_project() {
     fi
 }
 
-# Выводит финальный отчёт о миграции.
+# Prints the final migration report.
 print_migration_summary() {
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1207,12 +1207,12 @@ print_migration_summary() {
 
     if [ -n "$BACKUP_DIR" ] && [ -d "$BACKUP_DIR" ]; then
         echo "Backup: $BACKUP_DIR"
-        echo "Откат:  bash $0 --rollback"
+        echo "Rollback: bash $0 --rollback"
         echo ""
     fi
 
     echo "Next steps:"
-    echo "  1. Review CLAUDE.md — заполни плейсхолдеры (если есть)"
+    echo "  1. Review CLAUDE.md — fill in the placeholders (if any)"
     echo "  2. Edit manifest.md — repo_access"
     if [ "$PROJECT_TYPE" = "code" ] || [ "$PROJECT_TYPE" = "hybrid" ]; then
         echo "  3. If repo_access is public/private-shared, run scripts/switch-repo-access.sh BEFORE next framework commit"

@@ -1,12 +1,12 @@
 # v4 Archive Note
 
-Этот репозиторий был переведён на `Claude Code Starter v5`, но рабочее дерево `v4` сохранено внутри репозитория для полного отката и ручного сравнения.
+This repository has been moved to `Claude Code Starter v5`, but the `v4` working tree has been preserved inside the repository for a full rollback and manual comparison.
 
-Что сохранено:
-- `archive/v4-working-tree/` — копия живого рабочего дерева перед миграцией на `v5`;
-- `archive-v4-head-2026-04-06` — git tag на последний `v4` commit до переноса `v5` в основной корень репозитория.
+What has been preserved:
+- `archive/v4-working-tree/` — a copy of the live working tree before the migration to `v5`;
+- `archive-v4-head-2026-04-06` — a git tag on the last `v4` commit before `v5` was moved into the repository root.
 
-Что важно:
-- архив сделан из рабочего дерева, а не только из `HEAD`, поэтому в нём есть локальные изменения и новые файлы, которые ещё не были закоммичены на момент миграции;
-- тяжёлые локальные артефакты вроде `node_modules/`, `dist/`, `dist-release/`, `reports/` в архив не копировались;
-- для точного rollback по исходному tracked состоянию используй git tag, для ручного восстановления дерева и сравнения используй `archive/v4-working-tree/`.
+What matters:
+- the archive was made from the working tree, not just from `HEAD`, so it contains local changes and new files that had not yet been committed at the time of the migration;
+- heavy local artefacts such as `node_modules/`, `dist/`, `dist-release/`, `reports/` were not copied into the archive;
+- for an exact rollback to the original tracked state, use the git tag; for manual restoration of the tree and comparison, use `archive/v4-working-tree/`.

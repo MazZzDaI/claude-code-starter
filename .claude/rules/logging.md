@@ -1,18 +1,18 @@
-# Правило: Локальное логирование
+# Rule: Local logging
 
-## Принцип
+## Principle
 
-Каждая сессия и миграция оставляет лог. Логи хранятся локально в `.claude/logs/`, никуда не отправляются, и нужны для анализа ошибок фреймворка.
+Every session and migration leaves a log. Logs are stored locally in `.claude/logs/`, are not sent anywhere, and are needed for analysing framework errors.
 
-## Что логируется
+## What is logged
 
-### Сессии (`.claude/logs/sessions/`)
+### Sessions (`.claude/logs/sessions/`)
 
-При каждом `/start` и `/finish` создаётся/обновляется лог текущей сессии:
+On every `/start` and `/finish` the current session's log is created/updated:
 
-**Файл:** `.claude/logs/sessions/YYYY-MM-DD_HH-MM.md`
+**File:** `.claude/logs/sessions/YYYY-MM-DD_HH-MM.md`
 
-**Содержимое:**
+**Contents:**
 ```
 # Session: YYYY-MM-DD HH:MM
 
@@ -35,13 +35,13 @@
 - Duration: ...
 ```
 
-### Миграции (`.claude/logs/migrations/`)
+### Migrations (`.claude/logs/migrations/`)
 
-При каждом запуске `migrate.sh`:
+On every run of `migrate.sh`:
 
-**Файл:** `.claude/logs/migrations/YYYY-MM-DD_HH-MM.json`
+**File:** `.claude/logs/migrations/YYYY-MM-DD_HH-MM.json`
 
-**Содержимое:**
+**Contents:**
 ```json
 {
   "timestamp": "...",
@@ -54,33 +54,33 @@
 }
 ```
 
-### Ошибки (`.claude/logs/errors/`)
+### Errors (`.claude/logs/errors/`)
 
-При любой ошибке в работе фреймворка (упавший хук, неудачный субагент, сломанный скрипт):
+On any error in the framework's operation (a failed hook, an unsuccessful subagent, a broken script):
 
-**Файл:** `.claude/logs/errors/YYYY-MM-DD_HH-MM_error.md`
+**File:** `.claude/logs/errors/YYYY-MM-DD_HH-MM_error.md`
 
-**Содержимое:**
-- Что произошло
-- Контекст (какой skill/agent/hook)
-- Stack trace или вывод команды
-- Что было до ошибки (последние 3 действия)
+**Contents:**
+- What happened
+- Context (which skill/agent/hook)
+- Stack trace or command output
+- What came before the error (the last 3 actions)
 
-## Как логировать
+## How to log
 
-Логирование — это **конвенция агента**, не автоматика. Автоматически логируется только миграция (migrate.sh пишет JSON). Всё остальное — ответственность агента, который следует форматам выше.
+Logging is an **agent convention**, not automation. Only migration is logged automatically (migrate.sh writes JSON). Everything else is the responsibility of the agent, which follows the formats above.
 
-Агент ведёт лог в процессе работы:
-- При `/start` — создать файл сессии, записать начальное состояние
-- В процессе работы — дописывать значимые действия (субагенты, коммиты, ошибки)
-- При `/finish` — дописать итоги, тесты, duration
-- При ошибке — создать отдельный error-лог
+The agent keeps the log while working:
+- On `/start` — create the session file, record the initial state
+- During work — append significant actions (subagents, commits, errors)
+- On `/finish` — append the outcomes, tests, duration
+- On error — create a separate error log
 
-Логирование не должно замедлять работу. Запись — append в конец файла, без перечитывания. Если логирование мешает — пропусти. Лучше сделать работу без лога, чем не сделать с логом.
+Logging must not slow down the work. Writing means appending to the end of the file, without re-reading it. If logging gets in the way — skip it. Better to do the work without a log than to not do it with one.
 
-## Хранение
+## Storage
 
-- Все логи в `.gitignore` (автоматически)
-- Логи не удаляются автоматически
-- Для анализа проблем фреймворка: читать `.claude/logs/errors/`
-- Для хронологии работы: читать `.claude/logs/sessions/`
+- All logs are in `.gitignore` (automatically)
+- Logs are not deleted automatically
+- For analysing framework problems: read `.claude/logs/errors/`
+- For the work chronology: read `.claude/logs/sessions/`

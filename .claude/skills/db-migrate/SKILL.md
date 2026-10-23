@@ -1,6 +1,6 @@
 ---
 name: db-migrate
-description: "Миграция схемы базы данных: SQLite → PostgreSQL/Supabase. Генерация SQL, проверка совместимости."
+description: "Database schema migration: SQLite → PostgreSQL/Supabase. SQL generation, compatibility checks."
 paths:
   - "**/schema*"
   - "**/migrations/**"
@@ -14,14 +14,14 @@ disable-model-invocation: true
 
 ## Workflow: SQLite → PostgreSQL/Supabase
 
-### 1. Анализ текущей схемы
+### 1. Analyse the current schema
 
 ```bash
-# Извлечь схему из SQLite
+# Extract the schema from SQLite
 sqlite3 database.db ".schema" > schema-sqlite.sql
 ```
 
-### 2. Конвертация типов
+### 2. Type conversion
 
 | SQLite | PostgreSQL |
 |--------|-----------|
@@ -33,43 +33,43 @@ sqlite3 database.db ".schema" > schema-sqlite.sql
 | BOOLEAN (0/1) | BOOLEAN |
 | AUTOINCREMENT | SERIAL / GENERATED ALWAYS AS IDENTITY |
 
-### 3. Генерация PostgreSQL схемы
+### 3. Generate the PostgreSQL schema
 
-- Преобразовать типы
-- Добавить TIMESTAMPTZ вместо TEXT для дат
-- Заменить AUTOINCREMENT на SERIAL
-- Добавить Row Level Security (RLS) для Supabase
-- Сгенерировать миграционный файл
+- Convert the types
+- Use TIMESTAMPTZ instead of TEXT for dates
+- Replace AUTOINCREMENT with SERIAL
+- Add Row Level Security (RLS) for Supabase
+- Generate the migration file
 
-### 4. Проверка
+### 4. Verification
 
-- Валидировать SQL синтаксис
-- Проверить foreign keys
-- Проверить индексы
-- Проверить constraints
+- Validate the SQL syntax
+- Check foreign keys
+- Check indexes
+- Check constraints
 
-### 5. Деплой
+### 5. Deploy
 
-**Staging (автономно):**
+**Staging (autonomously):**
 ```bash
-# Применить на staging
+# Apply on staging
 psql $STAGING_DATABASE_URL -f migration.sql
 ```
 
-**Production (с подтверждением):**
-- Показать пользователю план миграции
-- Дождаться подтверждения
-- Применить
-- Проверить результат
+**Production (with confirmation):**
+- Show the user the migration plan
+- Wait for confirmation
+- Apply
+- Check the result
 
-## Supabase-специфика
+## Supabase specifics
 
-- Автоматически добавлять RLS policies
-- Использовать Supabase CLI если доступен:
+- Automatically add RLS policies
+- Use the Supabase CLI if available:
   ```bash
   supabase db push
   ```
-- Генерировать TypeScript типы:
+- Generate TypeScript types:
   ```bash
   supabase gen types typescript --local > src/types/database.ts
   ```

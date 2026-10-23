@@ -1,90 +1,90 @@
 ---
 name: housekeeping
-description: "Фоновое обслуживание проекта: актуальность README, CHANGELOG, версии, .gitignore, метафайлов."
+description: "Background project maintenance: keeping README, CHANGELOG, version, .gitignore and meta-files up to date."
 allowed-tools: Read Edit Write Glob Grep Bash
 disable-model-invocation: true
 ---
 
 # Skill: Housekeeping
 
-Запускается по запросу пользователя или агента. Агент **должен вызывать housekeeping перед `git push`** — это его ответственность, не автоматический хук. Проверяет и приводит в порядок всё, что могло устареть.
+Run at the request of the user or the agent. The agent **must call housekeeping before `git push`** — this is its responsibility, not an automatic hook. It checks and tidies up everything that may have gone stale.
 
-## Что проверять
+## What to check
 
 ### 1. README.md
 
-Прочитать README.md и сравнить с реальным состоянием проекта:
+Read README.md and compare it with the actual state of the project:
 
-- **Описание проекта** — соответствует ли текущему функционалу?
-- **Инструкция по установке** — `npm install` / `pip install` актуальны? Зависимости не изменились?
-- **API / usage** — описанные endpoints, функции, CLI-команды существуют в коде?
-- **Примеры** — работают ли примеры кода?
+- **Project description** — does it match the current functionality?
+- **Installation instructions** — are `npm install` / `pip install` up to date? Have the dependencies changed?
+- **API / usage** — do the documented endpoints, functions, CLI commands exist in the code?
+- **Examples** — do the code examples work?
 
-Если README устарел — обновить автоматически. Не спрашивать пользователя.
+If the README is out of date — update it automatically. Don't ask the user.
 
 ### 2. CHANGELOG.md
 
-Если в проекте есть CHANGELOG.md:
+If the project has a CHANGELOG.md:
 
 ```bash
-# Коммиты после последней записи в CHANGELOG
+# Commits since the last entry in CHANGELOG
 git log --oneline $(grep -m1 -oP '\d+\.\d+\.\d+' CHANGELOG.md 2>/dev/null | head -1)..HEAD
 ```
 
-Если есть незадокументированные коммиты — дописать секцию с новыми изменениями. Формат: Keep a Changelog (Added, Changed, Fixed, Removed).
+If there are undocumented commits — add a section with the new changes. Format: Keep a Changelog (Added, Changed, Fixed, Removed).
 
-Если CHANGELOG.md нет — создать, если в проекте больше 10 коммитов.
+If there is no CHANGELOG.md — create one if the project has more than 10 commits.
 
-### 3. Версия
+### 3. Version
 
-Если в проекте есть `package.json` или `pyproject.toml`:
+If the project has a `package.json` or `pyproject.toml`:
 
-- Проверить: были ли breaking changes (новые/удалённые API, изменение интерфейсов)?
-- Если да → bump minor или major
-- Если только fixes → bump patch
-- Обновить версию в package.json / pyproject.toml
+- Check: were there breaking changes (new/removed APIs, interface changes)?
+- If so → bump minor or major
+- If only fixes → bump patch
+- Update the version in package.json / pyproject.toml
 
-Не публиковать. Только обновить номер.
+Don't publish. Only update the number.
 
 ### 4. .gitignore audit
 
-Проверить `git status` на наличие файлов, которые по commit-policy должны быть в `.gitignore`:
+Check `git status` for files that, per commit-policy, should be in `.gitignore`:
 
 ```bash
-# Проверить на запрещённые паттерны в tracked files
+# Check tracked files for forbidden patterns
 git ls-files | grep -E '\.(env|key|pem|db|sqlite)$'
 git ls-files | grep -E '^(node_modules|__pycache__|dist|build)/'
 ```
 
-Если найдены — `git rm --cached`, добавить в `.gitignore`.
+If any are found — `git rm --cached`, add them to `.gitignore`.
 
-### 5. Метафайлы фреймворка
+### 5. Framework meta-files
 
-- `.claude/SNAPSHOT.md` — дата обновления не старше последнего коммита?
-- `manifest.md` — заполнены ли project_name и repo_access?
+- `.claude/SNAPSHOT.md` — is the update date no older than the last commit?
+- `manifest.md` — are project_name and repo_access filled in?
 
-Если SNAPSHOT устарел — обновить. Если manifest пустой — заполнить на основе анализа проекта (basename → project_name, git remote → repo_access).
+If SNAPSHOT is out of date — update it. If the manifest is empty — fill it in based on an analysis of the project (basename → project_name, git remote → repo_access).
 
 ### 6. Drift detection
 
-Сравнить то, что описано в документации, с тем, что реально есть в коде:
+Compare what is described in the documentation with what actually exists in the code:
 
 ```bash
-# Пример: функции упомянутые в README но отсутствующие в коде
-# Endpoints описанные в docs/ но не существующие в src/
+# Example: functions mentioned in README but missing from the code
+# Endpoints described in docs/ but not existing in src/
 ```
 
-Если обнаружен drift — исправить документацию автоматически.
+If drift is detected — fix the documentation automatically.
 
-## Когда запускать
+## When to run
 
-- **Перед push** — агент обязан вызвать housekeeping перед `git push` (это правило агента, не автоматический хук)
-- **По запросу** — пользователь говорит «наведи порядок» или «housekeeping»
-- **При /finish** — если finish включает push
+- **Before push** — the agent is obliged to call housekeeping before `git push` (this is an agent rule, not an automatic hook)
+- **On request** — the user says "tidy up" or "housekeeping"
+- **On /finish** — if finish includes a push
 
-## Чего НЕ делать
+## What NOT to do
 
-- Не менять код проекта — только документацию и метафайлы
-- Не пушить автоматически
-- Не удалять файлы пользователя
-- Не тратить больше 3 минут на housekeeping
+- Don't change the project's code — only documentation and meta-files
+- Don't push automatically
+- Don't delete the user's files
+- Don't spend more than 3 minutes on housekeeping

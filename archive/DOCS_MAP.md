@@ -66,7 +66,7 @@ These files **link to** authoritative sources. They don't duplicate.
 ### For CLAUDE.md (Navigator)
 - **DO:** Link to authoritative sources
 - **DON'T:** Duplicate details from other files
-- **Format:** "📖 См. WORKFLOW.md → Section Name"
+- **Format:** "📖 See WORKFLOW.md → Section Name"
 
 ### For AGENTS.md (Project Patterns)
 - **DO:** Document project-specific patterns

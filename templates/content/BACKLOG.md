@@ -7,59 +7,59 @@ updated: YYYY-MM-DD
 # Backlog
 
 <!--
-Что планируется по контенту, но ещё не делается.
+What is planned for the content but is not being done yet.
 
-Граница с другими файлами:
-- SNAPSHOT.md — что **в работе прямо сейчас** (текущая глава/урок, фаза).
-- BACKLOG.md (этот файл) — что **будет потом**: запланированные units,
-  research passes, недостающие примеры, ревью.
-- INVARIANTS.md — правила продукта, которые нельзя нарушать.
+The boundary with other files:
+- SNAPSHOT.md — what is **in progress right now** (current chapter/lesson, phase).
+- BACKLOG.md (this file) — what **comes later**: planned units,
+  research passes, missing examples, reviews.
+- INVARIANTS.md — product rules that must not be broken.
 
-Формат пункта:
-- [ ] <id>: <короткий заголовок> — <контекст> (опц. `→ path/to/unit.md`)
+Item format:
+- [ ] <id>: <short title> — <context> (opt. `→ path/to/unit.md`)
 
-id может быть произвольный (CH-04, L-12, RES-3 или слаг). Главное —
-ссылка должна быть стабильной.
+The id can be arbitrary (CH-04, L-12, RES-3 or a slug). What matters is
+that the reference is stable.
 -->
 
 ## Next
 
 <!--
-Что брать в работу следующим. Упорядочено по приоритету. Каждый пункт
-конкретен: ясно, какую единицу контента или какой раздел трогаем.
+What to pick up next. Ordered by priority. Each item is
+concrete: it is clear which content unit or section we are touching.
 -->
 
-- [ ] CH-04: написать черновик главы 4 — brief готов, sources собраны (→ `briefs/chapter-04.md`)
-- [ ] RES-1: research pass по теме X — нужен для главы 5
+- [ ] CH-04: write a draft of chapter 4 — brief ready, sources gathered (→ `briefs/chapter-04.md`)
+- [ ] RES-1: research pass on topic X — needed for chapter 5
 
 ## Soon
 
 <!--
-Известная работа на ближайшее время. Направление ясно, но детальный
-brief или outline ещё не готов. Перед стартом — детализировать и
-переместить в Next.
+Known work for the near future. The direction is clear, but a detailed
+brief or outline is not ready yet. Before starting — flesh it out and
+move it to Next.
 -->
 
-- [ ] L-12: урок про Y — определить learning objective и пререкизиты
-- [ ] ENR-2: добавить упражнения в module 03 — формат пока не выбран
+- [ ] L-12: lesson on Y — define the learning objective and prerequisites
+- [ ] ENR-2: add exercises to module 03 — format not chosen yet
 
 ## Later
 
 <!--
-Признано как нужное, но не запланировано. Идеи, улучшения, желаемые
-дополнения, которые не блокируют текущие цели.
+Recognised as needed, but not scheduled. Ideas, improvements, desirable
+additions that do not block current goals.
 -->
 
-- [ ] IDX-1: общий glossary для всего продукта — собрать после ревью
-- [ ] EXP-1: альтернативный формат экспорта (audio) — рассмотреть позже
+- [ ] IDX-1: a shared glossary for the whole product — compile after review
+- [ ] EXP-1: an alternative export format (audio) — consider later
 
 ## Won't do
 
 <!--
-Явно отклонённые направления. Один пункт = одна причина. Нужно, чтобы
-повторно не открывать дебаты после compaction или в следующей сессии.
-Если решение пересмотрено — перенести в Later/Soon, не редактировать
-запись.
+Explicitly rejected directions. One item = one reason. Needed so that
+the debate is not reopened after compaction or in the next session.
+If the decision is revisited — move it to Later/Soon, do not edit
+the entry.
 -->
 
-- [x] CH-99: дополнительная глава про Z — выходит за scope продукта, в отдельный материал
+- [x] CH-99: an extra chapter on Z — outside the product's scope, belongs in separate material

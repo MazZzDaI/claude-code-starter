@@ -10,7 +10,7 @@ Driven by a user regression report: collapsing memory into a single `SNAPSHOT.md
 - **New**: `INVARIANTS.md` — hard rules whose violation is a bug
 - **New methodology layer** with explicit maturity ladder (draft → pattern → mature → crystallized) for methodologies consumed by automated pipelines (Router → Adapter → Executor)
 - **New dialog preservation**: Claude Code session JSONLs are copied into `.claude/dialogs/` before retention cleanup; `/finish` auto-saves
-- **Documented in CLAUDE.md** — "Слои памяти" section so future "simplify" passes can't quietly collapse the model again
+- **Documented in CLAUDE.md** — "Memory layers" section so future "simplify" passes can't quietly collapse the model again
 - **`/start` and `/finish` updated** to read/update both axes
 
 Verified by 11 smoke tests (8 inherited + 3 new v6.2 regression tests). All pass.
@@ -31,7 +31,7 @@ git clone https://github.com/alexeykrol/claude-code-starter.git
 bash claude-code-starter/scripts/install-global.sh
 ```
 
-After install, `/setup-project` (or "новый проект") in any folder bootstraps the framework with no download.
+After install, `/setup-project` (or "new project") in any folder bootstraps the framework with no download.
 
 ## Memory Layers
 

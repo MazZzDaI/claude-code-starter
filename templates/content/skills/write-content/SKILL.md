@@ -1,6 +1,6 @@
 ---
 name: write-content
-description: "Создание или бережная адаптация content units по brief, структуре и style guide."
+description: "Creating or carefully adapting content units according to the brief, structure and style guide."
 allowed-tools: Read Write Edit Glob Grep
 disable-model-invocation: false
 ---
@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 ## Purpose
 
-Написать или адаптировать главу, урок, статью, документ, transcript-derived lesson, knowledge-base entry.
+Write or adapt a chapter, lesson, article, document, transcript-derived lesson or knowledge-base entry.
 
 ## Input
 
@@ -21,23 +21,23 @@ disable-model-invocation: false
 
 ## Process
 
-1. Прочитай brief, relevant outline, style guide
-2. Прочитай только нужные sources
-3. Если input rich: сохрани голос, порядок мысли, обязательные формулировки
-4. Если input sparse: опирайся на research outputs
-5. Напиши content unit по локальному формату
-6. Объясни термины на уровне аудитории
-7. Добавь transitions, summary, cross-links
-8. Запиши unresolved deficits
+1. Read the brief, the relevant outline and the style guide
+2. Read only the sources you need
+3. If the input is rich: preserve the voice, the order of thought and mandatory wording
+4. If the input is sparse: rely on the research outputs
+5. Write the content unit in the local format
+6. Explain terms at the audience's level
+7. Add transitions, summary, cross-links
+8. Record unresolved deficits
 
 ## Quality
 
-- Один unit — один фокус
-- В начале ясна цель
-- Нет unexplained jargon
-- Нет invented citations
-- Rich input не потерян
-- Файл соответствует формату
+- One unit — one focus
+- The goal is clear at the start
+- No unexplained jargon
+- No invented citations
+- Rich input not lost
+- The file matches the format
 
 ## Output
 

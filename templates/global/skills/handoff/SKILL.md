@@ -211,23 +211,23 @@ Pending:
 ## Kickoff Prompt
 
 ```text
-Ты новая Claude Code session для `<absolute project root>`.
-Сначала открой и прочитай handoff:
+You are a new Claude Code session for `<absolute project root>`.
+First open and read the handoff:
 `<absolute path to this handoff file>`
 
-Затем прочитай listed docs из handoff. После этого GROUND-VERIFY факты
-командами из "Grounded Facts"; не доверяй metafiles без проверки.
+Then read the listed docs from the handoff. After that, GROUND-VERIFY the facts
+with the commands from "Grounded Facts"; do not trust metafiles without checking.
 
-Твоя роль: <role/scope in one paragraph, carrying the TYPE discipline>.
+Your role: <role/scope in one paragraph, carrying the TYPE discipline>.
 
-После чтения и проверки выдай в чат Verification Report:
-- Understood: роль, scope, task/model своими словами (не эхо handoff).
-- Verified: какие команды прогнал и совпали ли факты (с реальными числами).
-- Discrepancies: расхождения или `—`.
-- Questions: вопросы или `—`.
-- Readiness: `ready on confirmation` / `blocked: ...`, плюс proposed first move.
+After reading and checking, post a Verification Report in the chat:
+- Understood: role, scope, task/model in your own words (not an echo of the handoff).
+- Verified: which commands you ran and whether the facts matched (with real numbers).
+- Discrepancies: discrepancies or `—`.
+- Questions: questions or `—`.
+- Readiness: `ready on confirmation` / `blocked: ...`, plus proposed first move.
 
-Не начинай работу до подтверждения owner/parent.
+Do not start work until the owner/parent confirms.
 ```
 ````
 

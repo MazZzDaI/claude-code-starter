@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Задать базовые форматы content units, metadata, index, export bundle.
+Define the baseline formats for content units, metadata, index and export bundle.
 
 ## Common Metadata
 

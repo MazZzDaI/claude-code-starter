@@ -1,99 +1,99 @@
 ---
-description: Создать Pull Request с правильным описанием
+description: Create a Pull Request with a proper description
 ---
 
-Создай Pull Request используя GitHub CLI (`gh`).
+Create a Pull Request using the GitHub CLI (`gh`).
 
-**ВАЖНО: Анализируй ВСЕ коммиты, не только последний!**
+**IMPORTANT: Analyse ALL commits, not just the last one!**
 
-## Процесс:
+## Process:
 
-### 1. Анализ текущего состояния ветки
+### 1. Analyse the current state of the branch
 
-Выполни параллельно эти команды:
+Run these commands in parallel:
 ```bash
-# Проверь текущую ветку и статус
+# Check the current branch and status
 git status
 
-# Посмотри unstaged и staged изменения
+# Look at unstaged and staged changes
 git diff
 git diff --staged
 
-# Проверь remote tracking
+# Check remote tracking
 git branch -vv
 
-# Посмотри ВСЕ коммиты от base branch (обычно main)
+# Look at ALL commits since the base branch (usually main)
 git log main..HEAD --oneline
 
-# Посмотри полный diff от base branch
+# Look at the full diff from the base branch
 git diff main...HEAD --stat
 ```
 
-### 2. Определи base branch
-Обычно это `main` или `master`. Проверь:
+### 2. Determine the base branch
+Usually this is `main` or `master`. Check:
 ```bash
 git remote show origin | grep "HEAD branch"
 ```
 
-### 3. Анализируй ВСЕ изменения
+### 3. Analyse ALL changes
 
-**КРИТИЧНО:** Не смотри только последний коммит! Проанализируй:
-- Все коммиты с момента divergence от main
-- Весь diff между base branch и HEAD
-- Все измененные файлы
+**CRITICAL:** Do not look only at the last commit! Analyse:
+- All commits since divergence from main
+- The entire diff between the base branch and HEAD
+- All changed files
 
 ```bash
-# Полный список измененных файлов
+# Full list of changed files
 git diff main...HEAD --name-status
 
-# Детальный diff всех изменений
+# Detailed diff of all changes
 git diff main...HEAD
 ```
 
-### 4. Составь PR описание
+### 4. Compose the PR description
 
-**Формат:**
+**Format:**
 ```markdown
 ## Summary
-[1-3 bullet points описывающие ЧТО было сделано]
+[1-3 bullet points describing WHAT was done]
 
-## Why (Мотивация)
-[ПОЧЕМУ эти изменения необходимы - бизнес-контекст]
+## Why (Motivation)
+[WHY these changes are needed - business context]
 
 ## What Changed
-[Детальное описание изменений по категориям]
+[Detailed description of changes by category]
 
 ### Added
-- [Новая функциональность]
+- [New functionality]
 
 ### Changed
-- [Изменения в существующей функциональности]
+- [Changes to existing functionality]
 
 ### Fixed
-- [Исправленные баги]
+- [Fixed bugs]
 
 ### Security
-- [Изменения связанные с безопасностью]
+- [Security-related changes]
 
 ## Technical Details
-[Технические детали для ревьюеров]
-- Архитектурные решения
-- Важные изменения в API/схеме БД
+[Technical details for reviewers]
+- Architectural decisions
+- Important changes to the API/database schema
 - Performance implications
 
 ## Test Plan
 - [ ] Unit tests pass (`make test`)
 - [ ] Type checking pass (`make typecheck`)
 - [ ] Linting pass (`make lint`)
-- [ ] Manual testing: [опиши что протестировал]
+- [ ] Manual testing: [describe what you tested]
 - [ ] Security check (`make security`)
-- [ ] Tested edge cases: [какие]
+- [ ] Tested edge cases: [which ones]
 
 ## Screenshots/Demo
-[Если есть UI изменения - добавь скриншоты]
+[If there are UI changes - add screenshots]
 
 ## Breaking Changes
-[Если есть breaking changes - опиши их здесь]
+[If there are breaking changes - describe them here]
 - [ ] Documentation updated
 - [ ] Migration guide provided
 
@@ -108,40 +108,40 @@ git diff main...HEAD
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 ```
 
-### 5. Push изменения (если нужно)
+### 5. Push the changes (if needed)
 
-Проверь нужно ли push:
+Check whether a push is needed:
 ```bash
 git status
 ```
 
-Если нужно:
+If needed:
 ```bash
-# Для новой ветки
+# For a new branch
 git push -u origin HEAD
 
-# Для существующей
+# For an existing one
 git push
 ```
 
-### 6. Создай PR с gh CLI
+### 6. Create the PR with the gh CLI
 
-Используй HEREDOC для правильного форматирования:
+Use a HEREDOC for correct formatting:
 
 ```bash
-gh pr create --title "<тип>: <краткое описание>" --body "$(cat <<'EOF'
+gh pr create --title "<type>: <short description>" --body "$(cat <<'EOF'
 ## Summary
 - [bullet point 1]
 - [bullet point 2]
 
 ## Why
-[Мотивация изменений]
+[Motivation for the changes]
 
 ## What Changed
-[Детальное описание]
+[Detailed description]
 
 ## Technical Details
-[Технические детали]
+[Technical details]
 
 ## Test Plan
 - [ ] Unit tests pass
@@ -160,48 +160,48 @@ EOF
 - `refactor: Simplify API error handling`
 - `docs: Update deployment guide`
 
-### 7. Проверь результат
+### 7. Check the result
 ```bash
 gh pr view --web
 ```
 
-## 🔐 Security Checklist (перед созданием PR)
-- [ ] Нет hardcoded secrets в коде
-- [ ] .env файлы не закоммичены
-- [ ] Все секреты в environment variables
-- [ ] Input validation на месте
-- [ ] Output sanitization реализован
-- [ ] SQL queries параметризованы
-- [ ] Authentication/Authorization проверены
-- [ ] `npm audit` не показывает критических уязвимостей
+## 🔐 Security Checklist (before creating the PR)
+- [ ] No hardcoded secrets in the code
+- [ ] .env files are not committed
+- [ ] All secrets are in environment variables
+- [ ] Input validation is in place
+- [ ] Output sanitisation is implemented
+- [ ] SQL queries are parameterised
+- [ ] Authentication/Authorisation checked
+- [ ] `npm audit` shows no critical vulnerabilities
 
 ## 📋 Pre-PR Checklist
-- [ ] Все коммиты осмысленные (не "wip", "fix", "update")
-- [ ] Squash мелких fixup коммитов (если нужно)
-- [ ] Ветка обновлена с main (rebase если нужно)
-- [ ] Все тесты проходят локально
-- [ ] Документация обновлена
-- [ ] BACKLOG.md обновлен
+- [ ] All commits are meaningful (not "wip", "fix", "update")
+- [ ] Squash small fixup commits (if needed)
+- [ ] Branch is up to date with main (rebase if needed)
+- [ ] All tests pass locally
+- [ ] Documentation is updated
+- [ ] BACKLOG.md is updated
 
-## 🚫 НЕ делай:
-- ❌ Анализировать только последний коммит (смотри ВСЕ коммиты!)
-- ❌ Создавать PR с failing tests
-- ❌ Игнорировать TypeScript ошибки
-- ❌ Забывать обновить документацию
-- ❌ Force push в shared ветку
-- ❌ PR с закомментированным кодом
-- ❌ Расплывчатое описание PR
+## 🚫 DO NOT:
+- ❌ Analyse only the last commit (look at ALL commits!)
+- ❌ Create a PR with failing tests
+- ❌ Ignore TypeScript errors
+- ❌ Forget to update the documentation
+- ❌ Force push to a shared branch
+- ❌ A PR with commented-out code
+- ❌ A vague PR description
 
 ## 💡 Tips:
-1. **Для больших PR:** разбей на несколько smaller PRs
-2. **Для hotfix:** используй флаг `--label "hotfix"`
-3. **Для draft PR:** используй флаг `--draft`
+1. **For large PRs:** split into several smaller PRs
+2. **For a hotfix:** use the flag `--label "hotfix"`
+3. **For a draft PR:** use the flag `--draft`
 4. **Assign reviewers:** `--reviewer @username`
 5. **Add to project:** `--project "Project Name"`
 
-## Примеры хороших PR:
+## Examples of good PRs:
 
-### Пример 1: Feature PR
+### Example 1: Feature PR
 ```bash
 gh pr create --title "feat: Add user dashboard with analytics" --body "$(cat <<'EOF'
 ## Summary
@@ -238,7 +238,7 @@ EOF
 )"
 ```
 
-### Пример 2: Bugfix PR
+### Example 2: Bugfix PR
 ```bash
 gh pr create --title "fix: Resolve memory leak in WebSocket connection" --body "$(cat <<'EOF'
 ## Summary
@@ -270,4 +270,4 @@ EOF
 )"
 ```
 
-**После создания PR выведи URL, чтобы пользователь мог его открыть!**
+**After creating the PR, print the URL so the user can open it!**

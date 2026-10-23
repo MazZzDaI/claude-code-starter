@@ -18,4 +18,4 @@
 
 ---
 
-Это example. Удали и создай `articles/topic-name.md` из `templates/article.md`.
+This is an example. Delete it and create `articles/topic-name.md` from `templates/article.md`.

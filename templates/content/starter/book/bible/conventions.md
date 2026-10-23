@@ -12,4 +12,4 @@
 
 - ...
 
-Это шаблон правил и запретов проекта. Заполни под конкретную книгу.
+This is a template for the project's rules and bans. Fill it in for the specific book.

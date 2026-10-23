@@ -1,29 +1,29 @@
 ---
 name: setup-project
-description: "Установить Claude Code Starter framework в текущую папку. Авто-определение типа проекта (code/content/hybrid). Вызывается фразами: /setup-project, setup project, начать проект, инициализация, новый проект, поставь фреймворк, установи фреймворк, bootstrap framework. (Не путать с встроенной /init, которая только генерирует CLAUDE.md.)"
+description: "Install the Claude Code Starter framework into the current folder. Auto-detects the project type (code/content/hybrid). Invoked by the phrases: /setup-project, setup project, start a project, initialisation, new project, set up the framework, install the framework, bootstrap framework. (Not to be confused with the built-in /init, which only generates CLAUDE.md.)"
 allowed-tools: Read Write Edit Bash Glob Grep
 disable-model-invocation: false
 ---
 
 # Skill: Setup Project (Framework Bootstrap)
 
-## Назначение
+## Purpose
 
-Установить Claude Code Starter framework в текущую рабочую папку. Авто-определяет, что это за проект (код, контент, гибрид), создаёт минимально необходимую структуру, не повреждая существующие файлы.
+Install the Claude Code Starter framework into the current working folder. Auto-detects what kind of project it is (code, content, hybrid) and creates the minimum necessary structure without damaging existing files.
 
-## Когда применяется
+## When it applies
 
-- Пользователь сказал `/setup-project`, `setup project`, `bootstrap`, `поставь фреймворк`, `установи фреймворк`, `начать проект`, `инициализировать проект`, `новый проект`
-- Пользователь работает в свежесозданной папке без `CLAUDE.md` и `.claude/`, и просит начать работу
-- В проекте есть устаревший framework и пользователь хочет обновиться
+- The user said `/setup-project`, `setup project`, `bootstrap`, `set up the framework`, `install the framework`, `start a project`, `initialise the project`, `new project`
+- The user is working in a freshly created folder without `CLAUDE.md` and `.claude/`, and asks to start work
+- The project has an outdated framework and the user wants to upgrade
 
-**НЕ путать** со встроенной командой Claude Code `/setup-project` — та делает совсем другое (генерирует документационный CLAUDE.md). Этот skill — про установку framework инфраструктуры (rules, skills, agents, hooks, manifest).
+**Do NOT confuse** this with the built-in Claude Code command `/setup-project` — that one does something quite different (generates a documentation CLAUDE.md). This skill is about installing the framework infrastructure (rules, skills, agents, hooks, manifest).
 
-## Алгоритм
+## Algorithm
 
-### 1. Найти framework source
+### 1. Find the framework source
 
-Проверь по порядку:
+Check in order:
 
 ```bash
 # Step 1: cached source path
@@ -46,9 +46,9 @@ if [ -z "$FRAMEWORK_PATH" ]; then
 fi
 ```
 
-Запиши найденный путь обратно: `echo "$FRAMEWORK_PATH" > ~/.claude/framework-source-path`.
+Write the path you found back: `echo "$FRAMEWORK_PATH" > ~/.claude/framework-source-path`.
 
-### 2. Проверить состояние текущей папки
+### 2. Check the state of the current folder
 
 ```bash
 PROJECT_DIR="$(pwd)"
@@ -59,55 +59,55 @@ HAS_CLAUDE_MD="no"
 TOTAL_FILES=$(find . -maxdepth 2 -type f -not -path './.git/*' 2>/dev/null | wc -l | tr -d ' ')
 ```
 
-### 3. Запустить установщик
+### 3. Run the installer
 
-Просто вызови основной installer — он сам делает auto-detect, backup и safe merge:
+Just invoke the main installer — it does the auto-detect, backup and safe merge itself:
 
 ```bash
 bash "$FRAMEWORK_PATH/init-project.sh"
 ```
 
-Если установка хочет имя проекта (свежая папка) — installer возьмёт имя текущей директории. Тип проекта определит автоматически по содержимому.
+If the installation wants a project name (fresh folder), the installer will take the name of the current directory. It will determine the project type automatically from the contents.
 
-### 4. После установки
+### 4. After installation
 
-Прочитай `manifest.md` и сообщи пользователю одной строкой что получилось:
+Read `manifest.md` and tell the user in one line what the outcome was:
 
 ```text
-✅ Framework установлен: <project_type> / <content_type>
-   Backup в .claude/backup-<TIMESTAMP>/
-   Откат: bash init-project.sh --rollback
-   Дальше: отредактируй CLAUDE.md под проект и скажи /start
+✅ Framework installed: <project_type> / <content_type>
+   Backup in .claude/backup-<TIMESTAMP>/
+   Rollback: bash init-project.sh --rollback
+   Next: edit CLAUDE.md for the project and say /start
 ```
 
-## Граничные случаи
+## Edge cases
 
-### Папка уже с framework
+### Folder already has the framework
 
-Если `HAS_FRAMEWORK=yes`, не запускай install заново молча. Спроси одним вопросом:
-- «В папке уже стоит framework. Обновить аддитивно (migrate)? [Y/n]»
-- При Y — запусти `bash "$FRAMEWORK_PATH/scripts/migrate.sh" --template "$FRAMEWORK_PATH"`
-- При n — ничего не делай, отчитайся
+If `HAS_FRAMEWORK=yes`, do not silently run the install again. Ask a single question:
+- "The framework is already installed in this folder. Upgrade additively (migrate)? [Y/n]"
+- On Y — run `bash "$FRAMEWORK_PATH/scripts/migrate.sh" --template "$FRAMEWORK_PATH"`
+- On n — do nothing, report back
 
-### Тяжёлый конфликт CLAUDE.md
+### Serious CLAUDE.md conflict
 
-Если установщик завершился с exit 2 — он уже записал `.claude/CLAUDE.md.merge-proposal.md` и НЕ менял файлы. Покажи пользователю короткое резюме предложения и команду применения:
+If the installer exited with exit 2, it has already written `.claude/CLAUDE.md.merge-proposal.md` and has NOT changed any files. Show the user a short summary of the proposal and the command to apply it:
 ```text
-⚠️ Установка остановлена — конфликт в CLAUDE.md.
-Я подготовил решение в .claude/CLAUDE.md.merge-proposal.md.
-Применить:  bash init-project.sh --apply-proposal
+⚠️ Installation stopped — conflict in CLAUDE.md.
+I have prepared a resolution in .claude/CLAUDE.md.merge-proposal.md.
+Apply:  bash init-project.sh --apply-proposal
 ```
 
-### Не нашли git
+### git not found
 
-Installer сам предлагает `git init` если репо нет. Это OK — пропусти, продолжи.
+The installer itself offers `git init` if there is no repo. That is OK — skip it, carry on.
 
-### Чего НЕ делать
+### What NOT to do
 
-- Не запускай установку молча в большом проекте, где много файлов и нет .git — сначала покажи что собираешься делать
-- Не переписывай существующий CLAUDE.md «вручную» — это работа `merge_claude_md.py`
-- Не задавай больше одного вопроса. Auto-detect должен покрывать 95% случаев. Если не уверен — выбери сам и скажи пользователю что выбрал
+- Do not silently run the installation in a large project with many files and no .git — first show what you are about to do
+- Do not rewrite an existing CLAUDE.md "by hand" — that is the job of `merge_claude_md.py`
+- Do not ask more than one question. Auto-detect should cover 95% of cases. If unsure — choose yourself and tell the user what you chose
 
 ## Output
 
-Всегда коротко: что было до, что добавлено, путь к backup, следующее действие.
+Always brief: what was there before, what was added, the backup path, the next action.

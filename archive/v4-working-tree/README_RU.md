@@ -1,8 +1,8 @@
 # Claude Code Starter
 
-Двуагентный мета-фреймворк для структурированной AI-разработки с **Claude Code** и **Codex**.
+A dual-agent meta-framework for structured AI development with **Claude Code** and **Codex**.
 
-> Название репозитория `claude-code-starter` сохранено для обратной совместимости.
+> The repository name `claude-code-starter` has been kept for backwards compatibility.
 
 [![GitHub](https://img.shields.io/badge/GitHub-claude--code--starter-blue)](https://github.com/alexeykrol/claude-code-starter)
 [![Version](https://img.shields.io/badge/version-4.0.2-orange.svg)](https://github.com/alexeykrol/claude-code-starter)
@@ -12,121 +12,121 @@
 
 > **EN version:** [README.md](README.md)
 
-## Что нового в v4.0.0
+## What's new in v4.0.0
 
-- Полноценная **двуагентная** архитектура: Claude-ветка + Codex-ветка в одном фреймворке.
-- Общий контракт состояния: `.claude/SNAPSHOT.md`, `.claude/BACKLOG.md`, `.claude/ARCHITECTURE.md`.
-- Аддитивная установка: текущий Claude-контур не ломается, Codex добавляется параллельно.
-- В Codex `start` поддерживает авто-роутинг миграции/апгрейда и автообновление фреймворка.
-- Миграция улучшена: legacy/upgrade могут формировать содержательные memory-файлы из материалов проекта.
+- A full **dual-agent** architecture: a Claude branch + a Codex branch in a single framework.
+- A shared state contract: `.claude/SNAPSHOT.md`, `.claude/BACKLOG.md`, `.claude/ARCHITECTURE.md`.
+- Additive installation: the existing Claude setup is not broken; Codex is added alongside it.
+- In Codex, `start` supports automatic routing of migration/upgrade and automatic framework updates.
+- Improved migration: legacy/upgrade can produce meaningful memory files from the project's materials.
 
-## Для пользователей
+## For users
 
-### Требования
+### Requirements
 
 - Node.js 18+
 - Python 3.x
 
-Проверка:
+Check:
 
 ```bash
 node --version
 python3 --version
 ```
 
-### Установка в любой host-проект
+### Installing into any host project
 
-1. Скопируйте `init-project.sh` в корень host-проекта.
-2. Запустите установщик:
+1. Copy `init-project.sh` into the root of the host project.
+2. Run the installer:
 
 ```bash
 ./init-project.sh
 ```
 
-Установщик теперь запрашивает **профиль проекта**:
-- `software` — для проектов разработки ПО (сервис/приложение/исходный код).
-- `content` — для контентных проектов (курс/книга/статья/исследование/сценарий).
+The installer now asks for a **project profile**:
+- `software` — for software development projects (service/application/source code).
+- `content` — for content projects (course/book/article/research/screenplay).
 
-Для каждого профиля используется отдельная структура memory-файлов и генерации.
+Each profile uses its own structure of memory files and generation.
 
-3. Запустите предпочитаемый агент в этом проекте:
+3. Run your preferred agent in this project:
 - `codex`
 - `claude`
 
-4. Запуск протокола:
+4. Start the protocol:
 - `start`
 
-5. Завершение протокола:
+5. Finish the protocol:
 - `/fi`
 
-## Рабочий цикл
+## Workflow
 
 ### Start
 
-Команда `start` выполняет cold start:
+The `start` command performs a cold start:
 
-- роутинг миграции/апгрейда (на первом запуске),
-- проверку crash/session,
-- загрузку общего контекста,
-- проверку версии фреймворка (с автообновлением при необходимости).
+- migration/upgrade routing (on the first run),
+- crash/session check,
+- loading of the shared context,
+- framework version check (with automatic update if needed).
 
-Контекстные файлы выбираются по профилю:
+Context files are chosen by profile:
 - software: `.claude/SNAPSHOT.md`, `.claude/BACKLOG.md`, `.claude/ARCHITECTURE.md`
 - content: `.claude/content/SNAPSHOT.md`, `.claude/content/BACKLOG.md`, `.claude/content/ARCHITECTURE.md`
 
 ### Finish
 
-Команда `/fi` выполняет completion:
+The `/fi` command performs completion:
 
-- security/export проверки,
-- git status/diff проверки,
-- финализацию сессии.
+- security/export checks,
+- git status/diff checks,
+- session finalisation.
 
-## Структура фреймворка
+## Framework structure
 
 ```text
 claude-code-starter/
-├── CLAUDE.md                    # Точка входа для Claude
-├── AGENTS.md                    # Точка входа для Codex
-├── init-project.sh              # Установщик для host-проектов
+├── CLAUDE.md                    # Entry point for Claude
+├── AGENTS.md                    # Entry point for Codex
+├── init-project.sh              # Installer for host projects
 ├── CHANGELOG.md
 ├── README.md
 ├── README_RU.md
 ├── .claude/
 │   ├── commands/                # Claude workflows/prompts
 │   ├── protocols/               # Silent protocol specs
-│   ├── scripts/quick-update.sh  # Вход обновления для Claude
-│   └── templates/               # Шаблоны состояния/конфига
+│   ├── scripts/quick-update.sh  # Update entry point for Claude
+│   └── templates/               # State/config templates
 ├── .codex/
-│   ├── commands/                # Исполняемые Codex workflows
-│   │   └── quick-update.sh      # Вход обновления для Codex
+│   ├── commands/                # Executable Codex workflows
+│   │   └── quick-update.sh      # Update entry point for Codex
 │   └── contracts/
-├── src/framework-core/          # Общий Python runtime (cold-start/completion)
-├── security/                    # Security scan/cleanup скрипты
-└── migration/                   # Сборка и релизные скрипты
+├── src/framework-core/          # Shared Python runtime (cold-start/completion)
+├── security/                    # Security scan/cleanup scripts
+└── migration/                   # Build and release scripts
 ```
 
-## Режимы миграции
+## Migration modes
 
-Установщик автоматически определяет тип host-проекта:
+The installer automatically detects the type of host project:
 
-- `new` — инициализация в новом проекте,
-- `legacy` — миграция существующего проекта,
-- `upgrade` — апгрейд со старой версии фреймворка.
+- `new` — initialisation in a new project,
+- `legacy` — migration of an existing project,
+- `upgrade` — upgrade from an older version of the framework.
 
-Во всех режимах установщик также фиксирует профиль проекта (`software` или `content`) в `.claude/.framework-config`.
+In all modes the installer also records the project profile (`software` or `content`) in `.claude/.framework-config`.
 
-Во всех режимах бизнес-код host-проекта не должен разрушаться.
+In all modes the host project's business code must not be broken.
 
-## Модель обновления
+## Update model
 
-- В `start` встроена проверка версии.
-- Если доступна новая версия и есть апдейтер, обновление применяется автоматически.
-- Пакет обновления включает обе ветки (Claude + Codex), чтобы сохранить parity.
+- A version check is built into `start`.
+- If a new version is available and an updater is present, the update is applied automatically.
+- The update package includes both branches (Claude + Codex) to preserve parity.
 
-## Для разработчиков фреймворка
+## For framework developers
 
-### Подготовка
+### Preparation
 
 ```bash
 git clone https://github.com/alexeykrol/claude-code-starter.git
@@ -135,32 +135,32 @@ npm install
 npm run build
 ```
 
-### Сборка дистрибутива
+### Building the distribution
 
 ```bash
 bash migration/build-distribution.sh
 ```
 
-Артефакты создаются в `dist-release/`:
+Artefacts are created in `dist-release/`:
 
 - `init-project.sh`
 - `framework.tar.gz`
 - `framework-commands.tar.gz`
 
-## Версионирование
+## Versioning
 
-- Используется Semantic Versioning.
-- `4.0.0` — major-релиз, так как фреймворк перешёл от single-agent к dual-agent контракту.
+- Semantic Versioning is used.
+- `4.0.0` is a major release, because the framework moved from a single-agent to a dual-agent contract.
 
-Подробности см. в [CHANGELOG.md](CHANGELOG.md).
+For details, see [CHANGELOG.md](CHANGELOG.md).
 
 ## Contributing
 
-1. Создайте ветку
-2. Внесите изменения
-3. Прогоните локальные проверки/сборку
-4. Откройте PR
+1. Create a branch
+2. Make your changes
+3. Run the local checks/build
+4. Open a PR
 
 ---
 
-Цель фреймворка: дать пользователю выбор агента при едином состоянии проекта и единой модели протоколов.
+The framework's goal: to give the user a choice of agent with a single project state and a single protocol model.

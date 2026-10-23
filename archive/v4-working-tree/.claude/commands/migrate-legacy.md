@@ -730,7 +730,7 @@ Why I recommend this:
 Your choice?
   • 1 - Choose Option 1
   • 2 - Choose Option 2
-  • best (or press Enter) - Сделай, как лучше (Use my recommendation)
+  • best (or press Enter) - Do what is best (Use my recommendation)
 ````
 
 **Example Questions to Ask:**
@@ -1428,7 +1428,7 @@ Show simple completion message:
 
 ````
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Миграция завершена!
+✅ Migration complete!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📁 Framework Files Created:

@@ -6,73 +6,73 @@ updated: YYYY-MM-DD
 
 # Invariants
 
-## Зачем этот файл
+## Why this file
 
-Здесь — **жёсткие правила продукта**, которые нельзя нарушать. Не
-стилистическое предпочтение, не «как обычно пишем», а гарантии, без
-которых продукт перестаёт быть собой. Нарушение инварианта = дефект, а
-не вопрос вкуса.
+This is where the **hard rules of the product** live, the ones that must not be broken. Not
+a stylistic preference, not "how we usually write", but guarantees without
+which the product stops being itself. Breaking an invariant = a defect, not
+a matter of taste.
 
-Отличие от `.claude/rules/`:
-- `rules/` — как работает **агент** (workflow, commit policy, делегирование).
-- `INVARIANTS.md` — что не должно случиться с **продуктом**: голос,
-  источники, фактическая точность, навигация, формат, обещания читателю.
+How it differs from `.claude/rules/`:
+- `rules/` — how the **agent** works (workflow, commit policy, delegation).
+- `INVARIANTS.md` — what must not happen to the **product**: voice,
+  sources, factual accuracy, navigation, format, promises to the reader.
 
-Если инвариант мешает задаче — это не повод его нарушить. Это повод
-открыть обсуждение и либо переформулировать, либо изменить задачу.
-Перед изменением инварианта — записать в `История`, чем он был вызван.
+If an invariant gets in the way of a task, that is no reason to break it. It is a reason to
+open a discussion and either reformulate it or change the task.
+Before changing an invariant, record in `History` what prompted it.
 
-**Категории (подсказка):** `source` · `voice` · `style` · `audience` ·
+**Categories (hint):** `source` · `voice` · `style` · `audience` ·
 `accuracy` · `structure` · `format` · `attribution` · `safety`
 
 ---
 
-### INV-001: Источник не переписывается с потерей голоса
+### INV-001: The source is not rewritten with loss of voice
 
-**Категория:** source / voice
-**Правило:** При работе с rich input (авторский текст, транскрипт,
-лекция, документ) запрещено заменять авторские формулировки синонимами,
-сглаживать повторы или менять порядок мысли без явной причины,
-зафиксированной в brief. Допускаются разметка, форматирование,
-заголовки, transitions, пояснения **как дополнение** к авторскому
-тексту, а не вместо него.
-**Почему:** Голос автора — часть продукта. Читатель приходит за
-конкретным голосом, а не за «улучшенной версией». Потеря голоса
-необратима: повторно собрать «как было» по чистовому тексту нельзя.
-**Как проверить:**
-- editor проверяет каждый rich-input unit на сохранение голоса (см.
-  `.claude/rules/content-quality.md`, секция Style and Voice);
-- ревью-чеклист: подряд читаем 1-2 абзаца оригинала и финала, отвечаем
-  «это всё ещё звучит как автор?»;
-- diff против source при редактуре, если source хранится отдельно.
-**История:** <!-- ссылка на конкретный случай, если был; иначе оставить пустым -->
+**Category:** source / voice
+**Rule:** When working with rich input (an author's text, transcript,
+lecture, document) it is forbidden to replace the author's wording with synonyms,
+smooth out repetitions or change the order of thought without an explicit reason
+recorded in the brief. Markup, formatting,
+headings, transitions and explanations are permitted **as a supplement** to the author's
+text, not in place of it.
+**Why:** The author's voice is part of the product. The reader comes for a
+specific voice, not for an "improved version". Loss of voice is
+irreversible: you cannot reassemble "how it was" from the polished text.
+**How to check:**
+- the editor checks every rich-input unit for preservation of voice (see
+  `.claude/rules/content-quality.md`, Style and Voice section);
+- review checklist: read 1-2 paragraphs of the original and the final side by side and answer
+  "does this still sound like the author?";
+- diff against the source when editing, if the source is stored separately.
+**History:** <!-- link to a specific case, if there was one; otherwise leave empty -->
 
 <!--
-Добавляй новые инварианты ниже. Шаблон:
+Add new invariants below. Template:
 
-### INV-NNN: <короткое имя>
+### INV-NNN: <short name>
 
-**Категория:** ...
-**Правило:** <одна фраза, утвердительно>
-**Почему:** <реальный риск для продукта или читателя>
-**Как проверить:** <ревью-чеклист / editor / автоматическая проверка>
-**История:** <случай, который привёл к появлению, если был>
+**Category:** ...
+**Rule:** <one sentence, in the affirmative>
+**Why:** <the real risk to the product or the reader>
+**How to check:** <review checklist / editor / automated check>
+**History:** <the case that led to it, if there was one>
 
-Типичные кандидаты в content-инварианты:
-- Иерархия источников не нарушается: канон бьёт черновик, brief бьёт
+Typical candidates for content invariants:
+- The source hierarchy is not violated: canon beats draft, brief beats
   generated notes.
-- Цитаты, ссылки, имена авторов не выдумываются.
-- Уровень аудитории соблюдается: для beginner — не вводим жаргон без
-  определения, для advanced — не разжёвываем базу.
-- Обязательные разделы формата присутствуют (например, для урока:
+- Quotes, links and authors' names are not invented.
+- The audience level is respected: for beginner — no jargon without a
+  definition, for advanced — no spoon-feeding the basics.
+- The mandatory sections of the format are present (for example, for a lesson:
   objective, prerequisites, example, summary).
-- Внутренние ссылки относительные и рабочие.
-- Provenance сохраняется: где взято важное утверждение.
-- Запрет-лист стилистики из CLAUDE.md соблюдается.
+- Internal links are relative and working.
+- Provenance is preserved: where an important claim was taken from.
+- The style ban list from CLAUDE.md is respected.
 
-Правила хорошего инварианта:
-- Одно правило = один пункт.
-- Формулировка проверяемая в ревью или автоматически.
-- Если не можешь объяснить «почему» — это, скорее всего, стилевое
-  предпочтение, ему место не здесь, а в style guide.
+Rules for a good invariant:
+- One rule = one item.
+- The wording is checkable in review or automatically.
+- If you cannot explain "why", it is most likely a stylistic
+  preference; it belongs in the style guide, not here.
 -->

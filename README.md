@@ -8,63 +8,63 @@
 [![Python](https://img.shields.io/badge/python3-recommended-3776ab?logo=python&logoColor=white)](https://www.python.org/)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-rules%2Bskills%2Bagents%2Bhooks-d97706)](https://www.anthropic.com/claude-code)
 
-`Claude Code Starter` — это готовая управляющая среда для проектов, в которых основной рабочий агент — Claude Code.
+`Claude Code Starter` is a ready-made management environment for projects in which the main working agent is Claude Code.
 
-Он нужен не для генерации приложения, а для того, чтобы быстро добавить в любой проект:
-- понятный `CLAUDE.md` вместо мегадокумента;
-- модульные `rules`, `skills`, `agents`, `hooks`;
-- **двух-осевую проектную память** — контракты (`ARCHITECTURE.md`, `INVARIANTS.md`, `methodology/`) и state (`SNAPSHOT.md`, `BACKLOG.md`, `dialogs/`);
-- **methodology layer** с лестницей зрелости (draft → pattern → mature → crystallized) для пайплайнов с автоматическими LLM-вызовами;
-- **dialog preservation** — JSONL текущей сессии сохраняется в `.claude/dialogs/` до того, как Claude Code сделает retention cleanup;
-- **оркестраторскую модель работы** — владелец остаётся продуктом над производством, агент сам поднимает и координирует воркеров;
-- единый installer для нового, существующего и legacy-проекта;
-- явный контроль над тем, что framework state делает с git-историей.
+It is not meant for generating an application; it is meant for quickly adding to any project:
+- a clear `CLAUDE.md` instead of a mega-document;
+- modular `rules`, `skills`, `agents`, `hooks`;
+- **two-axis project memory** — contracts (`ARCHITECTURE.md`, `INVARIANTS.md`, `methodology/`) and state (`SNAPSHOT.md`, `BACKLOG.md`, `dialogs/`);
+- a **methodology layer** with a maturity ladder (draft → pattern → mature → crystallized) for pipelines with automated LLM calls;
+- **dialog preservation** — the current session's JSONL is saved to `.claude/dialogs/` before Claude Code performs its retention cleanup;
+- an **orchestrator working model** — the owner stays the product above production, while the agent itself spawns and coordinates workers;
+- a single installer for new, existing and legacy projects;
+- explicit control over what framework state does to git history.
 
-**Новое в v6.3.0:** фреймворк переходит на **оркестраторскую модель**. Владелец — продукт/методолог **над** производством: даёт цель, границы полномочий, ревьюит результат и решает на стоп-точках. Агент — **оркестратор и главный девелопер**: сам режет работу на потоки, сам поднимает воркеров (субагенты / изолированные worktree / детерминированные workflows), интегрирует, независимо верифицирует и коммитит — не дёргая владельца на подтверждение каждого шага. Handoff эволюционирует из ручного «моста», который владелец переносил между сессиями, во внутренний **charter**, который оркестратор выдаёт воркерам; непрерывность контекста между сессиями держит **ограниченная двух-осевая память + тонкий указатель**, а не разрастающийся мегафайл. Модель поставляется как переносимый свод правил `orchestration-model.md` (принципы O1–O12), правила `autonomy`/`delegation` эволюционированы под неё, скилл `/handoff` теперь входит в поставку. См. [release-notes/v6.3.0.md](release-notes/v6.3.0.md).
+**What's new in v6.3.0:** the framework moves to the **orchestrator model**. The owner is the product/methodologist **above** production: sets the goal and the limits of authority, reviews the result and decides at stop points. The agent is the **orchestrator and lead developer**: it splits the work into streams itself, spawns workers itself (subagents / isolated worktrees / deterministic workflows), integrates, independently verifies and commits — without pestering the owner to confirm every step. Handoff evolves from a manual "bridge" that the owner carried between sessions into an internal **charter** that the orchestrator hands to workers; context continuity between sessions is held by **bounded two-axis memory + a thin pointer**, not by an ever-growing mega-file. The model ships as the portable rule set `orchestration-model.md` (principles O1–O12), the `autonomy`/`delegation` rules have evolved to match it, and the `/handoff` skill is now part of the distribution. See [release-notes/v6.3.0.md](release-notes/v6.3.0.md).
 
-**Новое в v6.2.1:** `/start` skill переписан — убран кэп «доложи 3-5 строк» (он читался моделью как потолок глубины, а не пол краткости), добавлен обязательный шаг **заземления карты в территорию** (git log + wc + grep против заявлений метафайлов), пометка «карта ≠ территория». В шапке `CLAUDE.md` — новая секция «Назначение этого файла» с **тремя видами ограничений** (действия / внимание / глубина): первые два — нормальны, кэп на глубину — структурный баг. В `validate-release.sh` — запрет на параллельный `ONBOARDING.md` (конституция только в `CLAUDE.md`). См. [release-notes/v6.2.1.md](release-notes/v6.2.1.md).
+**What's new in v6.2.1:** the `/start` skill has been rewritten — the "report in 3-5 lines" cap has been removed (the model read it as a ceiling on depth, not a floor on brevity), a mandatory step of **grounding the map in the territory** has been added (git log + wc + grep against the metafiles' claims), plus a "map ≠ territory" marker. The header of `CLAUDE.md` gets a new "Purpose of this file" section with **three kinds of constraints** (actions / attention / depth): the first two are normal, a cap on depth is a structural bug. `validate-release.sh` now forbids a parallel `ONBOARDING.md` (the constitution lives only in `CLAUDE.md`). See [release-notes/v6.2.1.md](release-notes/v6.2.1.md).
 
-**Новое в v6.2.0:** восстановлены слои памяти `ARCHITECTURE.md` и `BACKLOG.md`, добавлены `INVARIANTS.md` и каталог `methodology/` с лестницей зрелости (draft → pattern → mature → crystallized). Добавлен механизм dialog preservation (`scripts/save-dialogs.sh`, skill `/save-dialog`, авто-сохранение при `/finish`).
+**What's new in v6.2.0:** the `ARCHITECTURE.md` and `BACKLOG.md` memory layers have been restored, and `INVARIANTS.md` and the `methodology/` directory with its maturity ladder (draft → pattern → mature → crystallized) have been added. A dialog preservation mechanism has been added (`scripts/save-dialogs.sh`, the `/save-dialog` skill, auto-save on `/finish`).
 
-**Новое в v6.0–6.1:** автоматическое определение типа проекта (code / content / hybrid). Контентные проекты — книги, курсы, базы знаний, документы, транскрипты — получают свой набор правил, навыков и агентов (writer, editor, content-reviewer). Опциональный глобальный слой `~/.claude/` с `/setup-project` skill. Установка без флагов: `bash init-project.sh` сам поймёт, где находится, и поставит подходящий слой.
+**What's new in v6.0–6.1:** automatic detection of the project type (code / content / hybrid). Content projects — books, courses, knowledge bases, documents, transcripts — get their own set of rules, skills and agents (writer, editor, content-reviewer). An optional global layer `~/.claude/` with the `/setup-project` skill. Installation without flags: `bash init-project.sh` works out where it is and installs the appropriate layer.
 
-## Зачем Это Нужно
+## Why It Is Needed
 
-Обычно при работе с агентом проект быстро расползается:
-- инструкции живут в одном длинном `CLAUDE.md`;
-- правила смешаны с контекстом проекта;
-- старт нового проекта и миграция старого проекта делаются по-разному;
-- агентная память теряется между сессиями;
-- внутренние framework-файлы случайно попадают в shared/public git history.
+When working with an agent, a project usually sprawls quickly:
+- instructions live in one long `CLAUDE.md`;
+- rules are mixed up with project context;
+- starting a new project and migrating an old one are done differently;
+- agent memory is lost between sessions;
+- internal framework files accidentally end up in shared/public git history.
 
-`Claude Code Starter` решает эти проблемы:
-- отделяет проектный паспорт от operational logic;
-- даёт стандартную структуру `.claude/`;
-- добавляет reusable workflows через `skills`;
-- добавляет background guardrails через `hooks`;
-- поддерживает single-file installation;
-- вводит `repo_access`, чтобы память агента не утекала туда, где ей не место.
+`Claude Code Starter` solves these problems:
+- separates the project passport from operational logic;
+- provides a standard `.claude/` structure;
+- adds reusable workflows via `skills`;
+- adds background guardrails via `hooks`;
+- supports single-file installation;
+- introduces `repo_access`, so that the agent's memory does not leak where it does not belong.
 
-## Что Устанавливается В Проект
+## What Gets Installed Into the Project
 
-После установки в хост-проекте появляется такая база:
+After installation the host project has the following base:
 
 ```text
 .claude/
-  rules/                # операционные правила (autonomy, delegation, dialog-preservation, ...)
-                        #   autonomy + delegation несут оркестраторскую модель (v6.3.0+):
-                        #   владелец над производством, агент сам поднимает воркеров
+  rules/                # operational rules (autonomy, delegation, dialog-preservation, ...)
+                        #   autonomy + delegation carry the orchestrator model (v6.3.0+):
+                        #   owner above production, the agent spawns workers itself
   skills/               # /start, /finish, /save-dialog, /testing, ...
-  agents/               # researcher, implementer, reviewer (+ writer/editor для content)
-  hooks/                # фоновые guardrails (pre-compact, post-compact, ...)
-  logs/                 # сессии, миграции, ошибки (gitignored)
-  dialogs/              # архив JSONL сессий (по умолчанию gitignored)
-  SNAPSHOT.md           # state: текущая точка работы
+  agents/               # researcher, implementer, reviewer (+ writer/editor for content)
+  hooks/                # background guardrails (pre-compact, post-compact, ...)
+  logs/                 # sessions, migrations, errors (gitignored)
+  dialogs/              # archive of session JSONL files (gitignored by default)
+  SNAPSHOT.md           # state: the current point of work
   BACKLOG.md            # state: Next / Soon / Later / Won't do
-  ARCHITECTURE.md       # contract: карта системы
-  INVARIANTS.md         # contract: жёсткие правила, нарушение = баг
+  ARCHITECTURE.md       # contract: map of the system
+  INVARIANTS.md         # contract: hard rules, violation = bug
   settings.json
-methodology/            # contract: методологии для пайплайнов
+methodology/            # contract: methodologies for pipelines
   _HOW-THIS-GROWS.md
   templates/            # draft / pattern / mature / crystallized
   draft/ patterns/ mature/
@@ -78,108 +78,108 @@ manifest.md
 .gitignore
 ```
 
-**Двух-осевая память** (см. CLAUDE.md секция «Слои памяти»):
-- **Контракты — что должно быть** (медленно меняется): `ARCHITECTURE.md`, `INVARIANTS.md`, `methodology/`
-- **State — что есть сейчас** (быстро меняется): `SNAPSHOT.md`, `BACKLOG.md`, `dialogs/`
+**Two-axis memory** (see the "Memory layers" section of CLAUDE.md):
+- **Contracts — what should be** (changes slowly): `ARCHITECTURE.md`, `INVARIANTS.md`, `methodology/`
+- **State — what is now** (changes quickly): `SNAPSHOT.md`, `BACKLOG.md`, `dialogs/`
 
-Ключевые файлы:
-- `CLAUDE.md` — паспорт проекта;
+Key files:
+- `CLAUDE.md` — the project passport;
 - `manifest.md` — `project_name`, `repo_access`, `project_type`, `content_type`;
-- `.claude/SNAPSHOT.md` — что в работе прямо сейчас;
-- `.claude/BACKLOG.md` — план: Next / Soon / Later / Won't do;
-- `.claude/ARCHITECTURE.md` — карта модулей, контрактов, зависимостей;
-- `.claude/INVARIANTS.md` — правила, нарушение которых — баг, не предпочтение;
-- `.claude/dialogs/` — архив сессионных JSONL для последующего анализа;
-- `methodology/` — методологии с лестницей зрелости (draft → pattern → mature → crystallized);
-- `.claude/rules/`, `.claude/skills/`, `.claude/agents/`, `.claude/hooks/` — operational слой;
-- `scripts/save-dialogs.sh` — идемпотентное сохранение JSONL сессии;
-- `scripts/switch-repo-access.sh` — безопасное переключение между `private-solo`, `private-shared`, `public`.
+- `.claude/SNAPSHOT.md` — what is being worked on right now;
+- `.claude/BACKLOG.md` — the plan: Next / Soon / Later / Won't do;
+- `.claude/ARCHITECTURE.md` — map of modules, contracts, dependencies;
+- `.claude/INVARIANTS.md` — rules whose violation is a bug, not a preference;
+- `.claude/dialogs/` — archive of session JSONL files for later analysis;
+- `methodology/` — methodologies with a maturity ladder (draft → pattern → mature → crystallized);
+- `.claude/rules/`, `.claude/skills/`, `.claude/agents/`, `.claude/hooks/` — the operational layer;
+- `scripts/save-dialogs.sh` — idempotent saving of the session JSONL;
+- `scripts/switch-repo-access.sh` — safe switching between `private-solo`, `private-shared`, `public`.
 
-## Требования
+## Requirements
 
-Обязательно:
+Required:
 - `bash`
 - `git`
-- Claude Code с поддержкой:
+- Claude Code with support for:
   - `.claude/rules/`
   - `.claude/skills/`
   - `.claude/agents/`
   - `.claude/hooks/`
 
-Рекомендуется:
+Recommended:
 - `python3`
 
-Опционально:
+Optional:
 - `node` / `npm`
 - `pytest`
 - `sqlite3`
 - `psql`
 - `supabase`
 
-`python3` нужен не для bootstrap, а для безопасного merge `settings.json` в migration flow.
+`python3` is not needed for bootstrap, but for a safe merge of `settings.json` in the migration flow.
 
-## Установка
+## Installation
 
-### Вариант 1. Один файл
+### Option 1. A single file
 
-Возьми root installer `init-project.sh`, положи его в корень целевого проекта и запусти:
+Take the root installer `init-project.sh`, put it in the root of the target project and run it:
 
 ```bash
 chmod +x init-project.sh
 ./init-project.sh
 ```
 
-Никаких флагов не нужно. Launcher сам определит:
+No flags are needed. The launcher determines by itself:
 
-**Сценарий установки:**
-- `new` — новый проект;
-- `existing` — существующий без framework;
-- `legacy` — старый framework;
-- `upgrade` — частично установленный.
+**Installation scenario:**
+- `new` — a new project;
+- `existing` — an existing project without the framework;
+- `legacy` — an old framework;
+- `upgrade` — a partially installed one.
 
-**Тип проекта** (по содержимому файлов и папок):
-- `code` — обычный software-проект;
-- `content` — книги, курсы, KB, документы, транскрипты;
-- `hybrid` — и код, и контент.
+**Project type** (from the contents of files and folders):
+- `code` — an ordinary software project;
+- `content` — books, courses, KB, documents, transcripts;
+- `hybrid` — both code and content.
 
-**Тип контента** для контентных проектов:
-- `book` — папки `chapters/`, `briefs/`, `bible/`;
-- `course` — папки `modules/`, `lessons/`;
+**Content type** for content projects:
+- `book` — folders `chapters/`, `briefs/`, `bible/`;
+- `course` — folders `modules/`, `lessons/`;
 - `knowledge-base` — `articles/`, `INDEX.md`;
 - `documents` — `docs/`;
 - `transcripts` — `Section-*/`, `*-Lecture-*`;
-- `mixed` — несколько сразу.
+- `mixed` — several at once.
 
-Если установка затрагивает существующий `CLAUDE.md`, он мержится **аддитивно** через `scripts/lib/merge_claude_md.py` — кастомные секции пользователя сохраняются, фреймворк добавляет только недостающее. При жёстком конфликте установка останавливается и в `.claude/CLAUDE.md.merge-proposal.md` пишется конкретное предложение разрешения.
+If installation touches an existing `CLAUDE.md`, it is merged **additively** via `scripts/lib/merge_claude_md.py` — the user's custom sections are preserved, and the framework adds only what is missing. On a hard conflict the installation stops and a concrete resolution proposal is written to `.claude/CLAUDE.md.merge-proposal.md`.
 
-### Вариант 2. Из локального checkout
+### Option 2. From a local checkout
 
 ```bash
 cd /path/to/your/project
 bash /absolute/path/to/claude-code-starter/init-project.sh
 ```
 
-### Вариант 3. Глобальный слой + skill `/setup-project`
+### Option 3. Global layer + the `/setup-project` skill
 
-Если хочешь, чтобы framework был доступен **в любой папке** без скачивания каждый раз — поставь его в `~/.claude/`:
+If you want the framework to be available **in any folder** without downloading it every time, install it into `~/.claude/`:
 
 ```bash
 bash /path/to/claude-code-starter/scripts/install-global.sh
 ```
 
-Это аддитивно копирует rules / skills / agents в `~/.claude/`, не трогая существующие настройки. Делает backup в `~/.claude/.backup-TIMESTAMP/`. После этого:
+This additively copies rules / skills / agents into `~/.claude/` without touching existing settings. It makes a backup in `~/.claude/.backup-TIMESTAMP/`. After that:
 
 ```bash
 mkdir my-new-project && cd my-new-project
-# Открой Claude Code в этой папке и скажи:
-# /setup-project   — или просто: «новый проект» / «поставь фреймворк»
+# Open Claude Code in this folder and say:
+# /setup-project   — or simply: "new project" / "install the framework"
 ```
 
-Skill `/setup-project` сам найдёт checkout, определит тип проекта и поставит framework. Никакой ручной загрузки `init-project.sh` не требуется.
+The `/setup-project` skill finds the checkout by itself, determines the project type and installs the framework. No manual download of `init-project.sh` is required.
 
-Откат: `bash scripts/install-global.sh --rollback`.
+Rollback: `bash scripts/install-global.sh --rollback`.
 
-### Полезные параметры
+### Useful parameters
 
 ```bash
 ./init-project.sh --name "My Project"
@@ -192,106 +192,106 @@ Skill `/setup-project` сам найдёт checkout, определит тип �
 ./init-project.sh --force
 ```
 
-Поддерживаются:
-- `--name` — имя проекта для свежего bootstrap;
-- `--type code|content|hybrid|auto` — override автодетекта типа проекта;
-- `--content-type book|course|knowledge-base|documents|transcripts|mixed` — override автодетекта типа контента;
-- `--mode init` — принудительный bootstrap;
-- `--mode migrate` — принудительная migration/integration;
-- `--template` — использовать локальный checkout framework вместо download;
-- `--rollback` — восстановить файлы из последнего `.claude/backup-*/` snapshot;
-- `--apply-proposal` — применить предложение из `.claude/CLAUDE.md.merge-proposal.md`;
-- `--force` — перезаписать существующие файлы (для разработчиков фреймворка).
+Supported:
+- `--name` — the project name for a fresh bootstrap;
+- `--type code|content|hybrid|auto` — override project type auto-detection;
+- `--content-type book|course|knowledge-base|documents|transcripts|mixed` — override content type auto-detection;
+- `--mode init` — forced bootstrap;
+- `--mode migrate` — forced migration/integration;
+- `--template` — use a local checkout of the framework instead of a download;
+- `--rollback` — restore files from the latest `.claude/backup-*/` snapshot;
+- `--apply-proposal` — apply the proposal from `.claude/CLAUDE.md.merge-proposal.md`;
+- `--force` — overwrite existing files (for framework developers).
 
-## Что Делать После Установки
+## What to Do After Installation
 
-1. Заполнить `CLAUDE.md` под конкретный проект.
-2. Проверить `manifest.md`.
-3. Если проект shared/public, переключить режим до первого framework commit:
+1. Fill in `CLAUDE.md` for the specific project.
+2. Check `manifest.md`.
+3. If the project is shared/public, switch the mode before the first framework commit:
 
 ```bash
 scripts/switch-repo-access.sh public --commit
 ```
 
-или
+or
 
 ```bash
 scripts/switch-repo-access.sh private-shared --commit
 ```
 
-4. Открыть проект в Claude Code и запустить `/start`.
+4. Open the project in Claude Code and run `/start`.
 
 ## Repo Access
 
-`repo_access` задаётся в `manifest.md`.
+`repo_access` is set in `manifest.md`.
 
-Режимы:
-- `private-solo` — framework files можно хранить в git;
-- `private-shared` — framework files должны оставаться локальными;
-- `public` — framework files должны оставаться локальными.
+Modes:
+- `private-solo` — framework files may be kept in git;
+- `private-shared` — framework files must stay local;
+- `public` — framework files must stay local.
 
-Практический смысл:
-- если репозиторий личный, можно хранить framework state в истории;
-- если репозиторий общий или публичный, память агента не должна попадать в branch history.
+In practical terms:
+- if the repository is personal, framework state may be kept in history;
+- if the repository is shared or public, the agent's memory must not end up in branch history.
 
-Если framework state уже успел попасть в remote history, одного `.gitignore` недостаточно. Для таких случаев и существует `scripts/switch-repo-access.sh`.
+If framework state has already made it into remote history, `.gitignore` alone is not enough. That is exactly what `scripts/switch-repo-access.sh` exists for.
 
-## Как Устроен Этот Репозиторий
+## How This Repository Is Organised
 
-Публичный вход:
-- [init-project.sh](init-project.sh) — единственный installer entrypoint
+Public entry point:
+- [init-project.sh](init-project.sh) — the single installer entrypoint
 
-Внутренний payload:
+Internal payload:
 - [scripts/init-project.sh](scripts/init-project.sh) — bootstrap payload
 - [scripts/migrate.sh](scripts/migrate.sh) — migration payload
-- [scripts/framework-state-mode.sh](scripts/framework-state-mode.sh) — логика `repo_access`
+- [scripts/framework-state-mode.sh](scripts/framework-state-mode.sh) — `repo_access` logic
 - [scripts/switch-repo-access.sh](scripts/switch-repo-access.sh) — safe mode switch
 
-Документация:
-- [CHANGELOG.md](CHANGELOG.md) — история версий и изменений
-- [RELEASING.md](RELEASING.md) — как собирать и публиковать релиз
-- [release-notes/v6.3.0.md](release-notes/v6.3.0.md) — notes для текущего release
-- [release-notes/GITHUB_RELEASE_v6.3.0.md](release-notes/GITHUB_RELEASE_v6.3.0.md) — готовый body для GitHub Release
+Documentation:
+- [CHANGELOG.md](CHANGELOG.md) — history of versions and changes
+- [RELEASING.md](RELEASING.md) — how to build and publish a release
+- [release-notes/v6.3.0.md](release-notes/v6.3.0.md) — notes for the current release
+- [release-notes/GITHUB_RELEASE_v6.3.0.md](release-notes/GITHUB_RELEASE_v6.3.0.md) — ready-made body for the GitHub Release
 
-Архив:
-- [archive/V4_ARCHIVE_NOTE.md](archive/V4_ARCHIVE_NOTE.md) — что именно сохранено от `v4`
-- [archive/v4-working-tree](archive/v4-working-tree) — архивное дерево `v4`
+Archive:
+- [archive/V4_ARCHIVE_NOTE.md](archive/V4_ARCHIVE_NOTE.md) — what exactly has been kept from `v4`
+- [archive/v4-working-tree](archive/v4-working-tree) — the archived `v4` tree
 
-## Ограничения
+## Limitations
 
-1. `switch-repo-access.sh` не переписывает git history.
-2. `migrate.sh` зависит от `python3`, если нужен безопасный merge `.claude/settings.json`.
-3. Standalone installer лучше всего работает через GitHub Release assets.
-4. Hooks здесь — это guardrails, а не абсолютный enforcement layer.
+1. `switch-repo-access.sh` does not rewrite git history.
+2. `migrate.sh` depends on `python3` if a safe merge of `.claude/settings.json` is needed.
+3. The standalone installer works best via GitHub Release assets.
+4. Hooks here are guardrails, not an absolute enforcement layer.
 
-## Быстрые Ссылки
+## Quick Links
 
-- Установить framework: [init-project.sh](init-project.sh)
-- Прочитать историю версий: [CHANGELOG.md](CHANGELOG.md)
-- Собрать release: [RELEASING.md](RELEASING.md)
-- Посмотреть notes текущего релиза: [release-notes/v6.3.0.md](release-notes/v6.3.0.md)
-- Взять текст GitHub Release: [release-notes/GITHUB_RELEASE_v6.3.0.md](release-notes/GITHUB_RELEASE_v6.3.0.md)
+- Install the framework: [init-project.sh](init-project.sh)
+- Read the version history: [CHANGELOG.md](CHANGELOG.md)
+- Build a release: [RELEASING.md](RELEASING.md)
+- View the notes for the current release: [release-notes/v6.3.0.md](release-notes/v6.3.0.md)
+- Take the GitHub Release text: [release-notes/GITHUB_RELEASE_v6.3.0.md](release-notes/GITHUB_RELEASE_v6.3.0.md)
 
-## Эволюция версий
+## Version evolution
 
-| Тема | v5 | v6.0–6.1 | v6.2.0 | v6.2.1 | v6.3.0 |
+| Topic | v5 | v6.0–6.1 | v6.2.0 | v6.2.1 | v6.3.0 |
 |------|----|----|------|--------|--------|
-| Модель работы | агент-менеджер + субагенты | то же | то же | то же | **оркестраторская модель**: владелец над производством, агент сам поднимает воркеров (`orchestration-model.md`, O1–O12) |
-| Роль владельца | даёт ТЗ, сам клеит сессии | то же | то же | то же | продукт/методолог: цель + границы + ревью + стоп-точки; поднятие воркеров и интеграция — у агента |
-| Handoff / континуитет | нет | нет | SNAPSHOT + hooks | то же | `/handoff` в поставке; charter для воркеров; ограниченная память вместо мегафайла |
-| Тип проекта | только code | code / content / hybrid с автодетектом | + явная двух-осевая модель памяти | то же | то же |
-| Слои памяти | `SNAPSHOT.md` (всё в одном) | `SNAPSHOT.md` | `SNAPSHOT.md` + `BACKLOG.md` (state) + `ARCHITECTURE.md` + `INVARIANTS.md` (contracts) | то же | то же |
-| Контентные проекты | нет | книги, курсы, KB, документы, транскрипты | + content-flavored memory layers | то же | то же |
-| Methodology layer | нет | нет | `methodology/` с лестницей зрелости draft → pattern → mature → crystallized | + canonical draft про onboarding-cap | то же |
-| Dialog preservation | TypeScript-стек в v4, выкинут в v5 | нет | bash-скрипт + `/save-dialog` skill + auto-save при `/finish` | то же | то же |
-| `/start` skill | базовый | базовый | читает обе оси памяти | + grounding (git log/wc/grep против метафайлов), масштабируемый доклад, «карта ≠ территория» | то же |
-| `CLAUDE.md` шапка | passport-only | passport-only | + «Слои памяти» | + «Назначение» с тремя видами ограничений (действия / внимание / глубина), кэп глубины запрещён | то же |
-| `CLAUDE.md` при миграции | merge только `settings.json` hooks | полный аддитивный merge секций через Python helper | + документация двух-осевой памяти | то же | то же |
-| Конфликты | overwrite или skip | детектятся, останавливают установку, пишут конкретное предложение | то же | то же | то же |
-| Backup | нет | автоматический `.claude/backup-TIMESTAMP/` | + backup новых memory files | то же | то же |
-| Откат | manual | `init-project.sh --rollback` | + восстанавливает новые memory files | то же | то же |
-| Глобальный слой | нет | опциональный `~/.claude/` через `install-global.sh` | + глобальный `methodology/`, `/save-dialog` skill | то же | + `orchestration-model.md`, `/handoff` skill |
-| Drift guards | нет | нет | нет | `validate-release.sh` проверяет README badge + release-notes link + script headers, запрещает `ONBOARDING.md` | то же |
-| Шаблоны контента | нет | `chapter.md`, `lesson.md`, `transcript.md`, `article.md`, `document.md` | то же | то же | то же |
+| Working model | agent-manager + subagents | same | same | same | **orchestrator model**: owner above production, the agent spawns workers itself (`orchestration-model.md`, O1–O12) |
+| Owner's role | gives the brief, stitches sessions together by hand | same | same | same | product/methodologist: goal + limits + review + stop points; spawning workers and integration belong to the agent |
+| Handoff / continuity | none | none | SNAPSHOT + hooks | same | `/handoff` in the distribution; charter for workers; bounded memory instead of a mega-file |
+| Project type | code only | code / content / hybrid with auto-detection | + explicit two-axis memory model | same | same |
+| Memory layers | `SNAPSHOT.md` (everything in one) | `SNAPSHOT.md` | `SNAPSHOT.md` + `BACKLOG.md` (state) + `ARCHITECTURE.md` + `INVARIANTS.md` (contracts) | same | same |
+| Content projects | none | books, courses, KB, documents, transcripts | + content-flavoured memory layers | same | same |
+| Methodology layer | none | none | `methodology/` with a maturity ladder draft → pattern → mature → crystallized | + canonical draft on the onboarding cap | same |
+| Dialog preservation | TypeScript stack in v4, dropped in v5 | none | bash script + `/save-dialog` skill + auto-save on `/finish` | same | same |
+| `/start` skill | basic | basic | reads both memory axes | + grounding (git log/wc/grep against the metafiles), scalable report, "map ≠ territory" | same |
+| `CLAUDE.md` header | passport-only | passport-only | + "Memory layers" | + "Purpose" with three kinds of constraints (actions / attention / depth), depth cap forbidden | same |
+| `CLAUDE.md` on migration | merge of `settings.json` hooks only | full additive merge of sections via a Python helper | + documentation of two-axis memory | same | same |
+| Conflicts | overwrite or skip | detected, stop the installation, write a concrete proposal | same | same | same |
+| Backup | none | automatic `.claude/backup-TIMESTAMP/` | + backup of the new memory files | same | same |
+| Rollback | manual | `init-project.sh --rollback` | + restores the new memory files | same | same |
+| Global layer | none | optional `~/.claude/` via `install-global.sh` | + global `methodology/`, `/save-dialog` skill | same | + `orchestration-model.md`, `/handoff` skill |
+| Drift guards | none | none | none | `validate-release.sh` checks the README badge + release-notes link + script headers, forbids `ONBOARDING.md` | same |
+| Content templates | none | `chapter.md`, `lesson.md`, `transcript.md`, `article.md`, `document.md` | same | same | same |
 
-Подробности по эволюции версий смотри в [CHANGELOG.md](CHANGELOG.md).
+For details on the evolution of versions, see [CHANGELOG.md](CHANGELOG.md).

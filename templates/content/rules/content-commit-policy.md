@@ -2,45 +2,45 @@
 
 ## Principle
 
-В content-проекте продуктом являются `*.md`, `*.txt`, `*.pdf`, `*.docx`, images, metadata, indexes, bundles и source materials.
+In a content project the product is `*.md`, `*.txt`, `*.pdf`, `*.docx`, images, metadata, indexes, bundles and source materials.
 
-Используй `git add` конкретных файлов. Не используй `git add .` или `git add -A`.
+Use `git add` with specific files. Do not use `git add .` or `git add -A`.
 
 ## Prefixes
 
 | Prefix | Use |
 |--------|-----|
-| `content:` | новый материал, статья, раздел, документ |
-| `edit:` | редактура существующего текста |
-| `chapter:` | глава книги |
-| `lesson:` | урок курса |
+| `content:` | new material, article, section, document |
+| `edit:` | editing existing text |
+| `chapter:` | book chapter |
+| `lesson:` | course lesson |
 | `research:` | sources, research reports, notes |
 | `index:` | INDEX, registry, cross-links, navigation |
 | `meta:` | SNAPSHOT, manifest, project metadata |
-| `format:` | templates, format cleanup, metadata normalization |
-| `pipeline:` | обслуживающие скрипты, extractor, generator, converter |
-| `fix:` | исправление ошибки в коде или контенте |
+| `format:` | templates, format cleanup, metadata normalisation |
+| `pipeline:` | supporting scripts, extractor, generator, converter |
+| `fix:` | fixing a bug in code or content |
 
 ## repo_access Modes
 
 ### public / private-shared
 
-Коммитить продукт:
+Commit the product:
 - publishable content
 - user-facing docs
-- source files (если часть продукта)
+- source files (if part of the product)
 - metadata, indexes, templates
 - production scripts and tests
 
-Не коммитить процесс:
-- `.claude/`, `CLAUDE.md`, `manifest.md` (если framework локальный)
+Do not commit the process:
+- `.claude/`, `CLAUDE.md`, `manifest.md` (if the framework is local)
 - private notes, drafts, scratch, logs
 - raw dumps with sensitive data
 - unpublished author feedback
 
 ### private-solo
 
-Можно коммитить все рабочие материалы, кроме always-forbidden.
+All working materials may be committed, except always-forbidden ones.
 
 ## Always Forbidden
 
@@ -49,23 +49,23 @@
 - `.claude/settings.local.json`
 - local databases with private data
 - `node_modules/`, `.venv/`, `__pycache__/`
-- generated build artifacts (если не deliverable)
-- private tax/legal/medical docs в public/shared repos
+- generated build artifacts (unless a deliverable)
+- private tax/legal/medical docs in public/shared repos
 
 ## Content Atomicity
 
-Коммит должен быть смысловым:
-- одна глава + metadata/index updates
-- один урок + quiz/exercise + index update
-- один research pass + sources/concepts
-- один pipeline change + tests
+A commit should be meaningful as a unit:
+- one chapter + metadata/index updates
+- one lesson + quiz/exercise + index update
+- one research pass + sources/concepts
+- one pipeline change + tests
 
-Если правка content unit требует обновить index, commit включает оба.
+If an edit to a content unit requires an index update, the commit includes both.
 
 ## Before Push
 
-- Нет secrets
-- Нет private source docs в public/shared
-- Indexes обновлены
-- Links не сломаны
-- SNAPSHOT актуален
+- No secrets
+- No private source docs in public/shared
+- Indexes updated
+- Links not broken
+- SNAPSHOT up to date

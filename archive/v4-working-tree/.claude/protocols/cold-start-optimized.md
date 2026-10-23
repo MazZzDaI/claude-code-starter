@@ -5,7 +5,7 @@
 
 **Purpose:** Fast session initialization with background processing.
 
-**Trigger:** User types "start" or "начать"
+**Trigger:** User types "start" or "begin"
 
 **Time:** 15-30 seconds (was 5-6 minutes)
 

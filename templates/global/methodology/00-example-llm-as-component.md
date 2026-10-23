@@ -7,7 +7,7 @@ updated: 2026-06-11
 applies_when:
   - pipeline-design
   - multi-step-llm-chain
-  - "много однотипных решений на шумных данных"
+  - "many decisions of the same kind on noisy data"
   - extraction
   - classification
   - normalization
@@ -15,182 +15,182 @@ applies_when:
   - ranking
   - labeling
 does_not_apply:
-  - one-shot ответ пользователю в интерактивном чате
-  - творческая задача без проверяемого контракта
-  - задача, где «бухгалтерия» естественно вырождена (один элемент на вход)
+  - a one-shot answer to the user in an interactive chat
+  - a creative task with no verifiable contract
+  - a task where the "bookkeeping" is naturally degenerate (a single item as input)
 inputs_required:
-  - сырой шумный набор однотипных элементов
-  - доменные критерии «что входит / не входит / какая гранулярность» (по каждому срезу)
+  - a raw, noisy set of items of the same kind
+  - domain criteria for "what is in / what is out / what granularity" (per slice)
 outputs_produced:
-  - чистый, дедуплицированный, корректно категоризированный набор
-  - явный отчёт о потерях/дроп'ах (что было выброшено и почему)
+  - a clean, deduplicated, correctly categorised set
+  - an explicit report of losses/drops (what was thrown out and why)
 composes_with:
-  - router-pattern        # роутер выбирает срез/категорию для применения этого паттерна
-  - chunking-strategy     # как именно дробить вход
-  - contract-validation   # код, проверяющий полноту/инварианты
+  - router-pattern        # the router selects the slice/category to apply this pattern to
+  - chunking-strategy     # how exactly to split the input
+  - contract-validation   # code that checks completeness/invariants
 related: []
 ---
 
-# Methodology: LLM как ненадёжный компонент конвейера
+# Methodology: The LLM as an unreliable pipeline component
 
-## Концепция
+## Concept
 
-Качество выхода модели — не свойство модели, а функция от того, насколько узко ограничена задача и насколько жёстко формализован контракт вывода. Инженерия не в «попросить сделать хорошо», а в том, чтобы класс ошибок стал структурно невозможен. Сильная рассуждающая модель проектирует и верифицирует пайплайн **офлайн**, а runtime собирается из дешёвых моделей в малых фокусных окнах и детерминированного кода, который ведёт всю бухгалтерию.
+The quality of a model's output is not a property of the model but a function of how narrowly the task is bounded and how rigidly the output contract is formalised. The engineering lies not in "asking it to do a good job" but in making a class of errors structurally impossible. A strong reasoning model designs and verifies the pipeline **offline**, and the runtime is assembled from cheap models in small, focused windows plus deterministic code that does all the bookkeeping.
 
 ## Routing signals
 
-Применять, если выполнены **все** условия:
+Apply if **all** of these conditions hold:
 
-1. Задача — серия однотипных решений (не одно уникальное).
-2. Вход — шумный (есть дубли, опечатки, неточные категории, выбросы).
-3. Существует проверяемый контракт результата (полнота, дедуп, инварианты).
-4. Прямой подход «всё одним промптом в большую модель» уже даёт деградацию (потери, дубли, путаница категорий) — или предсказуемо даст.
+1. The task is a series of decisions of the same kind (not a single unique one).
+2. The input is noisy (duplicates, typos, imprecise categories, outliers).
+3. There is a verifiable contract for the result (completeness, dedup, invariants).
+4. The direct approach of "everything in one prompt to a large model" already degrades (losses, duplicates, confused categories) — or predictably will.
 
-Эксклюзивные сигналы (`does_not_apply`):
+Exclusion signals (`does_not_apply`):
 
-- Интерактивный one-shot ответ пользователю.
-- Творческая задача без контракта.
-- Вырожденная бухгалтерия (один элемент на вход — нечего учитывать).
+- An interactive one-shot answer to the user.
+- A creative task without a contract.
+- Degenerate bookkeeping (a single item as input — nothing to keep track of).
 
-## Декомпозиция (judgment vs bookkeeping)
+## Decomposition (judgment vs bookkeeping)
 
-- **Суждение (LLM):**
-  - релевантно ли?
-  - осмысленно ли?
-  - важно ли?
-  - как назвать / перевести / категоризировать?
+- **Judgement (LLM):**
+  - is it relevant?
+  - is it meaningful?
+  - is it important?
+  - what should it be called / how should it be translated / categorised?
 
-- **Бухгалтерия (код):**
-  - полнота (все ли элементы получили решение)
-  - дедуп по канонической метке
-  - агрегация (суммирование частот, ранги)
-  - сортировка, кэпы, валидация контракта
-  - проекция в финальный формат
+- **Bookkeeping (code):**
+  - completeness (did every item receive a decision)
+  - dedup by canonical label
+  - aggregation (summing frequencies, ranks)
+  - sorting, caps, contract validation
+  - projection into the final format
 
-- **Граница:** модель никогда не ведёт учёт. Если возник соблазн попросить модель «свернуть дубли в уме» или «вернуть только уникальные» — это сигнал, что бухгалтерия утекла в LLM. Верни её в код. Подробнее: [[rules/llm-as-component]].
+- **Boundary:** the model never keeps the accounts. If you are tempted to ask the model to "collapse duplicates in its head" or "return only the unique ones", that is a sign the bookkeeping has leaked into the LLM. Move it back into code. More detail: [[rules/llm-as-component]].
 
-## Prompt skeleton (для executor)
+## Prompt skeleton (for executor)
 
 ```text
-Ты получаешь ОДИН элемент: "{{item}}".
+You receive ONE item: "{{item}}".
 
-Контекст среза: {{slice_description}}
+Slice context: {{slice_description}}
 
-Критерии включения:
+Inclusion criteria:
 {{inclusion_criteria}}
 
-Критерии исключения:
+Exclusion criteria:
 {{exclusion_criteria}}
 
-Пример желаемого поведения:
-вход: "{{example_input}}"
-выход: {{example_output}}
+Example of the desired behaviour:
+input: "{{example_input}}"
+output: {{example_output}}
 
-Верни строго одно из:
-- {"decision": "keep", "canonical_label": "<строка>"}
-- {"decision": "drop", "reason": "<короткая причина>"}
+Return strictly one of:
+- {"decision": "keep", "canonical_label": "<string>"}
+- {"decision": "drop", "reason": "<short reason>"}
 
-НЕ возвращай несколько элементов. НЕ сворачивай дубли — это сделает код.
-НЕ добавляй полей сверх контракта.
+Do NOT return multiple items. Do NOT collapse duplicates — the code will do that.
+Do NOT add fields beyond the contract.
 ```
 
-Ключевые свойства каркаса:
-- решение принимается **по одному элементу** (фокусное окно = 1);
-- контракт ответа делает «потерю элемента» структурно невозможной;
-- запрет лишних полей убирает целый класс сбоев;
-- встроенный пример (example_input/output) — модель следует демонстрации лучше, чем декларации.
+Key properties of the scaffold:
+- the decision is made **one item at a time** (focus window = 1);
+- the response contract makes "losing an item" structurally impossible;
+- forbidding extra fields removes an entire class of failures;
+- the built-in example (example_input/output) — the model follows a demonstration better than a declaration.
 
 ## Anti-patterns
 
-- **«Один большой промпт на весь список»** — модель теряет элементы, выдумывает несуществующие, плодит дубли групп. Корень: перегрузка одновременным суждением и бухгалтерией.
-- **«Верни каждый элемент дословно»** — модель не воспроизводит ≥100 строк точно. Решение: работа по позициям/индексам, либо по одному элементу.
-- **«Верни решение по номеру»** в большом окне — модель «сворачивает дубли в уме» и сбивает соответствие номер↔элемент. Решение: каждый элемент — отдельный вызов.
-- **«Запрети ошибку текстом в инструкции»** — игнорируется. Решение: один конкретный пример желаемого поведения чинит дефект разом.
-- **«Порог по статистике решит всё»** — пороги (частота, длина) грубы и режут важное. Решение: арбитраж хвоста отдаётся суждению, не порогу.
-- **«Сильная модель в рантайме»** — дорого, медленно, не воспроизводимо. Решение: сильная модель проектирует офлайн и выходит, runtime — дешёвая модель + код.
+- **"One big prompt for the whole list"** — the model loses items, invents non-existent ones, multiplies duplicate groups. Root cause: overload from simultaneous judgement and bookkeeping.
+- **"Return every item verbatim"** — the model does not reproduce ≥100 lines accurately. Solution: work by positions/indices, or one item at a time.
+- **"Return the decision by number"** in a large window — the model "collapses duplicates in its head" and breaks the number↔item correspondence. Solution: each item is a separate call.
+- **"Forbid the error in the instruction text"** — gets ignored. Solution: one concrete example of the desired behaviour fixes the defect in one go.
+- **"A statistical threshold will solve everything"** — thresholds (frequency, length) are crude and cut out what matters. Solution: arbitration of the tail is handed to judgement, not to a threshold.
+- **"A strong model at runtime"** — expensive, slow, not reproducible. Solution: the strong model designs offline and steps out; the runtime is a cheap model + code.
 
 ## Composition notes
 
-Эта методология обычно сцепляется так:
+This methodology usually chains like this:
 
 ```
 [router-pattern]
-  выбирает срез/категорию (по чему сейчас идём)
+  selects the slice/category (what we are working through now)
         ↓
 [chunking-strategy]
-  готовит малые фокусные окна (обычно — по одному элементу)
+  prepares small, focused windows (usually one item each)
         ↓
-[llm-as-component] ← ЭТА методология
-  prompt skeleton применяется к каждому элементу независимо
+[llm-as-component] ← THIS methodology
+  the prompt skeleton is applied to each item independently
         ↓
 [contract-validation]
-  код проверяет полноту (все ли элементы получили решение),
-  делает дедуп по canonical_label, агрегирует частоты, валидирует контракт
+  code checks completeness (did every item receive a decision),
+  dedups by canonical_label, aggregates frequencies, validates the contract
         ↓
 [output projection]
-  финальный формат для downstream
+  final format for downstream
 ```
 
-Что эта методология **передаёт дальше**: набор `{decision, canonical_label}` на каждый входной элемент, без агрегаций. Агрегация — забота следующего шага.
+What this methodology **passes on**: a `{decision, canonical_label}` set for each input item, with no aggregation. Aggregation is the next step's concern.
 
-Что она **ожидает от router'а**: уже выбранный срез и подгруженные доменные критерии (inclusion/exclusion) — методология сама их не угадывает.
+What it **expects from the router**: an already selected slice and the loaded domain criteria (inclusion/exclusion) — the methodology does not guess them itself.
 
-## Примеры и trace-ы
+## Examples and traces
 
-**Кейс, из которого выведен принцип (формат: проблема → … → подтверждение):**
+**The case the principle was derived from (format: problem → … → confirmation):**
 
-- **Проблема.** Нужно из сырого шумного множества тегов получить чистый, дедуплицированный, корректно категоризированный набор. Прямой подход «дай умной модели весь список и попроси навести порядок» давал мусор: потерянные элементы, дубли, неверные категории, потерю частот.
+- **Problem.** From a raw, noisy set of tags we needed a clean, deduplicated, correctly categorised set. The direct approach of "give a clever model the whole list and ask it to tidy up" produced rubbish: lost items, duplicates, wrong categories, lost frequencies.
 
-- **Попытки.**
-  1. Один большой промпт на все категории / весь список → потери и выдумки.
-  2. Контракт «верни каждый тег дословно» → 150 строк не воспроизводятся точно.
-  3. Контракт «верни решение по номеру» → сворачивание дублей в уме, рассинхрон номер↔элемент.
+- **Attempts.**
+  1. One big prompt for all categories / the whole list → losses and fabrications.
+  2. A "return every tag verbatim" contract → 150 lines are not reproduced accurately.
+  3. A "return the decision by number" contract → duplicates collapsed in its head, number↔item desync.
 
-- **Поиск причины.** Корень — перегрузка: модель одновременно делала *суждение* (что оставить, куда отнести) и *бухгалтерию* (учёт всех элементов, дедуп, нумерация, частоты). Чем больше вход — тем хуже деградация.
+- **Root-cause search.** The root was overload: the model was simultaneously doing *judgement* (what to keep, where to put it) and *bookkeeping* (tracking all items, dedup, numbering, frequencies). The larger the input, the worse the degradation.
 
-- **Гипотеза.** Оставить модели **только** суждение по одному элементу за раз в малом окне; учёт/дедуп/агрегацию — в детерминированный код. Надёжность вырастет на порядок при той же цене токенов.
+- **Hypothesis.** Leave the model **only** the judgement on one item at a time in a small window; move tracking/dedup/aggregation into deterministic code. Reliability will rise by an order of magnitude at the same token cost.
 
-- **Эксперимент.** Чанки малого размера; независимая разметка каждого элемента (канон либо drop); дедуп и суммирование — в коде по канонической метке; запрет конкретного класса ошибок примером в промпте; критерии — отдельные по каждому срезу. Рассуждающая модель — оценщик в цикле: прогон → чтение результата → правка промпта, 2–3 итерации на срез.
+- **Experiment.** Small chunks; independent labelling of each item (canonical or drop); dedup and summing in code by canonical label; a specific class of error forbidden via an example in the prompt; separate criteria for each slice. The reasoning model acts as the evaluator in the loop: run → read the result → amend the prompt, 2–3 iterations per slice.
 
-- **Подтверждение.** Все срезы: дедуп, корректный скоуп, важное сохранено, рассинхрон ≈ 0. Системные дефекты (потеря частоты на дублях, путаница категорий) устранены **не уговорами модели**, а структурой.
+- **Confirmation.** All slices: dedup, correct scope, what matters preserved, desync ≈ 0. Systemic defects (frequency loss on duplicates, category confusion) were eliminated **not by coaxing the model** but by structure.
 
-## Принципы (домен-независимо)
+## Principles (domain-independent)
 
-1. **Раздели задачу на «суждение» и «бухгалтерию».** Модель — для суждения; код — для учёта. Никогда не проси модель вести учёт: это её слабейшая сторона.
+1. **Split the task into "judgement" and "bookkeeping".** The model is for judgement; code is for tracking. Never ask the model to keep the accounts: it is its weakest side.
 
-2. **Размер задачи = надёжность.** Дроби вход на малые фокусные окна. Большой вход деградирует качество нелинейно. Серия малых вызовов при той же цене токенов даёт качество и скорость на порядок выше одного большого.
+2. **Task size = reliability.** Split the input into small, focused windows. A large input degrades quality non-linearly. A series of small calls at the same token cost yields quality and speed an order of magnitude higher than one big call.
 
-3. **Проектируй контракт так, чтобы класс ошибок был невозможен, а не маловероятен.** Решение по позиции/индексу гарантирует полноту; независимая разметка убирает «сворачивание в уме»; запрет лишнего поля убирает целый тип сбоя.
+3. **Design the contract so that a class of errors is impossible, not merely unlikely.** A decision by position/index guarantees completeness; independent labelling removes "collapsing in its head"; forbidding an extra field removes an entire type of failure.
 
-4. **Пример бьёт правило.** Один конкретный показанный пример желаемого поведения чинит дефект разом.
+4. **An example beats a rule.** One concrete, demonstrated example of the desired behaviour fixes the defect in one go.
 
-5. **Статистика — сигнал, не закон; на хвосте решает суждение.** Редкое, но значимое должно выживать; частое, но пустое — отсекаться.
+5. **Statistics are a signal, not a law; at the tail, judgement decides.** The rare but significant must survive; the frequent but empty must be cut off.
 
-6. **Артефакт — это критерии, а не алгоритм.** Главная ценность — явная, проверяемая формализация доменного суждения (что входит / не входит / какая гранулярность), отдельная по каждому срезу.
+6. **The artefact is the criteria, not the algorithm.** The main value is an explicit, verifiable formalisation of domain judgement (what is in / what is out / what granularity), separate for each slice.
 
-7. **Исходник vs дериватив.** Отделяй неизменный источник от пересобираемого производного. Если результат — дериватив, итерируй смело: страх «сломать данные» уходит.
+7. **Source vs derivative.** Separate the immutable source from the rebuildable derivative. If the result is a derivative, iterate boldly: the fear of "breaking the data" goes away.
 
-## Архитектура (паттерн ролей)
+## Architecture (role pattern)
 
-**Сильная рассуждающая модель — офлайн-проектировщик и оценщик, НЕ runtime-исполнитель.**
+**The strong reasoning model is the offline designer and evaluator, NOT the runtime executor.**
 
 ```
-[Сильная модель / reasoning]  — ОФЛАЙН, в цикле обратной связи:
-   проектирует декомпозицию (суждение↔код),
-   пишет критерии и контракт,
-   гоняет дешёвого исполнителя, читает выход, правит — до стабильности,
-   затем ВЫХОДИТ из конвейера.
-        │  (оставляет: критерии + контракт + код-обвязку)
+[Strong model / reasoning]  — OFFLINE, in a feedback loop:
+   designs the decomposition (judgement↔code),
+   writes the criteria and the contract,
+   runs the cheap executor, reads the output, amends — until stable,
+   then STEPS OUT of the pipeline.
+        │  (leaves behind: criteria + contract + code harness)
         ▼
-[Дешёвая модель]  — RUNTIME: повторяемо делает узкое суждение в малом окне.
+[Cheap model]  — RUNTIME: repeatably makes a narrow judgement in a small window.
         │
         ▼
-[Детерминированный код]  — RUNTIME: учёт, дедуп, агрегация, валидация, проекция.
+[Deterministic code]  — RUNTIME: tracking, dedup, aggregation, validation, projection.
 ```
 
-Правила паттерна:
-- Сильной модели не должно быть *внутри* рантайма. Её задача — построить систему из дешёвых надёжных шагов и уметь её верифицировать, а потом отойти.
-- Каждый рантайм-шаг должен быть проверяем кодом (полнота, инварианты), а не «на веру».
-- Ценность сильной модели — не в том, чтобы делать работу, а в том, чтобы спроектировать и верифицировать систему, которая делает работу без неё.
+Rules of the pattern:
+- The strong model must not be *inside* the runtime. Its job is to build a system out of cheap, reliable steps and to be able to verify it, and then to step aside.
+- Every runtime step must be verifiable by code (completeness, invariants), not taken "on trust".
+- The strong model's value lies not in doing the work but in designing and verifying a system that does the work without it.
 
-**Тест применимости:** если задача — «много однотипных решений на шумных данных», она почти наверняка раскладывается по этому паттерну. Спроси: где здесь суждение (→ дешёвая модель, малое окно), где бухгалтерия (→ код), какой контракт делает ошибку невозможной, и какие критерии по каждому срезу нужно сформулировать офлайн.
+**Applicability test:** if the task is "many decisions of the same kind on noisy data", it almost certainly decomposes along this pattern. Ask: where is the judgement here (→ cheap model, small window), where is the bookkeeping (→ code), what contract makes the error impossible, and which criteria for each slice need to be formulated offline.

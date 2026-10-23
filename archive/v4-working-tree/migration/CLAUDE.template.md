@@ -5,10 +5,10 @@
 
 ## Triggers
 
-**"start", "начать":**
+**"start", "begin":**
 → Execute Cold Start Protocol
 
-**"заверши", "завершить", "finish", "done":**
+**"wrap up", "finish up", "finish", "done":**
 → Execute Completion Protocol
 
 ---
