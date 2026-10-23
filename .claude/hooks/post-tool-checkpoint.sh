@@ -1,14 +1,14 @@
 #!/bin/bash
 # Post-Tool-Use Checkpoint
-# Запускается после каждого tool call.
-# Считает вызовы. Каждые 20 — проверяет незакоммиченные изменения.
-# Лёгкий: если порог не достигнут — выход за <10ms.
+# Runs after every tool call.
+# Counts calls. Every 20 calls it checks for uncommitted changes.
+# Lightweight: if the threshold has not been reached, it exits in <10ms.
 
 PROJECT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 COUNTER_FILE="$PROJECT_DIR/.claude/.tool-counter"
 CHECKPOINT_INTERVAL=20
 
-# Инкремент счётчика (атомарно через файл в проекте, не /tmp)
+# Increment the counter (atomically via a file in the project, not /tmp)
 if [ -f "$COUNTER_FILE" ]; then
     COUNT=$(cat "$COUNTER_FILE" 2>/dev/null || echo "0")
     COUNT=$((COUNT + 1))
@@ -18,14 +18,14 @@ else
 fi
 echo "$COUNT" > "$COUNTER_FILE"
 
-# Проверка порога
+# Threshold check
 if [ $((COUNT % CHECKPOINT_INTERVAL)) -ne 0 ]; then
     exit 0
 fi
 
 # === Checkpoint reached ===
 
-# Проверить git только если это git-репо
+# Check git only if this is a git repo
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
     exit 0
 fi

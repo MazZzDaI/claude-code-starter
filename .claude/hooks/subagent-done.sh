@@ -1,9 +1,9 @@
 #!/bin/bash
 # Subagent Done Hook
-# Запускается автоматически после завершения любого субагента.
-# Это НАПОМИНАНИЕ, не команда. Логика в rules/delegation.md.
+# Runs automatically after any subagent finishes.
+# This is a REMINDER, not a command. The logic lives in rules/delegation.md.
 
-# Guard: если не git-репо — не проверять
+# Guard: if this is not a git repo, do not check
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
     exit 0
 fi

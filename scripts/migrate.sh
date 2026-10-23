@@ -4,25 +4,25 @@
 # Version: 6.3.0 (additive migration; backs up new memory layers too)
 #
 # Internal migration used by the public root launcher.
-# Аддитивная интеграция framework в существующий проект.
+# Additive integration of the framework into an existing project.
 #
-# Принцип: НИЧЕГО НЕ ТРОГАТЬ, ТОЛЬКО ДОБАВЛЯТЬ.
-# - Существующий код, документация, метафайлы остаются как есть
-# - Добавляются только отсутствующие framework files (rules/skills/agents/hooks)
-# - CLAUDE.md merge'ится аддитивно через scripts/lib/merge_claude_md.py
-# - При hard conflict — стоп + конкретное предложение в .claude/CLAUDE.md.merge-proposal.md
-# - Backup всегда создаётся перед любыми изменениями
-# - Rollback восстанавливает последний backup
+# Principle: TOUCH NOTHING, ONLY ADD.
+# - Existing code, documentation and meta-files stay as they are
+# - Only missing framework files are added (rules/skills/agents/hooks)
+# - CLAUDE.md is merged additively via scripts/lib/merge_claude_md.py
+# - On a hard conflict — stop + a concrete proposal in .claude/CLAUDE.md.merge-proposal.md
+# - A backup is always created before any changes
+# - Rollback restores the latest backup
 #
-# Использование:
-#   bash migrate.sh                                # Авто-определение типа
+# Usage:
+#   bash migrate.sh                                # Auto-detect the type
 #   bash migrate.sh --name "My Project"
 #   bash migrate.sh --type code|content|hybrid|auto
 #   bash migrate.sh --content-type book|course|knowledge-base|documents|transcripts|mixed
 #   bash migrate.sh --template /path/to/framework
-#   bash migrate.sh --rollback                     # Восстановить из последнего backup
-#   bash migrate.sh --apply-proposal               # Применить CLAUDE.md merge proposal
-#   bash migrate.sh --force                        # Перезаписать существующее
+#   bash migrate.sh --rollback                     # Restore from the latest backup
+#   bash migrate.sh --apply-proposal               # Apply the CLAUDE.md merge proposal
+#   bash migrate.sh --force                        # Overwrite existing files
 #
 
 set -e
@@ -32,7 +32,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TEMPLATE_DIR="${SCRIPT_DIR}/.."
 PROJECT_DIR="$(pwd)"
 
-# Подключаем общую библиотеку.
+# Load the shared library.
 # shellcheck source=lib/install_common.sh
 source "$SCRIPT_DIR/lib/install_common.sh"
 
@@ -74,7 +74,7 @@ fi
 # Migration logging
 # ============================================================================
 
-# Пишет JSON-лог миграции в .claude/logs/migrations/.
+# Writes a JSON migration log to .claude/logs/migrations/.
 write_migration_log() {
     local end_ts
     end_ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -88,7 +88,7 @@ write_migration_log() {
         -not -path './.claude/*' 2>/dev/null | wc -l | tr -d ' ')
 
     local claude_enriched="false"
-    grep -q "Операционный режим" "CLAUDE.md" 2>/dev/null && claude_enriched="true"
+    grep -qE "Operating mode|Операционный режим" "CLAUDE.md" 2>/dev/null && claude_enriched="true"
 
     cat > "$log_file" <<LOGEOF
 {
@@ -137,14 +137,14 @@ case "$MODE" in
         analyze_existing_project
         echo ""
 
-        # Project type detection (если auto)
+        # Project type detection (if auto)
         if [ "$PROJECT_TYPE" = "auto" ]; then
             log_info "Detecting project type..."
             PROJECT_TYPE=$(detect_project_type)
             log_info "Detected project type: $PROJECT_TYPE"
         fi
 
-        # Content type detection (если применимо)
+        # Content type detection (if applicable)
         if [ "$PROJECT_TYPE" = "content" ] || [ "$PROJECT_TYPE" = "hybrid" ]; then
             if [ -z "$CONTENT_TYPE" ]; then
                 CONTENT_TYPE=$(detect_content_type)
@@ -152,16 +152,16 @@ case "$MODE" in
             fi
         fi
 
-        # Unknown → fallback на code (безопасный выбор для существующего кодового проекта)
+        # Unknown → fall back to code (the safe choice for an existing code project)
         if [ "$PROJECT_TYPE" = "unknown" ]; then
             log_warning "Could not detect project type. Defaulting to 'code'. Use --type to override."
             PROJECT_TYPE="code"
         fi
 
-        # Backup до любых изменений
+        # Backup before any changes
         backup_existing
 
-        # Установка (аддитивно — все функции используют copy_if_missing внутри)
+        # Installation (additive — every function uses copy_if_missing internally)
         install_common
 
         case "$PROJECT_TYPE" in
@@ -180,13 +180,13 @@ case "$MODE" in
                 ;;
         esac
 
-        # CLAUDE.md merge — с детекцией конфликтов
+        # CLAUDE.md merge — with conflict detection
         merge_claude_md "CLAUDE.md" "$(claude_md_template_for_type)"
 
-        # Manifest (с расширенными полями)
+        # Manifest (with extended fields)
         generate_manifest
 
-        # Git init не делаем в migrate — у существующего проекта уже есть свой git
+        # No git init in migrate — an existing project already has its own git
 
         # Migration log
         write_migration_log

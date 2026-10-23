@@ -1,7 +1,7 @@
 #!/bin/bash
 # Post-Compaction Recovery Hook
-# Вызывается автоматически после compaction контекста.
-# Выводит содержимое SNAPSHOT и последние коммиты, чтобы агент восстановил контекст.
+# Invoked automatically after context compaction.
+# Prints the SNAPSHOT contents and recent commits so that the agent can restore context.
 
 PROJECT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 SNAPSHOT="$PROJECT_DIR/.claude/SNAPSHOT.md"
@@ -13,7 +13,7 @@ echo "  CONTEXT COMPACTED — RECOVERY MODE"
 echo "═══════════════════════════════════════"
 echo ""
 
-# 1. Вывести SNAPSHOT (агент увидит это в stdout)
+# 1. Print SNAPSHOT (the agent will see this on stdout)
 if [ -f "$SNAPSHOT" ]; then
     echo "── SNAPSHOT.md ──"
     cat "$SNAPSHOT"
@@ -25,14 +25,14 @@ fi
 
 echo ""
 
-# 2. Последние коммиты
+# 2. Recent commits
 echo "── Recent commits ──"
 git log --oneline -15 2>/dev/null || echo "(not a git repo)"
 echo "── end commits ──"
 
 echo ""
 
-# 3. Текущий git status
+# 3. Current git status
 DIRTY=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
 if [ "$DIRTY" -gt 0 ]; then
     echo "⚠ $DIRTY uncommitted files:"

@@ -81,7 +81,7 @@ class TestParser(unittest.TestCase):
 class TestNormalization(unittest.TestCase):
     def test_normalize_title_strips_emoji_and_format(self):
         self.assertEqual(mm.normalize_title("## **Bold** Title"), "bold title")
-        self.assertEqual(mm.normalize_title("Архитектура"), "архитектура")
+        self.assertEqual(mm.normalize_title("Architecture"), "architecture")
         self.assertEqual(mm.normalize_title("Workflow!"), "workflow")
 
     def test_similarity_identical(self):
@@ -162,10 +162,10 @@ class TestMergeFiles(unittest.TestCase):
         self.assertGreater(custom_pos, new_pos)
 
     def test_hard_conflict_detected(self):
-        existing = "# T\n\n## Архитектура\n\nThis project is a code repository with src/, lib/, tests/.\n"
-        template = "# T\n\n## Архитектура\n\nKnowledge tree: book/, chapters/, fragments/.\n"
+        existing = "# T\n\n## Architecture\n\nThis project is a code repository with src/, lib/, tests/.\n"
+        template = "# T\n\n## Architecture\n\nKnowledge tree: book/, chapters/, fragments/.\n"
         _, conflicts = mm.merge_files(existing, template)
-        self.assertTrue(any("Архитектура" in c for c in conflicts))
+        self.assertTrue(any("Architecture" in c for c in conflicts))
 
     def test_list_sections_merged(self):
         existing = "# T\n\n## Tools\n\n- vim\n- git\n"
@@ -189,13 +189,13 @@ class TestMergeFiles(unittest.TestCase):
         # Real-world case: existing has user-filled content; template has
         # only placeholders. Must not be treated as a conflict.
         existing = (
-            "# Project\n\n## Назначение\n\n"
+            "# Project\n\n## Purpose\n\n"
             "Content production engine. Input: brief. Output: markdown bundle.\n"
         )
         template = (
-            "# Project\n\n## Назначение\n\n"
+            "# Project\n\n## Purpose\n\n"
             "{{PROJECT_PURPOSE}}\n\n"
-            "**Тип контента:** {{CONTENT_TYPE}}\n"
+            "**Content type:** {{CONTENT_TYPE}}\n"
         )
         merged, conflicts = mm.merge_files(existing, template)
         self.assertEqual(conflicts, [], msg=f"unexpected conflicts: {conflicts}")
@@ -236,14 +236,14 @@ class TestCLI(unittest.TestCase):
             os.unlink(t)
 
     def test_cli_check_conflict(self):
-        e = write_tmp("# T\n\n## Архитектура\n\ncode project src/ lib/ tests/\n")
+        e = write_tmp("# T\n\n## Architecture\n\ncode project src/ lib/ tests/\n")
         t = write_tmp(
-            "# T\n\n## Архитектура\n\nknowledge tree book/ chapters/ fragments/\n"
+            "# T\n\n## Architecture\n\nknowledge tree book/ chapters/ fragments/\n"
         )
         try:
             r = run_cli("check", e, t)
             self.assertEqual(r.returncode, 2)
-            self.assertIn("Архитектура", r.stderr)
+            self.assertIn("Architecture", r.stderr)
         finally:
             os.unlink(e)
             os.unlink(t)

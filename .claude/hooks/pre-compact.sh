@@ -1,17 +1,17 @@
 #!/bin/bash
 # Pre-Compaction Hook
-# Вызывается автоматически перед compaction контекста.
-# Коммитит tracked изменения и обновляет timestamp в SNAPSHOT.
-# НЕ обновляет содержательные секции SNAPSHOT — это ответственность агента.
+# Invoked automatically before context compaction.
+# Commits tracked changes and updates the timestamp in SNAPSHOT.
+# Does NOT update the substantive sections of SNAPSHOT — that is the agent's responsibility.
 
-# НЕ используем set -e — скрипт должен выполняться до конца даже при ошибках
+# We do NOT use set -e — the script must run to the end even on errors
 
 PROJECT_DIR="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 SNAPSHOT="$PROJECT_DIR/.claude/SNAPSHOT.md"
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 STATE_HELPER="$PROJECT_DIR/scripts/framework-state-mode.sh"
 
-# Guard: если не git-репо — просто выйти, нечего сохранять через git
+# Guard: if this is not a git repo, just exit — there is nothing to save via git
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
     echo "pre-compact: not a git repo, skipping"
     exit 0
@@ -27,20 +27,22 @@ if [ -x "$STATE_HELPER" ]; then
     fi
 fi
 
-# 1. Коммит изменений в уже отслеживаемых файлах (git add -u).
-#    Untracked файлы НЕ добавляются автоматически — это осознанное решение:
-#    слепое git add . в хуке может захватить секреты, артефакты сборки и т.д.
-#    Агент должен добавлять новые файлы осознанно в рабочем процессе.
+# 1. Commit changes in already-tracked files (git add -u).
+#    Untracked files are NOT added automatically — this is a deliberate decision:
+#    a blind git add . in a hook could capture secrets, build artefacts, etc.
+#    The agent must add new files deliberately as part of its workflow.
 if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
     git add -u
-    # Inline git config на случай если у пользователя не настроен user.name/email
+    # Inline git config in case the user has not configured user.name/email
     git -c user.name="Claude" -c user.email="claude@local" \
         commit -m "auto: pre-compaction save ($TIMESTAMP)" 2>/dev/null || true
 fi
 
-# 2. Обновить timestamp в SNAPSHOT (файл всегда обновляется локально)
+# 2. Update the timestamp in SNAPSHOT (the file is always updated locally).
+# Matches both the current English label and the legacy Russian one, so that
+# already-installed projects keep working; always writes the English label.
 if [ -f "$SNAPSHOT" ]; then
-    sed -i.bak "s/\*\*Последнее обновление:\*\*.*/\*\*Последнее обновление:\*\* $TIMESTAMP (pre-compaction)/" "$SNAPSHOT" 2>/dev/null || true
+    sed -i.bak -E "s/\*\*(Last [Uu]pdated|Последнее обновление):\*\*.*/**Last updated:** $TIMESTAMP (pre-compaction)/" "$SNAPSHOT" 2>/dev/null || true
     rm -f "$SNAPSHOT.bak"
 
     if [ -x "$STATE_HELPER" ] && [ "$("$STATE_HELPER" should-commit-framework-state)" = "false" ]; then

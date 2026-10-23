@@ -1,83 +1,83 @@
 # {{PROJECT_NAME}}
 
-## Назначение
+## Purpose
 
 {{PROJECT_PURPOSE}}
 
-**Тип контента:** {{CONTENT_TYPE}}
-**Основной продукт:** тексты / курс / книга / база знаний / документы / транскрипты / гибрид
-**Код в проекте:** отсутствует / обслуживающий pipeline / равноправный слой
+**Content type:** {{CONTENT_TYPE}}
+**Main product:** texts / course / book / knowledge base / documents / transcripts / hybrid
+**Code in the project:** none / supporting pipeline / equal layer
 
-## Назначение этого файла
+## Purpose of this file
 
-Дать тебе **адекватную модель проекта**: правильную по структуре, заземлённую в источники и существующий контент, знающую свои границы. И защитить проект, пока эта модель строится.
+To give you an **adequate model of the project**: correct in structure, grounded in the sources and the existing content, aware of its own limits. And to protect the project while that model is being built.
 
-Ограничения в этом файле и связанных правилах — намеренно **трёх разных видов**:
+The constraints in this file and the related rules are deliberately of **three different kinds**:
 
-| Вид | Где живут | Как трактовать |
+| Kind | Where they live | How to treat them |
 |-----|-----------|---------------|
-| На действия | `INVARIANTS.md`, иерархия источников, запреты по голосу | **жёстко** — нарушение = баг |
-| На внимание | порядок чтения, навигация, две оси памяти | **полезно** — структура делает глубину достижимой |
-| На глубину понимания и объём доклада | — | **нет** — глубина диктуется запросом, не форматом |
+| On actions | `INVARIANTS.md`, source hierarchy, voice prohibitions | **strictly** — a violation = a bug |
+| On attention | reading order, navigation, the two memory axes | **helpful** — structure makes depth achievable |
+| On depth of understanding and length of report | — | **none** — depth is dictated by the request, not by the format |
 
-Кэпы на понимание (типа «доложи 3–5 строк») режут адекватность представления и являются багом протокола, а не нормой.
+Caps on understanding (such as "report in 3–5 lines") cut down the adequacy of the representation and are a protocol bug, not the norm.
 
-## Целевая аудитория
+## Target audience
 
 {{TARGET_AUDIENCE}}
 
-Опиши:
-- кто читатель/пользователь;
-- уровень: beginner / intermediate / advanced / mixed;
-- что читатель должен понять/решить/уметь;
-- какие знания нельзя предполагать.
+Describe:
+- who the reader/user is;
+- level: beginner / intermediate / advanced / mixed;
+- what the reader should understand/decide/be able to do;
+- what knowledge must not be assumed.
 
-## Структура контента
+## Content structure
 
-Точка входа: `{{ENTRYPOINT_FILE}}`
+Entry point: `{{ENTRYPOINT_FILE}}`
 
 ```text
 {{CONTENT_TREE}}
 ```
 
-**Правило навигации:**
-1. Начинай с точки входа.
-2. Читай индексы разделов (registry, arc, syllabus, map).
-3. Только потом открывай конкретные content units.
-4. Не делай выводы по файлу без проверки его места в структуре.
+**Navigation rule:**
+1. Start from the entry point.
+2. Read the section indexes (registry, arc, syllabus, map).
+3. Only then open specific content units.
+4. Do not draw conclusions from a file without checking its place in the structure.
 
-## Иерархия источников
+## Source hierarchy
 
-При конфликте доверяй в порядке:
+In a conflict, trust in this order:
 
-1. `{{SOURCE_LEVEL_1}}` — первичный источник истины.
+1. `{{SOURCE_LEVEL_1}}` — the primary source of truth.
 2. `{{SOURCE_LEVEL_2}}` — canon, bible, style guide, specs.
-3. `{{SOURCE_LEVEL_3}}` — briefs, задачи, рабочие документы.
-4. `{{SOURCE_LEVEL_4}}` — черновики, notes, generated artifacts.
+3. `{{SOURCE_LEVEL_3}}` — briefs, tasks, working documents.
+4. `{{SOURCE_LEVEL_4}}` — drafts, notes, generated artifacts.
 
-**Правило:** не придумывай факты, цитаты, ссылки, термины или намерения автора. Дефицит или эскалация.
+**Rule:** do not invent facts, quotations, references, terms or the author's intentions. Deficit or escalation.
 
-## Стиль и голос
+## Style and voice
 
-Основной style guide: `{{STYLE_GUIDE_FILE}}`
+Main style guide: `{{STYLE_GUIDE_FILE}}`
 
-Правила:
-- сохраняй авторский голос с богатым входом;
-- объясняй термины на уровне аудитории;
-- не вводи новые термины без нужды;
-- не меняй жанр без запроса;
-- не удаляй авторский материал без разрешения.
+Rules:
+- preserve the author's voice when the input is rich;
+- explain terms at the audience's level;
+- do not introduce new terms without need;
+- do not change the genre without a request;
+- do not remove the author's material without permission.
 
-Запрет-лист:
+Forbidden list:
 - `{{FORBIDDEN_PATTERN_1}}`
 - `{{FORBIDDEN_PATTERN_2}}`
 
-**Универсальные запреты (всегда):**
-- Не убирать авторский контент из rich input
-- Не менять голос/стиль без явного разрешения
-- Не нарушать иерархию источников
-- Не добавлять выдуманные факты, цитаты, ссылки
-- Не игнорировать audience level
+**Universal prohibitions (always):**
+- Do not remove the author's content from rich input
+- Do not change the voice/style without explicit permission
+- Do not violate the source hierarchy
+- Do not add invented facts, quotations or references
+- Do not ignore the audience level
 
 ## Workflow
 
@@ -87,103 +87,103 @@ Intake → Research → Outline → Write → Enrich → Review → Export/Index
 
 ### Intake
 
-Определи режим:
+Determine the mode:
 
-- **Rich input:** авторский текст, транскрипт, документ, глава, лекция. Задача — сохранить мысль, структуру, голос; допускаются разметка, форматирование, пояснения, редактура.
-- **Sparse input:** тема или краткий бриф. Задача — исследовать, структурировать, создать с нуля.
+- **Rich input:** the author's text, a transcript, a document, a chapter, a lecture. The task is to preserve the thought, structure and voice; mark-up, formatting, explanations and editing are allowed.
+- **Sparse input:** a topic or a short brief. The task is to research, structure and create from scratch.
 
-Зафиксируй:
+Record:
 ```text
-Режим: rich / sparse / mixed
-Тип выхода: book / course / knowledge-base / docs / transcripts / report / hybrid
-Аудитория: beginner / intermediate / advanced / mixed
-Источники: full / partial / weak
-Ограничения: ...
-Дефициты: ...
+Mode: rich / sparse / mixed
+Output type: book / course / knowledge-base / docs / transcripts / report / hybrid
+Audience: beginner / intermediate / advanced / mixed
+Sources: full / partial / weak
+Constraints: ...
+Deficits: ...
 ```
 
-## Форматы файлов
+## File formats
 
-Используй:
+Use:
 - `templates/`
 - `.claude/rules/content-formats.md`
-- существующие файлы проекта
+- the project's existing files
 
-Базовые content unit форматы:
-- глава: `chapters/NN-slug.md`
-- урок: `modules/NN-name/lesson-NN.md`
-- транскрипт: `Section-NN/NN-Lecture-Title.md`
-- документ: `docs/topic-name.md`
+Basic content unit formats:
+- chapter: `chapters/NN-slug.md`
+- lesson: `modules/NN-name/lesson-NN.md`
+- transcript: `Section-NN/NN-Lecture-Title.md`
+- document: `docs/topic-name.md`
 - registry/index: `INDEX.md`, `00-course-index.md`, `course-registry.md`
-- metadata: `meta.yaml` или frontmatter
+- metadata: `meta.yaml` or frontmatter
 
-## Review и качество
+## Review and quality
 
 Checklist:
-- соответствует задаче и аудитории;
-- сохраняет источник и голос;
-- нет фактических ошибок;
-- нет потери обязательных тем;
-- структура понятна;
-- ссылки работают;
-- формат соответствует шаблону.
+- fits the task and the audience;
+- preserves the source and the voice;
+- no factual errors;
+- no required topics lost;
+- the structure is clear;
+- links work;
+- the format matches the template.
 
 Severity:
-- Critical — блокирует публикацию.
-- Major — исправить до финала.
+- Critical — blocks publication.
+- Major — fix before the final version.
 - Minor — backlog.
 
-## Слои памяти
+## Memory layers
 
-Память проекта живёт на **двух осях**. Не схлопывай их в один файл.
+The project's memory lives on **two axes**. Do not collapse them into one file.
 
-**Ось 1. Контракты — что должно быть (медленно меняется):**
+**Axis 1. Contracts — what should be (changes slowly):**
 
-| Файл | Что хранит |
+| File | What it holds |
 |------|-----------|
-| `.claude/ARCHITECTURE.md` | Карта проекта: chapters/lessons/sections, нарратив, иерархия источников, навигация |
-| `.claude/INVARIANTS.md` | Жёсткие правила продукта: сохранение голоса, иерархия источников, audience level |
-| `methodology/` | Методологии (например, для пайплайнов обработки транскриптов или research) |
+| `.claude/ARCHITECTURE.md` | Project map: chapters/lessons/sections, narrative, source hierarchy, navigation |
+| `.claude/INVARIANTS.md` | Hard product rules: voice preservation, source hierarchy, audience level |
+| `methodology/` | Methodologies (for example, for transcript-processing or research pipelines) |
 
-**Ось 2. State — что есть сейчас (быстро меняется):**
+**Axis 2. State — what is now (changes quickly):**
 
-| Файл | Что хранит |
+| File | What it holds |
 |------|-----------|
-| `.claude/SNAPSHOT.md` | Текущая фаза, готовность content units, дефициты, pending review |
-| `.claude/BACKLOG.md` | План: главы/уроки/research/enrichment — Next / Soon / Later / Won't do |
-| `.claude/dialogs/` | Архив сессионных диалогов (см. `rules/dialog-preservation.md`) |
+| `.claude/SNAPSHOT.md` | Current phase, readiness of content units, deficits, pending review |
+| `.claude/BACKLOG.md` | Plan: chapters/lessons/research/enrichment — Next / Soon / Later / Won't do |
+| `.claude/dialogs/` | Archive of session dialogs (see `rules/dialog-preservation.md`) |
 
-При старте сессии читай **обе оси**. При завершении — обновляй обе.
+At session start read **both axes**. At the end — update both.
 
-## Подсистемы
+## Subsystems
 
-| Слой | Путь | Назначение |
+| Layer | Path | Purpose |
 |------|------|------------|
-| Правила | `.claude/rules/` | workflow, quality, sources, formats, commits, dialog-preservation |
-| Навыки | `.claude/skills/` | research, outline, write, review, enrich, index, save-dialog |
-| Агенты | `.claude/agents/` | researcher, writer, editor, reviewer |
-| Хуки | `.claude/hooks/` | checkpoints, compaction, reminders |
-| Методологии | `methodology/` | Спецификации для контент-пайплайнов |
-| Метаданные | `manifest.md` | project_name, repo_access, project_type, content_type |
+| Rules | `.claude/rules/` | workflow, quality, sources, formats, commits, dialog-preservation |
+| Skills | `.claude/skills/` | research, outline, write, review, enrich, index, save-dialog |
+| Agents | `.claude/agents/` | researcher, writer, editor, reviewer |
+| Hooks | `.claude/hooks/` | checkpoints, compaction, reminders |
+| Methodologies | `methodology/` | Specifications for content pipelines |
+| Metadata | `manifest.md` | project_name, repo_access, project_type, content_type |
 
-## Агенты
+## Agents
 
-- `researcher` — исследует источники, строит source map, выделяет concepts, gaps.
-- `writer` — пишет/адаптирует content units по brief, structure, style guide.
-- `editor` — проверяет голос, стиль, термины, формат, readability.
-- `reviewer` — release review: полнота, ссылки, sources, contract.
+- `researcher` — researches sources, builds a source map, identifies concepts and gaps.
+- `writer` — writes/adapts content units to the brief, structure and style guide.
+- `editor` — checks voice, style, terms, format and readability.
+- `reviewer` — release review: completeness, links, sources, contract.
 
-## Коммиты
+## Commits
 
-В content-проекте продуктом являются content files. Префиксы:
+In a content project, the product is the content files. Prefixes:
 
-- `content:` — новый контент;
-- `edit:` — редактура;
-- `chapter:` — глава книги;
-- `lesson:` — урок курса;
-- `research:` — источники, notes;
-- `index:` — индексы, registry, навигация;
+- `content:` — new content;
+- `edit:` — editing;
+- `chapter:` — a book chapter;
+- `lesson:` — a course lesson;
+- `research:` — sources, notes;
+- `index:` — indexes, registry, navigation;
 - `meta:` — snapshot, manifest;
-- `pipeline:` — обслуживающий код.
+- `pipeline:` — supporting code.
 
-Следуй `.claude/rules/content-commit-policy.md`.
+Follow `.claude/rules/content-commit-policy.md`.

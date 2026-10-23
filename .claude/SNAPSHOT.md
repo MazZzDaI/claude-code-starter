@@ -1,26 +1,26 @@
 # Project Snapshot
 
-## Текущее состояние
+## Current state
 
-**Статус:** релиз v6.3.0 (оркестраторская модель)
-**Последнее обновление:** 2026-07-25
+**Status:** release v6.3.0 (orchestrator model)
+**Last updated:** 2026-07-25
 
-## Что сделано
+## Done
 
-- **v6.3.0 — оркестраторская модель** (2026-07-25): владелец = продукт над производством,
-  агент = оркестратор + главный девелопер, сам поднимает воркеров. Поставлены:
-  `templates/global/rules/orchestration-model.md` (O1–O12), `/handoff` в install-набор,
-  эволюция `autonomy.md`/`delegation.md`, секция модели в `CLAUDE.addendum.md`.
-  Все метафайлы (README, CHANGELOG, release-notes, RELEASING) приведены к v6.3.0.
-- v6.2.1 — onboarding-cap fix + grounding step (см. CHANGELOG).
+- **v6.3.0 — orchestrator model** (2026-07-25): owner = product above production,
+  agent = orchestrator + lead developer, raises workers itself. Delivered:
+  `templates/global/rules/orchestration-model.md` (O1–O12), `/handoff` in the install set,
+  evolution of `autonomy.md`/`delegation.md`, a section on the model in `CLAUDE.addendum.md`.
+  All meta-files (README, CHANGELOG, release-notes, RELEASING) brought up to v6.3.0.
+- v6.2.1 — onboarding-cap fix + grounding step (see CHANGELOG).
 
-## Что в процессе
+## In progress
 
-## Известные проблемы
+## Known issues
 
-- Оркестраторская модель обкатывается в поле (первый полигон — Saved Downloader);
-  ошибки внедрения ожидаемы и нормальны — фиксировать и дистиллировать в правки свода.
+- The orchestrator model is being road-tested in the field (first proving ground — Saved Downloader);
+  adoption mistakes are expected and normal — record them and distil them into amendments to the rule set.
 
-## Следующие шаги
+## Next steps
 
-- Собирать полевые кейсы применения оркестраторской модели → правки O-принципов.
+- Collect field cases of applying the orchestrator model → amendments to the O-principles.

@@ -3,21 +3,21 @@
 # Claude Code Starter — Global Installer
 # Version: 6.3.0
 #
-# Устанавливает framework в глобальный ~/.claude/, чтобы он был доступен
-# во всех проектах без отдельного init.
+# Installs the framework into the global ~/.claude/ so that it is available
+# in every project without a separate init.
 #
-# Что делает:
+# What it does:
 #   - Backup ~/.claude/ → ~/.claude/.backup-TIMESTAMP/
-#   - Аддитивно копирует content rules/skills/agents (которых ещё нет)
-#   - Заменяет skills/housekeeping на content-version (она универсальнее)
-#   - Добавляет content-reviewer как отдельного агента
-#   - Копирует code-only skills из framework (db-migrate, playwright)
-#   - Устанавливает skill /init для бутстрапа новых проектов
-#   - Устанавливает skill /handoff (континуитет между сессиями + оркестрация)
-#   - Аддитивно мёрджит ~/.claude/CLAUDE.md с framework addendum
-#   - Записывает путь к framework checkout в ~/.claude/framework-source-path
+#   - Additively copies content rules/skills/agents (those not yet present)
+#   - Replaces skills/housekeeping with the content version (it is more universal)
+#   - Adds content-reviewer as a separate agent
+#   - Copies code-only skills from the framework (db-migrate, playwright)
+#   - Installs the /init skill for bootstrapping new projects
+#   - Installs the /handoff skill (continuity between sessions + orchestration)
+#   - Additively merges ~/.claude/CLAUDE.md with the framework addendum
+#   - Writes the path to the framework checkout into ~/.claude/framework-source-path
 #
-# Использование:
+# Usage:
 #   bash scripts/install-global.sh
 #   bash scripts/install-global.sh --rollback
 #   bash scripts/install-global.sh --dry-run
@@ -271,7 +271,9 @@ if [ -d "$src" ]; then
     done
 fi
 
-# Clean up old name if it was installed by an earlier version
+# Clean up old name if it was installed by an earlier version.
+# The Cyrillic string below is a fixed marker of the legacy (pre-rename, Russian)
+# skills/init/SKILL.md and must stay as-is to detect already-installed copies.
 if [ -d "$GLOBAL_DIR/skills/init" ] && [ -f "$GLOBAL_DIR/skills/init/SKILL.md" ]; then
     if grep -q "Установить Claude Code Starter framework" "$GLOBAL_DIR/skills/init/SKILL.md" 2>/dev/null; then
         run rm -rf "$GLOBAL_DIR/skills/init"
@@ -361,7 +363,7 @@ echo ""
 echo "Test it:"
 echo "  mkdir /tmp/test-setup && cd /tmp/test-setup"
 echo "  # Open Claude Code here, then say: /setup-project"
-echo "  # (or just \"новый проект\" / \"поставь фреймворк\")"
+echo "  # (or just \"new project\" / \"install the framework\")"
 echo ""
 echo "Rollback if needed:"
 echo "  bash $SCRIPT_DIR/install-global.sh --rollback"
