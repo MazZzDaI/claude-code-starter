@@ -88,7 +88,7 @@ write_migration_log() {
         -not -path './.claude/*' 2>/dev/null | wc -l | tr -d ' ')
 
     local claude_enriched="false"
-    grep -qE "Operating mode|Операционный режим" "CLAUDE.md" 2>/dev/null && claude_enriched="true"
+    grep -qE "Operating mode" "CLAUDE.md" 2>/dev/null && claude_enriched="true"
 
     cat > "$log_file" <<LOGEOF
 {

@@ -17,7 +17,7 @@ Install the Claude Code Starter framework into the current working folder. Auto-
 - The user is working in a freshly created folder without `CLAUDE.md` and `.claude/`, and asks to start work
 - The project has an outdated framework and the user wants to upgrade
 
-**Do NOT confuse** this with the built-in Claude Code command `/setup-project` — that one does something quite different (generates a documentation CLAUDE.md). This skill is about installing the framework infrastructure (rules, skills, agents, hooks, manifest).
+**Do NOT confuse** this with the built-in Claude Code command `/init` — that one does something quite different (generates a documentation CLAUDE.md). This skill is about installing the framework infrastructure (rules, skills, agents, hooks, manifest).
 
 ## Algorithm
 
