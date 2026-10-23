@@ -56,17 +56,17 @@ Output contract:
 - `.codex/contracts/core-cli-contract.md`
 
 
-### Делегирование задач субагентам
+### Delegating tasks to subagents
 
-При получении задачи от пользователя — сначала оценить:
-- **Сам:** быстрые правки (< 2 мин), обсуждения, анализ, вопросы, мелкие фиксы
-- **Субагент:** код > 50 строк, новые модули, рефакторинг, UI-изменения, исследования, любые задачи > 5 мин
+When you receive a task from the user — first assess:
+- **Yourself:** quick edits (< 2 min), discussions, analysis, questions, small fixes
+- **Subagent:** code > 50 lines, new modules, refactoring, UI changes, research, any task > 5 min
 
-При делегировании субагенту:
-- Составить детальное ТЗ с контекстом, файлами для чтения, ожидаемым результатом
-- Запустить в фоне
-- Сообщить пользователю что запущено
-- По завершении — дать краткий отчёт о результате
-- Можно запускать несколько субагентов параллельно на независимые задачи
+When delegating to a subagent:
+- Write a detailed brief with context, files to read, and the expected result
+- Run it in the background
+- Tell the user what has been launched
+- On completion — give a short report on the result
+- You can run several subagents in parallel on independent tasks
 
-Цель: максимальная параллельность и минимальное время ожидания пользователя.
+Goal: maximum parallelism and minimum waiting time for the user.

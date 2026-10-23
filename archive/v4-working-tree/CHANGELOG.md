@@ -98,25 +98,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **🔄 Restored Framework Auto-Update**
-  - **Проблема:** При переходе на Python в v3.0.0 случайно потеряли автообновление фреймворка
-  - **Симптом:** Хост-проекты НЕ получали обновления автоматически, только ручное обновление через `quick-update.sh`
-  - **Root cause:** Python utility только проверяет наличие обновления, но не скачивает/не устанавливает
-  - **Решение:** Восстановлен Phase 2.5 в Cold Start Protocol с полной реализацией автообновления
-  - **Изменения:**
-    - Добавлен Phase 2.5 в `.claude/protocols/cold-start-silent.md`
-    - Bash скрипт скачивает CLAUDE.md + framework-commands.tar.gz
-    - Aggressive strategy - автоматическая установка без подтверждения
-    - Self-healing - автокоррекция версии при несоответствии
-    - Безопасно: обновляются только framework файлы, user data не трогается
-  - **Как работает:**
-    - Phase 1: Python utility проверяет версию (tasks/version.py)
-    - Phase 2: Парсим результат JSON
-    - **Phase 2.5**: Если UPDATE:available - скачиваем и устанавливаем
-    - Phase 3: Просим перезапустить сессию
-  - **Что обновляется:**
+  - **Problem:** During the move to Python in v3.0.0, the framework's auto-update was lost by accident
+  - **Symptom:** Host projects did NOT receive updates automatically, only manual updating via `quick-update.sh`
+  - **Root cause:** The Python utility only checks whether an update is available, but does not download/install it
+  - **Solution:** Restored Phase 2.5 in the Cold Start Protocol with a full implementation of auto-update
+  - **Changes:**
+    - Added Phase 2.5 to `.claude/protocols/cold-start-silent.md`
+    - A bash script downloads CLAUDE.md + framework-commands.tar.gz
+    - Aggressive strategy - automatic installation without confirmation
+    - Self-healing - automatic version correction on mismatch
+    - Safe: only framework files are updated, user data is not touched
+  - **How it works:**
+    - Phase 1: The Python utility checks the version (tasks/version.py)
+    - Phase 2: We parse the JSON result
+    - **Phase 2.5**: If UPDATE:available - we download and install
+    - Phase 3: We ask for the session to be restarted
+  - **What is updated:**
     - CLAUDE.md (framework instructions)
     - 5 framework commands (fi, ui, watch, migrate-legacy, upgrade-framework)
-  - **Что НЕ обновляется:**
+  - **What is NOT updated:**
     - User commands (commit, pr, fix, feature, review, test, etc.)
     - Project files (SNAPSHOT, BACKLOG, ARCHITECTURE, IDEAS, ROADMAP)
     - User configuration (.framework-config)
@@ -131,9 +131,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Migration Notes
 
-- Хост-проекты на v3.1.0 автоматически обновятся до v3.1.1 при следующем `start`
-- Хост-проекты на v3.0.0 также получат автообновление (Phase 2.5 в протоколе)
-- После обновления потребуется перезапуск сессии (exit + claude)
+- Host projects on v3.1.0 will automatically update to v3.1.1 on the next `start`
+- Host projects on v3.0.0 will also receive the auto-update (Phase 2.5 in the protocol)
+- After the update, a session restart will be required (exit + claude)
 
 ---
 
@@ -142,37 +142,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **🚀 Parallel File Generation in Migration (5x speedup)**
-  - **Проблема:** Step 6 миграции генерирует 5 файлов последовательно (~200 секунд / 3+ минуты)
-  - **Решение:** Параллельная генерация через Task tool с субагентами
-  - **Изменения:**
-    - Обновлен `.claude/commands/migrate-legacy.md` Step 6
-    - Новая секция: "6.1: Prepare Shared Context"
-    - Новая секция: "6.2: Launch Parallel File Generation"
-    - Один вызов с 5 Task tool calls одновременно
-    - Каждый агент генерирует свой файл независимо
-  - **Преимущества:**
-    - 5x ускорение Step 6 (200s → 40s)
-    - ~30% ускорение всей миграции (9 минут → 6.7 минут)
-    - Файлы генерируются одновременно, а не последовательно
-  - **Генерируемые файлы:**
-    - SNAPSHOT.md (30-50 строк)
-    - BACKLOG.md (50-100 строк)
-    - ROADMAP.md (50-150 строк)
-    - ARCHITECTURE.md (100-200 строк)
-    - IDEAS.md (30-50 строк)
+  - **Problem:** Step 6 of the migration generates 5 files sequentially (~200 seconds / 3+ minutes)
+  - **Solution:** Parallel generation via the Task tool with subagents
+  - **Changes:**
+    - Updated `.claude/commands/migrate-legacy.md` Step 6
+    - New section: "6.1: Prepare Shared Context"
+    - New section: "6.2: Launch Parallel File Generation"
+    - A single call with 5 Task tool calls at once
+    - Each agent generates its own file independently
+  - **Advantages:**
+    - 5x speed-up of Step 6 (200s → 40s)
+    - ~30% speed-up of the whole migration (9 minutes → 6.7 minutes)
+    - Files are generated simultaneously rather than sequentially
+  - **Generated files:**
+    - SNAPSHOT.md (30-50 lines)
+    - BACKLOG.md (50-100 lines)
+    - ROADMAP.md (50-150 lines)
+    - ARCHITECTURE.md (100-200 lines)
+    - IDEAS.md (30-50 lines)
 
 ### Changed
 
 - **Migration Protocol Optimization**
-  - Step 6 переписан с sequential на parallel execution
-  - Добавлен SHARED_CONTEXT для всех агентов
-  - Улучшены промпты для каждого типа файла
-  - Добавлена верификация результатов после генерации
+  - Step 6 rewritten from sequential to parallel execution
+  - Added SHARED_CONTEXT for all agents
+  - Improved prompts for each file type
+  - Added verification of the results after generation
 
 ### Performance
 
-- Migration time: 9 минут → 6.7 минут (~30% ускорение)
-- Step 6 time: 200 секунд → 40 секунд (5x ускорение)
+- Migration time: 9 minutes → 6.7 minutes (~30% speed-up)
+- Step 6 time: 200 seconds → 40 seconds (5x speed-up)
 
 ---
 
@@ -181,33 +181,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **🐍 Python Framework Core - Zero Terminal Noise**
-  - **Проблема:** 20-30% времени уходит на протоколы, terminal spam от bash background tasks
-  - **Решение:** Полная переписка execution layer с bash на Python
-  - **Новое:**
-    - `src/framework-core/` - Python утилита (16 файлов, 931 строка кода)
+  - **Problem:** 20-30% of the time goes on protocols, terminal spam from bash background tasks
+  - **Solution:** A complete rewrite of the execution layer from bash to Python
+  - **New:**
+    - `src/framework-core/` - a Python utility (16 files, 931 lines of code)
     - `main.py` - CLI entry point
     - `commands/` - cold_start.py, completion.py
-    - `tasks/` - 10 задач (config, session, git, version, security, hooks)
+    - `tasks/` - 10 tasks (config, session, git, version, security, hooks)
     - `utils/` - logging, JSON output, parallel execution
-  - **Преимущества:**
-    - Zero terminal noise (JSON output вместо task notifications)
-    - 1000x быстрее (359ms vs минуты)
+  - **Advantages:**
+    - Zero terminal noise (JSON output instead of task notifications)
+    - 1000x faster (359ms vs minutes)
     - Parallel execution (Python threading)
     - Cross-platform (Windows native)
-    - Easy debugging (код вместо bash scripts)
+    - Easy debugging (code instead of bash scripts)
     - Zero dependencies (stdlib only)
-  - **Команды:**
+  - **Commands:**
     - `python3 src/framework-core/main.py cold-start`
     - `python3 src/framework-core/main.py completion`
 
 ### Changed
 
 - **📝 Updated Protocols to v3.0.0**
-  - `.claude/protocols/cold-start-silent.md` - использует Python utility
-  - Phase 1: Execute Python Utility (вместо 10 bash команд)
+  - `.claude/protocols/cold-start-silent.md` - uses the Python utility
+  - Phase 1: Execute Python Utility (instead of 10 bash commands)
   - Phase 2: Parse JSON Result & React
-  - Удалена секция "Background Tasks Detail" (bash команды)
-  - Добавлена секция "Python Utility Implementation"
+  - Removed the "Background Tasks Detail" section (bash commands)
+  - Added the "Python Utility Implementation" section
 
 ### Breaking Changes
 
@@ -239,83 +239,83 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 ### Fixed
 
 - **🔧 CRITICAL: Framework Version Update Loop (#framework-version-loop-20260117)**
-  - **Проблема:** GitHub release v2.5.0 содержал CLAUDE.md с версией v2.4.3 вместо v2.5.0
-  - **Результат:** Пользователи застревали в бесконечном цикле обновлений
-  - **Решение:**
-    - Self-healing mechanism в Cold Start Protocol (Step 0.2)
-    - Автоматически исправляет неправильную версию в скачанном CLAUDE.md
-    - Предотвращает замкнутый цикл обновлений
+  - **Problem:** The GitHub release v2.5.0 contained a CLAUDE.md with version v2.4.3 instead of v2.5.0
+  - **Result:** Users got stuck in an endless update loop
+  - **Solution:**
+    - Self-healing mechanism in the Cold Start Protocol (Step 0.2)
+    - Automatically corrects the wrong version in the downloaded CLAUDE.md
+    - Prevents a closed update loop
 
 - **🔒 CRITICAL: COMMIT_POLICY Missing reports/ Pattern (#commit-policy-missing-reports-20260117)**
-  - **Проблема:** Bug reports коммитились в git (утечка приватной информации)
-  - **Причины:**
-    1. Template не содержал `reports/` в запрещённых паттернах
-    2. COMMIT_POLICY.md не создавался автоматически при установке
-    3. Claude AI не проверял наличие файла перед коммитом
-  - **Решение:**
-    - Добавлен `reports/` во все необходимые файлы:
+  - **Problem:** Bug reports were being committed to git (leak of private information)
+  - **Causes:**
+    1. The template did not contain `reports/` in the forbidden patterns
+    2. COMMIT_POLICY.md was not created automatically during installation
+    3. Claude AI did not check that the file existed before committing
+  - **Solution:**
+    - Added `reports/` to all the necessary files:
       - `migration/templates/COMMIT_POLICY.template.md`
       - `.claude/COMMIT_POLICY.md`
       - `.claude/scripts/pre-commit-hook.sh`
-    - Auto-create COMMIT_POLICY.md в Cold Start (новый Step 0.55)
-    - Strengthened Completion Protocol Step 4.1 (теперь MANDATORY)
-    - Добавлены hardcoded fallback rules для защиты
-  - **Defense in Depth:** 6 слоёв защиты против случайных коммитов
+    - Auto-create COMMIT_POLICY.md in Cold Start (new Step 0.55)
+    - Strengthened Completion Protocol Step 4.1 (now MANDATORY)
+    - Added hardcoded fallback rules for protection
+  - **Defense in Depth:** 6 layers of protection against accidental commits
 
 ### Added
 
 - **📋 Pre-release Validation Script (migration/validate-release.sh)**
-  - Проверяет консистентность версий перед релизом
-  - Валидирует: CLAUDE.md, protocols, package.json, CHANGELOG.md, git tags
-  - Предотвращает создание релизов с несоответствующими версиями
+  - Checks version consistency before a release
+  - Validates: CLAUDE.md, protocols, package.json, CHANGELOG.md, git tags
+  - Prevents releases being created with mismatched versions
 
 - **📝 Version Update Utility (migration/update-version.sh)**
-  - Обновляет версию во всех framework файлах одной командой
-  - Поддержка macOS (BSD sed) и Linux (GNU sed)
-  - Гарантирует консистентность версий
+  - Updates the version in all framework files with a single command
+  - Support for macOS (BSD sed) and Linux (GNU sed)
+  - Guarantees version consistency
 
 - **🚀 Automated Release Script (migration/create-release.sh)**
-  - Автоматизирует весь процесс релиза
-  - Интегрирует: validation → build → GitHub release
-  - Безопасный workflow с проверками
+  - Automates the entire release process
+  - Integrates: validation → build → GitHub release
+  - A safe workflow with checks
 
-- **Step 0.55 в Cold Start Protocol: Auto-Create COMMIT_POLICY.md**
-  - Автоматически создаёт COMMIT_POLICY.md если отсутствует
-  - Использует template или создаёт минимальную версию
-  - Гарантирует наличие policy перед любыми коммитами
+- **Step 0.55 in the Cold Start Protocol: Auto-Create COMMIT_POLICY.md**
+  - Automatically creates COMMIT_POLICY.md if it is missing
+  - Uses the template or creates a minimal version
+  - Guarantees that a policy exists before any commits
 
 ### Changed
 
 - **Strengthened Completion Protocol Step 4.1:**
-  - Теперь помечен как MANDATORY (обязательный)
-  - Автоматически создаёт COMMIT_POLICY.md если отсутствует
-  - Добавлены hardcoded fallback rules для защиты
-  - Невозможно пропустить проверку policy
+  - Now marked as MANDATORY
+  - Automatically creates COMMIT_POLICY.md if it is missing
+  - Added hardcoded fallback rules for protection
+  - Impossible to skip the policy check
 
 - **Enhanced Cold Start Protocol Step 0.2:**
-  - Добавлен self-healing mechanism для version mismatches
-  - Автоматически исправляет версию в скачанном CLAUDE.md
-  - OS-aware sed (поддержка macOS и Linux)
+  - Added a self-healing mechanism for version mismatches
+  - Automatically corrects the version in the downloaded CLAUDE.md
+  - OS-aware sed (macOS and Linux support)
 
 ### Security
 
 - **Enhanced COMMIT_POLICY enforcement:**
   - 6 layers of protection: .gitignore → policy → auto-create (x2) → Claude check → pre-commit hook
-  - `reports/` теперь блокируется на всех уровнях
-  - Bug reports и migration logs не могут быть закоммичены
+  - `reports/` is now blocked at all levels
+  - Bug reports and migration logs cannot be committed
 
 ### Documentation
 
-- **BUG_FIX_SUMMARY.md** — Детальное описание исправления version loop
-- **COMMIT_POLICY_FIX_SUMMARY.md** — Детальное описание исправления COMMIT_POLICY
-- **BUGS_FIXED_v2.5.1.md** — Общий summary для релиза
+- **BUG_FIX_SUMMARY.md** — Detailed description of the version loop fix
+- **COMMIT_POLICY_FIX_SUMMARY.md** — Detailed description of the COMMIT_POLICY fix
+- **BUGS_FIXED_v2.5.1.md** — Overall summary for the release
 
 ### Testing
 
-- ✅ Self-healing mechanism протестирован (симуляция version mismatch)
-- ✅ Validation script обнаруживает несоответствия версий
-- ✅ Pre-commit hook блокирует reports/ файлы (integration test)
-- ✅ Auto-create COMMIT_POLICY.md работает корректно
+- ✅ Self-healing mechanism tested (simulated version mismatch)
+- ✅ Validation script detects version mismatches
+- ✅ Pre-commit hook blocks reports/ files (integration test)
+- ✅ Auto-create COMMIT_POLICY.md works correctly
 
 ---
 
@@ -323,76 +323,76 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 
 ### Added
 
-- **🔒 COMMIT_POLICY.md — Защита от случайных утечек в git**
-  - **Проблема:** `git add -A` коммитит ВСЁ без разбора
-    - Внутренние notes/, WIP файлы, debug логи
-    - Диалоги с упоминаниями credentials
-    - Бизнес-планы, конфиденциальные документы
-    - Результат: утечки в публичный GitHub
+- **🔒 COMMIT_POLICY.md — Protection against accidental leaks into git**
+  - **Problem:** `git add -A` commits EVERYTHING indiscriminately
+    - Internal notes/, WIP files, debug logs
+    - Dialogs with mentions of credentials
+    - Business plans, confidential documents
+    - Result: leaks into public GitHub
 
-  - **Решение:** Трехуровневая защита
-    1. **COMMIT_POLICY.md** — человеко-читаемый документ с правилами
-    2. **Step 4 Completion Protocol** — Claude AI проверяет файлы перед staging
-    3. **Pre-commit Hook** — последняя защита, блокирует запрещенные файлы
+  - **Solution:** Three-level protection
+    1. **COMMIT_POLICY.md** — a human-readable document with the rules
+    2. **Step 4 Completion Protocol** — Claude AI checks files before staging
+    3. **Pre-commit Hook** — the last line of defence, blocks forbidden files
 
-  - **Файлы:**
-    - `.claude/COMMIT_POLICY.md` — правила коммитов (что можно/нельзя)
-    - `.claude/scripts/pre-commit-hook.sh` — git hook для блокировки
-    - `.claude/scripts/install-git-hooks.sh` — установка hooks
-    - `.claude/protocols/completion.md` — Step 4 полностью переписан
-    - `.claude/protocols/cold-start.md` — Step 0.6 установка git hooks
-    - `migration/templates/COMMIT_POLICY.template.md` — шаблон для новых проектов
+  - **Files:**
+    - `.claude/COMMIT_POLICY.md` — commit rules (what is and isn't allowed)
+    - `.claude/scripts/pre-commit-hook.sh` — git hook for blocking
+    - `.claude/scripts/install-git-hooks.sh` — hooks installation
+    - `.claude/protocols/completion.md` — Step 4 completely rewritten
+    - `.claude/protocols/cold-start.md` — Step 0.6 git hooks installation
+    - `migration/templates/COMMIT_POLICY.template.md` — template for new projects
 
-  - **Как работает:**
-    - Пользователь редактирует `.claude/COMMIT_POLICY.md` под свой проект
-    - Claude читает policy перед каждым коммитом
-    - Файлы из секции "НИКОГДА" → НЕ стейджатся
-    - Файлы из секции "ВСЕГДА" → стейджатся автоматически
-    - Файлы из секции "СПРОСИТЬ" → Claude спрашивает пользователя
-    - `git add -A` УДАЛЕН, заменен на селективный staging
-    - Pre-commit hook блокирует commit если запрещенные файлы попали
+  - **How it works:**
+    - The user edits `.claude/COMMIT_POLICY.md` to suit their project
+    - Claude reads the policy before every commit
+    - Files from the "NEVER" section → are NOT staged
+    - Files from the "ALWAYS" section → are staged automatically
+    - Files from the "ASK" section → Claude asks the user
+    - `git add -A` REMOVED, replaced with selective staging
+    - Pre-commit hook blocks the commit if forbidden files slip through
 
-- **Паттерны COMMIT_POLICY "НИКОГДА":**
+- **COMMIT_POLICY "NEVER" patterns:**
   ```
-  notes/, scratch/, experiments/     # Внутренняя кухня
+  notes/, scratch/, experiments/     # Internal kitchen
   WIP_*, INTERNAL_*, DRAFT_*         # Work in progress
-  dialog/, .claude/logs/              # Framework logs (КРИТИЧНО!)
-  *.local.*, .vscode/, .idea/        # Локальные конфиги
-  secrets/, credentials/, *.key      # Чувствительные данные (КРИТИЧНО!)
+  dialog/, .claude/logs/              # Framework logs (CRITICAL!)
+  *.local.*, .vscode/, .idea/        # Local configs
+  secrets/, credentials/, *.key      # Sensitive data (CRITICAL!)
   ```
 
-- **Обновлен .gitignore:**
-  - Добавлена секция "COMMIT_POLICY.md Patterns"
-  - Синхронизировано с паттернами из COMMIT_POLICY
+- **Updated .gitignore:**
+  - Added the "COMMIT_POLICY.md Patterns" section
+  - Synchronised with the patterns from COMMIT_POLICY
 
 ### Changed
 
-- **BREAKING: Completion Protocol Step 4 полностью переписан**
-  - БЫЛО: `git add -A && git status && git commit` (опасно!)
-  - СТАЛО: Policy check → Selective staging → User approval → Commit
-  - Claude AI теперь анализирует каждый файл перед staging
-  - Пользователь видит что будет закоммичено и может отменить
+- **BREAKING: Completion Protocol Step 4 completely rewritten**
+  - BEFORE: `git add -A && git status && git commit` (dangerous!)
+  - NOW: Policy check → Selective staging → User approval → Commit
+  - Claude AI now analyses every file before staging
+  - The user sees what will be committed and can cancel
 
 ### Security
 
-- **CRITICAL: Защита от утечек credentials в публичный GitHub**
-  - Диалоги могут содержать обсуждения SSH ключей, API токенов, паролей
-  - `dialog/` теперь блокируется на 3 уровнях:
-    1. .gitignore (VS Code не показывает)
-    2. COMMIT_POLICY (Claude не стейджит)
-    3. Pre-commit hook (git блокирует commit)
+- **CRITICAL: Protection against credential leaks into public GitHub**
+  - Dialogs may contain discussions of SSH keys, API tokens, passwords
+  - `dialog/` is now blocked at 3 levels:
+    1. .gitignore (VS Code doesn't show it)
+    2. COMMIT_POLICY (Claude doesn't stage it)
+    3. Pre-commit hook (git blocks the commit)
 
-- **Защита от утечки бизнес-логики:**
-  - `notes/`, `business-plans/`, `competitors/` и т.д.
-  - Пользователь может настроить под свой проект
+- **Protection against business-logic leaks:**
+  - `notes/`, `business-plans/`, `competitors/` etc.
+  - The user can customise it for their project
 
 ### Impact
 
-- **Критическое изменение идеологии фреймворка**
-- Все существующие проекты ДОЛЖНЫ обновиться до v2.5.0
-- После обновления: получат `.claude/COMMIT_POLICY.md` и защиту
-- BREAKING: `/fi` теперь работает иначе (селективный staging вместо `git add -A`)
-- Пользователи могут настроить COMMIT_POLICY под свои нужды
+- **A critical change in the framework's ideology**
+- All existing projects MUST update to v2.5.0
+- After updating: they will get `.claude/COMMIT_POLICY.md` and the protection
+- BREAKING: `/fi` now works differently (selective staging instead of `git add -A`)
+- Users can customise COMMIT_POLICY to suit their needs
 
 ---
 
@@ -400,18 +400,18 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 
 ### Fixed
 
-- **CRITICAL: Auto-update не выполнялся (Step 0.2)**
-  - Проблема: Claude читал bash-код в Step 0.2 как описание, а не как команды к выполнению
-  - Симптом: Проекты с v2.3.1 не обновлялись до v2.4.5 автоматически
-  - Решение: Добавлена явная инструкция "CRITICAL: Execute this bash script using the Bash tool"
-  - Файл: `.claude/protocols/cold-start.md` — Step 0.2
-  - Теперь: Claude обязан выполнить bash-скрипт через Bash tool, а не просто прочитать
+- **CRITICAL: Auto-update was not being executed (Step 0.2)**
+  - Problem: Claude read the bash code in Step 0.2 as a description, not as commands to execute
+  - Symptom: Projects on v2.3.1 did not update to v2.4.5 automatically
+  - Solution: Added an explicit instruction "CRITICAL: Execute this bash script using the Bash tool"
+  - File: `.claude/protocols/cold-start.md` — Step 0.2
+  - Now: Claude must execute the bash script via the Bash tool, not just read it
 
 ### Impact
 
-- Все существующие хост-проекты получат автообновление при следующем "start"
-- Фреймворк будет обновляться автоматически без ручного вмешательства
-- **Важно:** После обновления до v2.4.6 потребуется рестарт сессии (как и планировалось)
+- All existing host projects will receive the auto-update on the next "start"
+- The framework will update automatically without manual intervention
+- **Important:** After updating to v2.4.6, a session restart will be required (as planned)
 
 ---
 
@@ -419,25 +419,25 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 
 ### Fixed
 
-- **UX: Пояснение к "Continue or commit first?" в Crash Recovery (#41)**
-  - Проблема: Через пару дней пользователь забывает что означает каждый вариант
-  - Решение: Добавлено понятное пояснение с описанием вариантов
-  - Файл: `.claude/protocols/cold-start.md` — Step 0.1 (Crash Recovery)
-  - Формат:
+- **UX: Explanation for "Continue or commit first?" in Crash Recovery (#41)**
+  - Problem: After a couple of days, the user forgets what each option means
+  - Solution: Added a clear explanation describing the options
+  - File: `.claude/protocols/cold-start.md` — Step 0.1 (Crash Recovery)
+  - Format:
     ```
-    Варианты:
-      1. Continue - начать новую работу (изменения останутся uncommitted)
-      2. Commit first - сначала закоммитить изменения из crashed session
+    Options:
+      1. Continue - start new work (the changes will remain uncommitted)
+      2. Commit first - commit the changes from the crashed session first
     ```
 
 ### Closed
 
-- **#23:** Спам issue (invalid content)
-- **#3:** Documentation уже исправлена (no restart required in installation)
+- **#23:** Spam issue (invalid content)
+- **#3:** Documentation already fixed (no restart required in installation)
 
 ### Impact
 
-- **User Experience:** Понятный выбор при crash recovery
+- **User Experience:** A clear choice during crash recovery
 - **Documentation:** Confirmed correct installation instructions
 
 ---
@@ -446,27 +446,27 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 
 ### Fixed
 
-- **CRITICAL: `/migrate` пропускает docs/ с мета-документацией (#7)**
-  - Проблема: `/migrate-legacy` находил только файлы в корне проекта
-  - Последствия: Пропускал docs/BACKLOG.md (491 строка roadmap!), docs/STATUS.md
-  - Результат: .claude/BACKLOG.md оставался пустым template после "успешной" миграции
-  - **Нарушал обещание:** "single source of truth" - два источника истины
-  - Решение: Сканирование subdirectories (docs/, documentation/, notes/, wiki/, .github/)
-  - Файл: `.claude/commands/migrate-legacy.md` — Step 2.1, 2.3, 3, 5, 6, 9
-  - Новые возможности:
-    - Классификация по содержимому (мета-документация vs code documentation)
-    - Интерактивное подтверждение для ambiguous файлов
-    - Правильный mapping: docs/BACKLOG.md → .claude/BACKLOG.md
-    - Архивирование docs/ после миграции (single source of truth)
-    - Приоритизация источников: docs/BACKLOG.md > TODO.md > GitHub Issues
+- **CRITICAL: `/migrate` skips docs/ containing meta-documentation (#7)**
+  - Problem: `/migrate-legacy` found only files in the project root
+  - Consequences: It skipped docs/BACKLOG.md (a 491-line roadmap!), docs/STATUS.md
+  - Result: .claude/BACKLOG.md remained an empty template after a "successful" migration
+  - **Broke the promise:** "single source of truth" - two sources of truth
+  - Solution: Scanning subdirectories (docs/, documentation/, notes/, wiki/, .github/)
+  - File: `.claude/commands/migrate-legacy.md` — Step 2.1, 2.3, 3, 5, 6, 9
+  - New capabilities:
+    - Classification by content (meta-documentation vs code documentation)
+    - Interactive confirmation for ambiguous files
+    - Correct mapping: docs/BACKLOG.md → .claude/BACKLOG.md
+    - Archiving of docs/ after migration (single source of truth)
+    - Source prioritisation: docs/BACKLOG.md > TODO.md > GitHub Issues
 
 ### Impact
 
-- **Migration Quality:** Теперь находит ВСЮ мета-документацию, не только в корне
-- **Single Source of Truth:** .claude/ действительно становится единственным источником
-- **User Experience:** После миграции .claude/BACKLOG.md заполнен реальным контентом
-- **Token Economy:** AI не тратит токены на поиск docs/BACKLOG.md после миграции
-- **Prevents Confusion:** Archived docs/ предотвращает "два источника истины"
+- **Migration Quality:** Now finds ALL the meta-documentation, not only in the root
+- **Single Source of Truth:** .claude/ genuinely becomes the single source
+- **User Experience:** After migration, .claude/BACKLOG.md is filled with real content
+- **Token Economy:** The AI does not spend tokens looking for docs/BACKLOG.md after migration
+- **Prevents Confusion:** The archived docs/ prevents "two sources of truth"
 
 ---
 
@@ -474,20 +474,20 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 
 ### Fixed
 
-- **CRITICAL: init-project.sh не копирует .claude/commands/ для legacy проектов (#4)**
-  - Проблема: при установке в legacy проект копировались только 2 команды (migrate-legacy.md, upgrade-framework.md)
-  - Последствия: пользователи не могли запустить `/migrate`, `/fi`, `/ui` и другие команды
-  - Блокировало весь workflow миграции
-  - Решение: копирование всей структуры .claude/ (commands, dist, protocols, scripts, templates)
-  - Файл: `init-project.sh` — lines 349-375 (LEGACY/UPGRADE mode)
-  - Теперь legacy проекты получают полную функциональность фреймворка сразу после установки
-  - Включает: все slash команды, CLI tools, protocol files, helper scripts
+- **CRITICAL: init-project.sh does not copy .claude/commands/ for legacy projects (#4)**
+  - Problem: when installing into a legacy project, only 2 commands were copied (migrate-legacy.md, upgrade-framework.md)
+  - Consequences: users could not run `/migrate`, `/fi`, `/ui` and other commands
+  - It blocked the entire migration workflow
+  - Solution: copying the whole .claude/ structure (commands, dist, protocols, scripts, templates)
+  - File: `init-project.sh` — lines 349-375 (LEGACY/UPGRADE mode)
+  - Legacy projects now get the framework's full functionality straight after installation
+  - Includes: all slash commands, CLI tools, protocol files, helper scripts
 
 ### Impact
 
-- **Migration Workflow:** Legacy проекты теперь могут сразу использовать `/migrate` и все другие команды
-- **User Experience:** Полная функциональность фреймворка доступна с первого запуска
-- **Compatibility:** Unified installation path для всех типов проектов (new, legacy, upgrade)
+- **Migration Workflow:** Legacy projects can now use `/migrate` and all other commands straight away
+- **User Experience:** The framework's full functionality is available from the first run
+- **Compatibility:** Unified installation path for all project types (new, legacy, upgrade)
 
 ---
 
@@ -495,28 +495,28 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 
 ### Fixed
 
-- **CRITICAL: Dialog export с кириллицей в пути (#54)**
-  - Проблема: `npm run dialog:export` находил 0 сессий для проектов с unicode путями
-  - Решение: использование `sessions-index.json` для точного сопоставления путей
-  - Файл: `src/claude-export/exporter.ts` — функция `findClaudeProjectDir()`
-  - Метод 1: чтение projectPath из sessions-index.json (100% точность)
-  - Метод 2: fallback к legacy path-based matching (backwards compatibility)
-  - Поддержка: любые unicode символы (кириллица, китайский, арабский, спецсимволы)
+- **CRITICAL: Dialog export with Cyrillic in the path (#54)**
+  - Problem: `npm run dialog:export` found 0 sessions for projects with unicode paths
+  - Solution: using `sessions-index.json` for exact path matching
+  - File: `src/claude-export/exporter.ts` — the `findClaudeProjectDir()` function
+  - Method 1: reading projectPath from sessions-index.json (100% accuracy)
+  - Method 2: fallback to legacy path-based matching (backwards compatibility)
+  - Support: any unicode characters (Cyrillic, Chinese, Arabic, special characters)
 
-- **MEDIUM: `/explain` избыточные ответы (#50)**
-  - Проблема: 6 обязательных разделов даже для 1-3 строк кода (500+ строк ответа)
-  - Решение: адаптивная детализация по сложности кода
-  - Файл: `.claude/commands/explain.md` — adaptive complexity assessment
-  - Simple (1-10 lines) → 50-100 tokens (краткое объяснение)
-  - Medium (10-50 lines) → 200-400 tokens (обзор + ключевые моменты)
-  - Complex (50+ lines) → Full breakdown (все 7 разделов)
-  - Token economy: до 90% сокращение для простого кода
+- **MEDIUM: `/explain` excessive answers (#50)**
+  - Problem: 6 mandatory sections even for 1-3 lines of code (500+ lines of answer)
+  - Solution: adaptive level of detail depending on code complexity
+  - File: `.claude/commands/explain.md` — adaptive complexity assessment
+  - Simple (1-10 lines) → 50-100 tokens (brief explanation)
+  - Medium (10-50 lines) → 200-400 tokens (overview + key points)
+  - Complex (50+ lines) → Full breakdown (all 7 sections)
+  - Token economy: up to 90% reduction for simple code
 
 ### Impact
 
-- **Internationalization:** Framework теперь работает с любыми языками в путях
-- **User Experience:** `/explain` теперь даёт адекватные по размеру ответы
-- **Compatibility:** Обратная совместимость с legacy проектами сохранена
+- **Internationalization:** The framework now works with any languages in paths
+- **User Experience:** `/explain` now gives appropriately sized answers
+- **Compatibility:** Backwards compatibility with legacy projects preserved
 
 ---
 
@@ -816,7 +816,7 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 - **Step 0: Re-read Completion Protocol (Self-Check)** — Protocol accuracy enforcement
   - Added to Completion Protocol in CLAUDE.md and migration/CLAUDE.production.md
   - Forces re-reading Completion Protocol section at /fi start
-  - Prevents "сапожник без сапог" problem (forgetting to document changes)
+  - Prevents "the cobbler's children have no shoes" problem (forgetting to document changes)
   - Includes self-check questions for metafile updates
   - Counters context compaction during long sessions
   - Works for both framework and host projects
@@ -1233,7 +1233,7 @@ Per Semantic Versioning, this qualifies as **MAJOR** version increment.
 ### Changed
 - README.md and README_RU.md now reference actual file locations
 - .claude/ARCHITECTURE.md updated with migration/ structure
-- Section renamed: "Что входит в Init/" → "Файлы фреймворка"
+- Section renamed: "What's in Init/" → "Framework files"
 - Workflow now references SNAPSHOT.md instead of PROJECT_INTAKE.md
 
 ### Migration System Release (2025-12-07)
@@ -1386,7 +1386,7 @@ AI agent completed Phase 4 tasks but:
 - ❌ Did NOT update PROJECT_SNAPSHOT.md
 - ❌ Did NOT update CLAUDE.md
 - ✅ Partially updated BACKLOG.md
-- ❌ Only updated after user reminder: "А в каких мета файлах описан твой цикл?"
+- ❌ Only updated after user reminder: "So which metafiles describe your cycle?"
 
 **Root cause:**
 - Instructions existed in PROCESS.md (lines 78-110)
@@ -1418,7 +1418,7 @@ AI created .gitignore with wrong pattern (`wp-config_*.php` vs real files `wp-co
 - `init_eng/SPRINT_COMPLETION_CHECKLIST.md` (English)
 
 #### 🚨 Trigger Section in CLAUDE.md
-**Added:** "🚨 ТРИГГЕР: Перед завершением работы (КРИТИЧНО!)" section
+**Added:** "🚨 TRIGGER: Before finishing work (CRITICAL!)" section
 
 **Location:** After Cold Start Protocol, before Quick Start
 
@@ -1427,14 +1427,14 @@ AI created .gitignore with wrong pattern (`wp-config_*.php` vs real files `wp-co
 - 4-step mandatory checklist
 - Reference to PROCESS.md lines 78-110
 - Reference to `/finalize` command
-- Warning: "НЕ пропускай эти шаги!"
+- Warning: "DON'T skip these steps!"
 
 **Files Modified:**
 - `Init/CLAUDE.md` (+28 lines)
 - `init_eng/CLAUDE.md` (+28 lines)
 
 #### 🏁 Sprint Completion Protocol in AGENTS.md
-**Added:** "🏁 Sprint Completion Protocol (ОБЯЗАТЕЛЬНО!)" section
+**Added:** "🏁 Sprint Completion Protocol (MANDATORY!)" section
 
 **Location:** After "Quick Start for AI Agents", before "Key Files Quick Reference"
 
@@ -1468,13 +1468,13 @@ AI created .gitignore with wrong pattern (`wp-config_*.php` vs real files `wp-co
 ### Changed
 
 #### 🚨🚨🚨 Strengthened Warning in PROCESS.md
-**Modified:** "Напоминания для AI ассистента" section → "🚨🚨🚨 КРИТИЧНО ДЛЯ AI АССИСТЕНТА"
+**Modified:** "Reminders for the AI assistant" section → "🚨🚨🚨 CRITICAL FOR THE AI ASSISTANT"
 
 **Changes:**
 - Added triple 🚨🚨🚨 emphasis
-- Added "🎯 Триггер: Когда читать этот чеклист?" subsection
+- Added "🎯 Trigger: When to read this checklist?" subsection
 - Clear triggers: 4 conditions when to read
-- Added: "⚠️ ДАЖЕ ЕСЛИ пользователь не напоминает - ТЫ ДОЛЖЕН СДЕЛАТЬ ЭТО САМ!"
+- Added: "⚠️ EVEN IF the user doesn't remind you - YOU MUST DO IT YOURSELF!"
 
 **Files Modified:**
 - `Init/PROCESS.md` (~15 lines changed)
@@ -1577,11 +1577,11 @@ During test migration of a real project ([multiagents](https://github.com/alexey
 - `init_eng/MIGRATION.md` (English)
 
 **Changes:**
-- **Added "⚠️ КРИТИЧНО: Предварительные требования"** section at start of preparation
+- **Added "⚠️ CRITICAL: Prerequisites"** section at start of preparation
 - Step-by-step instructions to copy Init/ templates
 - Explicit instructions to copy slash commands from `Init/.claude/commands/`
 - Verification commands: `ls Init/`, `ls .claude/commands/migrate.md`
-- Clear warning: "⚠️ Без этих файлов миграция не запустится!"
+- Clear warning: "⚠️ The migration will not start without these files!"
 
 **Impact:**
 - ✅ Saves 15 minutes per user migration
@@ -1666,9 +1666,9 @@ Efficiency: 29% better than baseline
 **Real-World Validation:**
 
 User feedback from actual migration:
-> "Slash commands не в корне `.claude/`, а в `Init/.claude/commands/`"
-> "Init/ templates отсутствуют в целевом проекте"
-> "Slash-команда `/migrate` это не скрипт, а инструкция на 612 строк"
+> "Slash commands are not in the root of `.claude/`, but in `Init/.claude/commands/`"
+> "Init/ templates are missing from the target project"
+> "The `/migrate` slash command is not a script but a 612-line instruction"
 
 Instead of guessing what users need, we:
 1. Ran real migration on multiagents project
@@ -1787,7 +1787,7 @@ Additionally, README files were becoming long (~400 lines) without easy navigati
 ### Why This Matters
 
 **User Insight:**
-User explained the philosophy: "По идее получается так, что когда фреймворк загружается 1-й раз, то ИИ должен прочитать его весь... Но потом даже при холодном новом старте, ему нужо будет прочитать очень мало..."
+User explained the philosophy: "The idea, then, is that when the framework is loaded for the 1st time, the AI should read all of it... But after that, even on a cold fresh start, it will need to read very little..."
 
 Translation: "The way it works is that when the framework loads the first time, AI must read everything... But then even with cold starts, it needs to read very little..."
 
@@ -2095,7 +2095,7 @@ During analysis of `/Users/alexeykrolmini/Downloads/Code/NewProj`, we found succ
 - Modular focus enabled massive token savings (~90% when working on single module)
 
 **Key User Insight:**
-> "Модульный фокус это ключ к экономии токенов. В моменте твой фокус ограничен скопом модуля, что сильно экономит время и токены."
+> "Modular focus is the key to saving tokens. At any given moment your focus is limited to the scope of the module, which saves a lot of time and tokens."
 >
 > Translation: "Modular focus is the key to token savings. At any moment your focus is limited to the scope of one module, which greatly saves time and tokens."
 
@@ -2260,7 +2260,7 @@ This follows the framework's own philosophy: accumulate real use cases before ad
 #### 📦 /release Slash Command
 
 **Problem Solved:**
-After implementing Cold Start protocol (v1.2.5), we forgot to update README and CHANGELOG until user pointed out: "Смысл этого фреймворка - помогать другим проектам ничего не упускать, а сами забываем добавить в README и логи))) Это как?"
+After implementing Cold Start protocol (v1.2.5), we forgot to update README and CHANGELOG until user pointed out: "The whole point of this framework is to help other projects not miss anything, and yet we ourselves forget to add things to the README and the logs))) How come?"
 
 **Solution:**
 New `/release` command that fully automates the release process with proactive AI suggestions.
@@ -2283,7 +2283,7 @@ New `/release` command that fully automates the release process with proactive A
    - Optionally creates GitHub Release with gh CLI
 
 3. **Proactive Release Checking in AGENTS.md**
-   - New section: "🚀 Release Management (для claude-code-starter проекта)"
+   - New section: "🚀 Release Management (for the claude-code-starter project)"
    - **Substantial Changes Criteria:**
      - New slash commands in `.claude/commands/`
      - New sections in templates (Init/, init_eng/)
@@ -2296,7 +2296,7 @@ New `/release` command that fully automates the release process with proactive A
    - Added to both `Init/AGENTS.md` (+190 lines) and `init_eng/AGENTS.md` (+190 lines)
 
 4. **Release Process in WORKFLOW.md**
-   - New section: "📦 Release Process (для claude-code-starter)"
+   - New section: "📦 Release Process (for claude-code-starter)"
    - **When to Create Release:** Clear criteria for patch/minor/major
    - **Automatic Workflow:** AI should automatically suggest after commits
    - **Semantic Versioning Rules:** Detailed explanation of version numbering
@@ -2307,7 +2307,7 @@ New `/release` command that fully automates the release process with proactive A
 
 5. **CLAUDE.md Updates**
    - Added `/release` to slash commands list
-   - Marked as "только для claude-code-starter" / "only for claude-code-starter"
+   - Marked as "only for claude-code-starter" (RU) / "only for claude-code-starter" (EN)
    - Added to both `Init/CLAUDE.md` and `init_eng/CLAUDE.md`
 
 ### Changed
@@ -2389,9 +2389,9 @@ Error reduction: 87.5%
 ### Why This Matters
 
 **User Feedback That Triggered This:**
-> "Смысл этого фреймворка - помогать другим проектам ничего не упускать, а сами забываем добавить в README и логи))) Это как?"
+> "The whole point of this framework is to help other projects not miss anything, and yet we ourselves forget to add things to the README and the logs))) How come?"
 >
-> "да, но по идее после всех даже минорных изменений, особнно существенных ты должен на автомате корректировать README и лог"
+> "yes, but in principle after any change, even a minor one, and especially a significant one, you should automatically correct the README and the log"
 
 The framework's purpose is helping others not miss important updates. But we ourselves forgot to update our own README and CHANGELOG after implementing Cold Start protocol. This was the "shoemaker without shoes" problem.
 
@@ -2450,7 +2450,7 @@ Implemented 3-stage conditional file reading protocol that saves ~60% tokens on 
    - Added to both `Init/PROJECT_INTAKE.md` and `init_eng/PROJECT_INTAKE.md`
 
 2. **Cold Start Protocol in CLAUDE.md**
-   - New section: "🔄 Протокол Cold Start" (Russian) / "🔄 Cold Start Protocol" (English)
+   - New section: "🔄 Cold Start Protocol" (Russian) / "🔄 Cold Start Protocol" (English)
    - **Stage 1: Quick Status Check (~500 tokens)**
      - Reads only first 20 lines of PROJECT_INTAKE.md
      - Checks: Status, Migration Status, Project Name
@@ -2471,7 +2471,7 @@ Implemented 3-stage conditional file reading protocol that saves ~60% tokens on 
 
 4. **README Documentation**
    - New section: "⚡ Cold Start Protocol: Token Optimization" in README.md
-   - New section: "⚡ Протокол Cold Start: Оптимизация токенов" in README_RU.md
+   - New section: "⚡ Cold Start Protocol: Token Optimisation" in README_RU.md
    - Added to features list: "✅ **Cold Start Protocol** - 60% token savings on session reloads"
    - Explains problem, solution, stages, and automatic activation
 
@@ -2581,7 +2581,7 @@ Project with 50 session reloads/month:
 ### Why This Matters
 
 **Token Optimization:**
-User feedback: "Каждый раз перезагружаю Claude Code и чувствую что токены тратятся на чтение всего"
+User feedback: "Every time I restart Claude Code, I feel the tokens being spent on reading everything"
 
 The Cold Start protocol addresses this by implementing conditional file reading based on project status. AI only reads what's necessary for current context.
 
@@ -2629,10 +2629,10 @@ Test execution revealed 8 real-world issues that would cause migration failures 
   - Updated migration section with "start" command
 - **README_RU.md:**
   - Same updates in Russian
-  - "# Инициализируйте диалог с AI (ВАЖНО!) / start"
+  - "# Initialise the dialogue with the AI (IMPORTANT!) / start"
 - **init-project.sh:**
-  - Updated NEW project output: "4. ВАЖНО! Инициализируйте диалог с AI: start"
-  - Updated LEGACY project output: "3. ВАЖНО! Инициализируйте диалог с AI: start"
+  - Updated NEW project output: "4. IMPORTANT! Initialise the dialogue with the AI: start"
+  - Updated LEGACY project output: "3. IMPORTANT! Initialise the dialogue with the AI: start"
   - Recreated zip archives with updated script
 
 ### Changed
@@ -2660,7 +2660,7 @@ Test execution revealed 8 real-world issues that would cause migration failures 
 - ✅ Works for both new and legacy projects
 
 **Why This Matters:**
-User feedback revealed confusion: "После команды claude ничего не произошло". Users expected AI to speak first automatically but didn't understand CLI limitation. Now documentation clearly states: `claude` → `start` → AI engages.
+User feedback revealed confusion: "Nothing happened after the claude command". Users expected AI to speak first automatically but didn't understand CLI limitation. Now documentation clearly states: `claude` → `start` → AI engages.
 
 ---
 
@@ -2705,7 +2705,7 @@ DON'T wait for user to ask - be PROACTIVE!
 ### Impact
 
 **User Feedback Addressed:**
-> "По плану ты должен как-то подтвердить все, потом начать анализ и какой-то диалог"
+> "According to the plan, you should somehow confirm everything, then start the analysis and some kind of dialogue"
 
 **Benefits:**
 - ✅ Clear confirmation that framework is active
@@ -2748,7 +2748,7 @@ Now AI agents proactively demonstrate that:
 3. AI is ready to engage with project-specific information
 4. Next steps are clear
 
-This addresses the core issue: **"интерактивность"** - users want immediate, visible, interactive engagement.
+This addresses the core issue: **"interactivity"** - users want immediate, visible, interactive engagement.
 
 ---
 
@@ -2763,7 +2763,7 @@ This addresses the core issue: **"интерактивность"** - users want
 **Solution:**
 - Modified `init-project.sh` legacy scenario to automatically copy CLAUDE.md to root
 - Added check: if CLAUDE.md already exists in root, skip copying (prevents overwriting user customizations)
-- User sees clear message: "✅ CLAUDE.md скопирован в корень для автозагрузки"
+- User sees clear message: "✅ CLAUDE.md copied to the root for auto-loading"
 
 **Impact:**
 - ✅ Legacy projects now work correctly with `claude` command
@@ -2806,7 +2806,7 @@ Claude Code CLI requires CLAUDE.md to be in project root for auto-loading. Witho
   - Updated migration instructions to use script
   - Clear emphasis on "bash init-project.sh" (no chmod required)
 - **README_RU.md:**
-  - Added "Что нового в v1.2.0" section
+  - Added "What's new in v1.2.0" section
   - Rewritten Quick Start with new 3-step process
   - Updated migration section with script-based workflow
 
@@ -2847,7 +2847,7 @@ The smart script eliminates these pain points entirely.
 
 ### Why This Matters
 
-This update addresses critical user feedback: "можно ошибиться, много файлом" (easy to make mistakes with many files). By automating the entire installation process and adding intelligent project detection, we've made the framework accessible to absolute beginners while maintaining power-user flexibility through command-line flags.
+This update addresses critical user feedback: "it's easy to slip up, too many files" (easy to make mistakes with many files). By automating the entire installation process and adding intelligent project detection, we've made the framework accessible to absolute beginners while maintaining power-user flexibility through command-line flags.
 
 The script embodies the framework's philosophy: **simplify complexity for the user, let automation handle the details**.
 
@@ -2866,7 +2866,7 @@ The script embodies the framework's philosophy: **simplify complexity for the us
 - Removed duplicated security rules (now references SECURITY.md)
 - Removed duplicated workflow checklists (now references WORKFLOW.md)
 - Transformed from "Navigator + Reference + Duplicated Rules" to "Navigator ONLY"
-- Added clear cross-references with format "📖 См. WORKFLOW.md → Section Name"
+- Added clear cross-references with format "📖 See WORKFLOW.md → Section Name"
 
 #### AGENTS.md (Russian & English)
 - **Removed ~31 duplicated security instructions**
