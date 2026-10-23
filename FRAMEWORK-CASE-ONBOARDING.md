@@ -1,116 +1,116 @@
-# FRAMEWORK-CASE-ONBOARDING — кейс: онбординг-файл, который сузил агента
+# FRAMEWORK-CASE-ONBOARDING — case study: an onboarding file that narrowed the agent
 
-_Кейс для разработчика Claude Code Starter. Дата: 2026-06-12, проект Saved Downloader.
-Написан по горячим следам инцидента по запросу владельца: паттерн «`.claude/ONBOARDING.md`
-как единая конституция сессии» — кандидат на тиражирование во все проекты фреймворка;
-без исправления описанная проблема воспроизведётся везде. Формат: проблема → симптом →
-разбор → принципы → решение. Дополняет `FRAMEWORK-REGRESSION-REPORT.md`._
+_A case study for the developer of Claude Code Starter. Date: 2026-06-12, project Saved Downloader.
+Written in the immediate aftermath of the incident at the owner's request: the "`.claude/ONBOARDING.md`
+as the single constitution of the session" pattern is a candidate for replication across every framework project;
+without a fix, the problem described here will reproduce everywhere. Format: problem → symptom →
+analysis → principles → solution. Supplements `FRAMEWORK-REGRESSION-REPORT.md`._
 
 ---
 
 ## TL;DR
 
-`.claude/ONBOARDING.md` («единая конституция проекта», вставляемый промпт сессии) **удалён**.
-У паттерна три структурных дефекта:
+`.claude/ONBOARDING.md` ("the single constitution of the project", a session prompt to paste in) has been **deleted**.
+The pattern has three structural defects:
 
-1. **Дубликат автозагружаемого CLAUDE.md** → два источника истины, неизбежный дрейф.
-2. **Кэп на выход в протоколе понимания** («доложи готовность 3-5 строк») → агент читает
-   формат как потолок глубины и строит минимально-достаточную модель проекта.
-3. **Представление только из самоописания** (читаются одни метафайлы, без сверки с кодом) →
-   агент наследует слепые пятна карты и не знает об этом.
+1. **A duplicate of the auto-loaded CLAUDE.md** → two sources of truth, inevitable drift.
+2. **A cap on output in the understanding protocol** ("report readiness in 3-5 lines") → the agent reads
+   the format as a ceiling on depth and builds a minimally sufficient model of the project.
+3. **A picture built only from self-description** (only the metafiles are read, with no check against the code) →
+   the agent inherits the map's blind spots and does not know it.
 
-Решение: конституция консолидирована в CLAUDE.md (единственный источник истины), формат
-доклада масштабируется под запрос, добавлен обязательный шаг заземления в код.
+Solution: the constitution has been consolidated into CLAUDE.md (the single source of truth), the report format
+scales to the request, and a mandatory step of grounding in the code has been added.
 
-## Хронология инцидента
+## Incident timeline
 
-1. Владелец — новой сессии: «разберись с проектом, я хочу убедиться, что ты понял — что это
-   и зачем, как устроен».
-2. Агент выполнил онбординг по конституции добросовестно: прочитал весь хребет (manifest,
-   CLAUDE, SNAPSHOT, ARCHITECTURE, INVARIANTS, METHODOLOGY, BACKLOG) — и доложил по
-   предписанию ШАГ 5: сжатый дайджест готовности.
-3. Владелец сравнил доклад с `docs/EXTERNAL-ANALYSIS.md` — разбором **того же проекта**,
-   сделанным агентом из соседней папки **без этого онбординга**: тезис «зачем» из
-   ROADMAP/CONCEPT, метрики кода, таблица «реальность vs дизайн», риски, интеграционные
-   выводы. Контраст разительный; оценка владельца — «убогий» vs «подробный».
-4. Разбор показал: дело не в способности агента (тот же агент за минуту верифицировал
-   метрики внешнего разбора grep'ом и wc), а в конструкции онбординг-файла. Глубина приходит
-   из постановки задачи и заземления — конституция в текущем виде подавляла и то, и другое.
+1. The owner, to a new session: "get to grips with the project, I want to make sure you've understood what it is
+   and why it exists, and how it is built".
+2. The agent carried out the onboarding by the constitution conscientiously: it read the whole backbone (manifest,
+   CLAUDE, SNAPSHOT, ARCHITECTURE, INVARIANTS, METHODOLOGY, BACKLOG) — and reported as
+   prescribed by STEP 5: a condensed readiness digest.
+3. The owner compared the report with `docs/EXTERNAL-ANALYSIS.md` — an analysis of **the same project**
+   made by an agent from a neighbouring folder **without this onboarding**: the "why" thesis from
+   ROADMAP/CONCEPT, code metrics, a "reality vs design" table, risks, integration
+   conclusions. The contrast was striking; the owner's verdict was "meagre" vs "detailed".
+4. The analysis showed that the issue was not the agent's ability (the same agent verified the external analysis's
+   metrics with grep and wc in a minute), but the design of the onboarding file. Depth comes
+   from how the task is framed and from grounding — the constitution in its current form suppressed both.
 
-## Дефект 1. Дубликат автозагружаемого файла
+## Defect 1. A duplicate of the auto-loaded file
 
-**Механика.** CLAUDE.md харнес кладёт в контекст агента автоматически, до первого действия —
-его не нужно «читать». ONBOARDING.md агент видит только по указателю из CLAUDE.md. При этом
-содержание дублировалось на ~80% (две оси памяти, порядок чтения, INV-границы, правила
-работы). Цепочка: гарантированно загруженный файл отправляет агента читать второй файл,
-повторяющий первый.
+**Mechanics.** The harness puts CLAUDE.md into the agent's context automatically, before the first action —
+it does not need to be "read". The agent sees ONBOARDING.md only via a pointer from CLAUDE.md. Meanwhile
+the content was ~80% duplicated (the two memory axes, reading order, INV boundaries, working
+rules). The chain: a guaranteed-loaded file sends the agent to read a second file
+that repeats the first.
 
-**Чем это плохо.** Два файла с одним содержанием = два источника истины. Они расходятся при
-правках — и тогда непонятно, какой истинен. Конкретика: дефектный кэп «3-5 строк» жил в
-*обоих* файлах. Это анти-паттерн «два словаря без контракта» — ровно тот класс бага, который
-сам проект чинил в данных (рассинхрон словарей MCP, решён через `tag_alias`).
+**Why this is bad.** Two files with the same content = two sources of truth. They diverge with
+edits — and then it is unclear which one is true. Specifically: the defective "3-5 lines" cap lived in
+*both* files. This is the "two dictionaries without a contract" anti-pattern — exactly the class of bug that
+the project itself had been fixing in its data (MCP dictionary desync, resolved via `tag_alias`).
 
-**Принцип для фреймворка.** Конституция живёт в файле, который харнес **гарантированно
-загружает** (CLAUDE.md). Легитимная функция отдельного онбординг-файла — переносимость для
-агентов вне харнеса (сессия из другой папки, Codex с его AGENTS.md, веб) — реализуется
-**тонким указателем без содержания**: «прочитай CLAUDE.md и `.claude/*` в таком порядке».
-Нулевое содержание → нечему дрейфовать.
+**Principle for the framework.** The constitution lives in the file that the harness **is guaranteed to
+load** (CLAUDE.md). The legitimate function of a separate onboarding file — portability for
+agents outside the harness (a session from another folder, Codex with its AGENTS.md, the web) — is implemented
+as **a thin pointer with no content**: "read CLAUDE.md and `.claude/*` in this order".
+Zero content → nothing to drift.
 
-## Дефект 2. Кэп на выход в протоколе понимания
+## Defect 2. A cap on output in the understanding protocol
 
-**Механика.** «Доложи готовность 3-5 строк» задумывался как анти-шум (не вываливать простыню
-на старте), но сработал как якорь: агент строит модель до уровня, достаточного для 5 строк,
-и останавливается. Формат протокола прочитан как потолок, а не как пол — даже когда явный
-запрос владельца («хочу убедиться, что ты понял») требовал большего.
+**Mechanics.** "Report readiness in 3-5 lines" was intended as anti-noise (don't dump a wall of text
+at the start), but it worked as an anchor: the agent builds the model up to the level sufficient for 5 lines,
+and stops. The protocol format was read as a ceiling rather than a floor — even when the owner's explicit
+request ("I want to make sure you've understood") demanded more.
 
-**Корень — смешение трёх видов ограничений с противоположной ценностью:**
+**The root cause is mixing three kinds of constraints with opposite value:**
 
-| Вид ограничения | Пример | Вердикт |
+| Kind of constraint | Example | Verdict |
 |---|---|---|
-| на **действия** | INV-6 (не тратить деньги), INV-7 (не трогать данные) | **необходимы** — guardrails, защищают проект, пока модель агента строится |
-| на **внимание** | порядок чтения, две оси памяти, «хребет раньше docs/» | **полезны** — делают глубину достижимой в конечном окне контекста |
-| на **глубину/выход** | «доложи 3-5 строк» | **вредны** — режут адекватность представления |
+| on **actions** | INV-6 (don't spend money), INV-7 (don't touch the data) | **necessary** — guardrails, they protect the project while the agent's model is being built |
+| on **attention** | reading order, the two memory axes, "backbone before docs/" | **helpful** — they make depth achievable in a finite context window |
+| on **depth/output** | "report in 3-5 lines" | **harmful** — they cut the adequacy of the picture |
 
-Тезис владельца, принятый как назначение конституции: файл должен дать **адекватное и
-достаточно глубокое** представление о проекте; всё, что ограничивает глубину понимания,
-противоречит самому назначению файла.
+The owner's thesis, adopted as the purpose of the constitution: the file must give an **adequate and
+sufficiently deep** picture of the project; anything that limits the depth of understanding
+contradicts the very purpose of the file.
 
-**Принцип для фреймворка.** В протоколах онбординга не кэпить выход. Формулировка вместо
-фиксированного объёма: «доклад масштабируй под запрос: рутинный старт — кратко; просьба
-разобраться/проанализировать — полный аналитический разбор». Минимум — пол, не потолок.
+**Principle for the framework.** Do not cap output in onboarding protocols. Wording instead of
+a fixed length: "scale the report to the request: routine start — brief; a request to
+get to grips with / analyse — a full analytical breakdown". The minimum is a floor, not a ceiling.
 
-## Дефект 3. Представление только из самоописания
+## Defect 3. A picture built only from self-description
 
-**Механика.** Онбординг предписывал читать только метафайлы проекта. Это карта, не
-территория: если SNAPSHOT/ARCHITECTURE разошлись с кодом, агент наследует неточность вместе
-со слепыми пятнами самоописания — и не имеет шанса это заметить.
+**Mechanics.** The onboarding prescribed reading only the project's metafiles. That is the map, not the
+territory: if SNAPSHOT/ARCHITECTURE have diverged from the code, the agent inherits the inaccuracy along
+with the blind spots of the self-description — and has no chance of noticing it.
 
-**Контрпример, который вскрыл дефект.** EXTERNAL-ANALYSIS оказался глубже не потому, что
-прочитал больше прозы, а потому что **заземлил карту в реальность**: снял метрики кода
-(32 файла / ~11.6k строк `scripts/`), грепнул заглушки (`scenario.py`: 8 модельных шагов
-`# TODO`), построил таблицу «реальность vs дизайн». Стоимость заземления — минута работы
-(git log, wc, пара grep), ценность — представление, которому можно верить.
+**The counterexample that exposed the defect.** EXTERNAL-ANALYSIS turned out deeper not because it
+read more prose, but because it **grounded the map in reality**: it took code metrics
+(32 files / ~11.6k lines of `scripts/`), grepped for stubs (`scenario.py`: 8 model steps
+`# TODO`), built a "reality vs design" table. The cost of grounding is a minute of work
+(git log, wc, a couple of greps); the value is a picture that can be trusted.
 
-**Принцип для фреймворка.** Онбординг обязан включать шаг заземления (дешёвые пробы кода
-против заявлений метафайлов) и явную пометку границ знания: «после этих шагов ты знаешь
-карту, не территорию; перед правкой подсистемы — читай её код и её docs». Опасна не
-неполнота модели, а ложная уверенность в её полноте.
+**Principle for the framework.** Onboarding must include a grounding step (cheap probes of the code
+against the metafiles' claims) and an explicit marker of the limits of knowledge: "after these steps you know the
+map, not the territory; before editing a subsystem, read its code and its docs". The danger is not
+an incomplete model, but false confidence in its completeness.
 
-## Что сделано в проекте (референс-решение)
+## What was done in the project (reference solution)
 
-- `.claude/ONBOARDING.md` удалён.
-- CLAUDE.md — единственная конституция. В шапке — назначение: «адекватная модель проекта:
-  правильная по структуре, заземлённая в код, знающая свои границы + защита проекта, пока
-  модель строится; ограничения на действия жёсткие, ограничений на глубину понимания нет».
-- В «Старт сессии» добавлены: шаг заземления (п. 3), масштабируемый доклад с эталоном
-  глубины (п. 4), пометка «карта ≠ территория» (п. 5), указатель для внешних агентов.
+- `.claude/ONBOARDING.md` has been deleted.
+- CLAUDE.md is the only constitution. Its header states the purpose: "an adequate model of the project:
+  correct in structure, grounded in the code, aware of its own limits + protection of the project while the
+  model is being built; constraints on actions are hard, there are no constraints on depth of understanding".
+- "Session start" now includes: a grounding step (item 3), a scalable report with a depth
+  benchmark (item 4), a "map ≠ territory" marker (item 5), a pointer for external agents.
 
-## Чек-лист для фреймворка
+## Checklist for the framework
 
-- [ ] Не генерировать в проектах отдельный ONBOARDING.md с содержанием: конституция = CLAUDE.md.
-- [ ] Переносимый промпт для внешних агентов — указатель без содержания (нечему дрейфовать).
-- [ ] В шаблоне CLAUDE.md формат доклада — «масштабируй под запрос», без фиксированного объёма.
-- [ ] В шаблон онбординга — шаг заземления (метрики/grep против метафайлов) и пометку
-      «карта ≠ территория».
-- [ ] Различать три вида ограничений: действия — жёстко; внимание — структурировать;
-      глубину/выход — не кэпить никогда.
+- [ ] Do not generate a separate ONBOARDING.md with content in projects: constitution = CLAUDE.md.
+- [ ] A portable prompt for external agents is a pointer with no content (nothing to drift).
+- [ ] In the CLAUDE.md template the report format is "scale to the request", with no fixed length.
+- [ ] Into the onboarding template — a grounding step (metrics/grep against the metafiles) and a
+      "map ≠ territory" marker.
+- [ ] Distinguish three kinds of constraints: actions — hard; attention — structure it;
+      depth/output — never cap.

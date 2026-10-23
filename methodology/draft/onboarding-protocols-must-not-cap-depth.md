@@ -8,48 +8,48 @@ sources:
   - /Users/alexeykrolmini/Code/Saved Downloader/docs/FRAMEWORK-REGRESSION-REPORT.md
 ---
 
-# Наблюдение: онбординг-протокол не должен кэпить глубину понимания
+# Observation: an onboarding protocol must not cap depth of understanding
 
-## Что заметил
+## What I noticed
 
-В протоколах инициализации сессии (`/start`, `cold-start`, любой «прочитай N файлов и доложи») легко непреднамеренно прописать **ограничение на выход** («доложи 3–5 строк», «summary не больше N»), которое модель читает как **потолок глубины**, а не пол краткости. На запросе «разберись с проектом» агент строит модель ровно до уровня, достаточного для 5 строк, и останавливается — даже когда это явно недостаточно.
+In session initialisation protocols (`/start`, `cold-start`, any "read N files and report") it is easy to unintentionally write in a **constraint on output** ("report in 3–5 lines", "summary of no more than N"), which the model reads as a **ceiling on depth** rather than a floor on brevity. On a "get to grips with the project" request the agent builds its model exactly to the level sufficient for 5 lines, and stops — even when that is clearly insufficient.
 
-Подтверждено реальным инцидентом в проекте Saved Downloader: тот же агент с тем же доступом к коду на запрос «убедись что ты понял проект» выдал убогий 5-строчный дайджест по конституции, а на запрос «дай аналитический разбор» (другой папкой, без онбординг-кэпа) — глубокий разбор с метриками, таблицей реальности vs дизайна, рисками.
+Confirmed by a real incident in the Saved Downloader project: the same agent with the same access to the code, asked to "make sure you've understood the project", produced a meagre 5-line digest following the constitution, whereas when asked to "give an analytical breakdown" (from another folder, without the onboarding cap) it produced a deep analysis with metrics, a reality vs design table and risks.
 
-## В каких случаях
+## In which cases
 
-Протоколы инициализации сессии, онбординга, cold-start. Любой документ, который:
-1. предписывает читать набор метафайлов;
-2. предписывает доложить результат.
+Session initialisation, onboarding and cold-start protocols. Any document that:
+1. prescribes reading a set of metafiles;
+2. prescribes reporting the result.
 
-Если шаг (2) имеет фиксированный объём в строках/предложениях — это кандидат на этот баг.
+If step (2) has a fixed length in lines/sentences, it is a candidate for this bug.
 
-## Принцип
+## Principle
 
-Различать **три вида ограничений** в протоколе:
+Distinguish **three kinds of constraints** in a protocol:
 
-| Вид | Назначение | Норма |
+| Kind | Purpose | Norm |
 |-----|------------|-------|
-| На действия | защитить проект (INVARIANTS, production-safety) | **жёстко** |
-| На внимание | сделать глубину достижимой (порядок чтения, две оси памяти) | **полезно** |
-| На глубину/выход | — | **никогда не кэпить** |
+| On actions | protect the project (INVARIANTS, production-safety) | **hard** |
+| On attention | make depth achievable (reading order, the two memory axes) | **helpful** |
+| On depth/output | — | **never cap** |
 
-Глубина диктуется запросом пользователя, не форматом протокола. Минимум — пол адекватности, потолка нет.
+Depth is dictated by the user's request, not by the protocol's format. The minimum is a floor of adequacy; there is no ceiling.
 
-Связанное:
-- метафайлы — карта, не территория; протокол без шага заземления (grep/wc против заявлений) даёт ложную уверенность в полноте модели;
-- два файла с одинаковым содержанием (CLAUDE.md + ONBOARDING.md) = два источника истины, неизбежный дрейф. Конституция живёт в файле, который харнес автозагружает; переносимый промпт для внешних агентов — это **указатель без содержания**.
+Related:
+- metafiles are the map, not the territory; a protocol without a grounding step (grep/wc against the claims) gives false confidence in the completeness of the model;
+- two files with the same content (CLAUDE.md + ONBOARDING.md) = two sources of truth, inevitable drift. The constitution lives in the file the harness auto-loads; a portable prompt for external agents is **a pointer with no content**.
 
-## Что пробовали / альтернативы
+## What was tried / alternatives
 
-- Кэп «3–5 строк» как анти-шум на старте — даёт нужный эффект для рутинного `/start`, но проваливается на запросе «разберись». Лечение через масштабирование: формат доклада явно зависит от типа запроса (рутинный / аналитический / задача).
-- Только метафайлы без заземления — даёт быстрый результат, но воспроизводимо унаследует слепые пятна самоописания. Лечение — обязательный шаг grep/wc/git log против заявлений ARCHITECTURE/SNAPSHOT.
+- A "3–5 lines" cap as anti-noise at the start — gives the desired effect for a routine `/start`, but fails on a "get to grips with it" request. The cure is scaling: the report format depends explicitly on the type of request (routine / analytical / task).
+- Metafiles only, without grounding — gives a quick result, but reproducibly inherits the blind spots of the self-description. The cure is a mandatory grep/wc/git log step against the claims of ARCHITECTURE/SNAPSHOT.
 
-## Связь с другими наблюдениями
+## Connection to other observations
 
-- Повторение пользовательского репорта в той же области (контракты vs state в [[memory-axes-must-stay-separate]]) → это второй случай от того же владельца по близкой теме. Если повторится третий раз — поднимать в pattern.
-- Сильно перекликается с принципом из `rules/llm-as-component`: ошибка структурно возможна, потому что инструкция позволяет модели «остановиться рано». Запрет на ранний выход = кэп невозможен структурно.
+- A repeat of a user report in the same area (contracts vs state in [[memory-axes-must-stay-separate]]) → this is the second case from the same owner on a closely related topic. If it happens a third time, promote it to a pattern.
+- Strongly echoes the principle from `rules/llm-as-component`: the error is structurally possible because the instruction allows the model to "stop early". A ban on early exit = a cap is structurally impossible.
 
 ---
 
-*Поднимать до pattern, когда тот же подход повторился в 3+ задачах. Сейчас — 2 (memory-axes + onboarding-cap), оба от одного владельца, в одном репозитории-потребителе.*
+*Promote to pattern once the same approach has recurred in 3+ tasks. Currently 2 (memory-axes + onboarding-cap), both from the same owner, in the same consuming repository.*

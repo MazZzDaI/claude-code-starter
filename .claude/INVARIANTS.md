@@ -6,58 +6,58 @@ updated: YYYY-MM-DD
 
 # Invariants
 
-## Зачем этот файл
+## Why this file exists
 
-Здесь — **жёсткие правила продукта**, которые нельзя нарушать. Не стиль,
-не предпочтение, не «как обычно делаем». Нарушение инварианта = баг, а не
-вопрос вкуса.
+This is where the **hard rules of the product** live, the ones that must not be broken. Not style,
+not preference, not "the way we usually do it". Violating an invariant = a bug, not
+a matter of taste.
 
-Отличие от `.claude/rules/`:
-- `rules/` — как работает **агент** (когда коммитить, как делегировать).
-- `INVARIANTS.md` — что не должно произойти с **продуктом** (данные,
-  безопасность, контракты, инварианты состояния).
+How it differs from `.claude/rules/`:
+- `rules/` — how the **agent** works (when to commit, how to delegate).
+- `INVARIANTS.md` — what must not happen to the **product** (data,
+  security, contracts, state invariants).
 
-Если инвариант мешает задаче — это не повод его нарушить. Это повод
-открыть обсуждение и либо ослабить формулировку, либо изменить задачу.
-Перед изменением инварианта — записать в `История`, чем он был вызван.
+If an invariant gets in the way of a task, that is no reason to break it. It is a reason
+to open a discussion and either relax the wording or change the task.
+Before changing an invariant, record in `History` what prompted it.
 
-**Категории (подсказка):** `data` · `security` · `api` · `performance` ·
+**Categories (hint):** `data` · `security` · `api` · `performance` ·
 `concurrency` · `migration` · `compatibility` · `licensing` · `pii`
 
 ---
 
-### INV-001: Не использовать `DROP TABLE` в миграциях
+### INV-001: Do not use `DROP TABLE` in migrations
 
-**Категория:** data / migration
-**Правило:** Миграции схемы выполняются только через `ALTER`, `ADD`,
-`RENAME`, `CREATE` или дополнительные таблицы. `DROP TABLE`, `TRUNCATE`,
-`DELETE FROM` без `WHERE` — запрещены в коде миграций.
-**Почему:** Потеря данных недопустима. История уже знала случаи, когда
-одна «безопасная очистка» в миграции уничтожала данные продакшна
-безвозвратно. Откатывать нельзя — бэкап восстанавливает только то, что
-было до миграции.
-**Как проверить:**
-- ревью каждой миграции вручную;
+**Category:** data / migration
+**Rule:** Schema migrations are performed only via `ALTER`, `ADD`,
+`RENAME`, `CREATE` or additional tables. `DROP TABLE`, `TRUNCATE`,
+`DELETE FROM` without `WHERE` are forbidden in migration code.
+**Why:** Data loss is unacceptable. History has already seen cases where
+a single "safe clean-up" in a migration destroyed production data
+irreversibly. It cannot be rolled back — a backup restores only what
+existed before the migration.
+**How to check:**
+- review every migration by hand;
 - lint: `grep -rE 'DROP TABLE|TRUNCATE|DELETE FROM [^W]' migrations/`
-  должен быть пустым;
-- интеграционный тест прогоняет миграцию на копии прод-данных и
-  проверяет row counts до/после.
-**История:** <!-- ссылка на incident report, если был; иначе оставить пустым -->
+  must be empty;
+- an integration test runs the migration on a copy of production data and
+  checks row counts before/after.
+**History:** <!-- link to the incident report, if there was one; otherwise leave empty -->
 
 <!--
-Добавляй новые инварианты ниже. Шаблон:
+Add new invariants below. Template:
 
-### INV-NNN: <короткое имя>
+### INV-NNN: <short name>
 
-**Категория:** ...
-**Правило:** <одна фраза, утвердительно>
-**Почему:** <реальный риск, от которого защищает>
-**Как проверить:** <тест / lint / ревью-чеклист / ручная проверка>
-**История:** <инцидент, который привёл к появлению, если был>
+**Category:** ...
+**Rule:** <one sentence, in the affirmative>
+**Why:** <the real risk it protects against>
+**How to check:** <test / lint / review checklist / manual check>
+**History:** <the incident that led to it, if there was one>
 
-Правила хорошего инварианта:
-- Одно правило = один пункт. Не объединяй несвязанные запреты.
-- Формулировка проверяемая: либо машинно, либо в ревью-чеклисте.
-- Если не можешь объяснить «почему» — это, скорее всего, не инвариант,
-  а стилевое предпочтение, ему место не здесь.
+Rules for a good invariant:
+- One rule = one item. Do not combine unrelated prohibitions.
+- The wording is verifiable: either by machine or in a review checklist.
+- If you cannot explain the "why", it is most likely not an invariant
+  but a stylistic preference, and it does not belong here.
 -->
