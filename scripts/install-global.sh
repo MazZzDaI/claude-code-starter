@@ -272,10 +272,9 @@ if [ -d "$src" ]; then
 fi
 
 # Clean up old name if it was installed by an earlier version.
-# The Cyrillic string below is a fixed marker of the legacy (pre-rename, Russian)
-# skills/init/SKILL.md and must stay as-is to detect already-installed copies.
+# The legacy skills/init/SKILL.md is identified by the framework name in its description.
 if [ -d "$GLOBAL_DIR/skills/init" ] && [ -f "$GLOBAL_DIR/skills/init/SKILL.md" ]; then
-    if grep -q "Установить Claude Code Starter framework" "$GLOBAL_DIR/skills/init/SKILL.md" 2>/dev/null; then
+    if grep -q "Claude Code Starter framework" "$GLOBAL_DIR/skills/init/SKILL.md" 2>/dev/null; then
         run rm -rf "$GLOBAL_DIR/skills/init"
         log_info "Removed legacy skills/init/ (renamed to setup-project/)"
     fi

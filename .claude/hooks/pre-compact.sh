@@ -39,10 +39,9 @@ if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
 fi
 
 # 2. Update the timestamp in SNAPSHOT (the file is always updated locally).
-# Matches both the current English label and the legacy Russian one, so that
-# already-installed projects keep working; always writes the English label.
+# Matches "Last updated" / "Last Updated"; always writes "Last updated".
 if [ -f "$SNAPSHOT" ]; then
-    sed -i.bak -E "s/\*\*(Last [Uu]pdated|Последнее обновление):\*\*.*/**Last updated:** $TIMESTAMP (pre-compaction)/" "$SNAPSHOT" 2>/dev/null || true
+    sed -i.bak -E "s/\*\*Last [Uu]pdated:\*\*.*/**Last updated:** $TIMESTAMP (pre-compaction)/" "$SNAPSHOT" 2>/dev/null || true
     rm -f "$SNAPSHOT.bak"
 
     if [ -x "$STATE_HELPER" ] && [ "$("$STATE_HELPER" should-commit-framework-state)" = "false" ]; then

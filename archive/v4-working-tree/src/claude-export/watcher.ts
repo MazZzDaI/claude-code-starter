@@ -66,7 +66,7 @@ export function requestSummary(dialogPath: string, verbose: boolean = false, isF
   const prompt = isFinal
     ? `Read the file ${dialogPath} — it is a completed dialog with Claude Code.
 
-Create TWO summaries in Russian:
+Create TWO summaries in English:
 
 1. SHORT (for the dialog list) - one sentence:
    - The essence of the changes or the problem
@@ -84,7 +84,7 @@ Then use Edit to REPLACE the existing summary at the start of the file in the fo
 <!-- SUMMARY_FULL: full detailed summary -->`
     : `Read the file ${dialogPath}.
 
-Create TWO summaries in Russian:
+Create TWO summaries in English:
 
 1. SHORT - one sentence with specifics (files/functions/modules)
    Example: "Added a watcher for auto-exporting dialogs to dialog/"

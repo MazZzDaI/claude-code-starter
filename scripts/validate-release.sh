@@ -82,10 +82,9 @@ if ! grep -q "release-notes/v$VERSION.md" "$REPO_DIR/README.md"; then
 fi
 
 # Content drift — README must have a highlight paragraph for the current
-# version, not just a badge bump. Pattern: "**What's new in v6.2.1:**" (legacy Russian form also accepted) or
-# "**What's new in v6.2.1:**". This catches the recurring "I bumped the
+# version, not just a badge bump. Pattern: "**What's new in v6.2.1:**". This catches the recurring "I bumped the
 # badge but the highlight still describes the prior release" failure mode.
-if ! grep -qE "\*\*(Новое в|What'?s new in) v$VERSION[^0-9.]" "$REPO_DIR/README.md"; then
+if ! grep -qE "\*\*What'?s new in v$VERSION[^0-9.]" "$REPO_DIR/README.md"; then
     echo "validate-release: README.md has no '**What's new in v$VERSION:**' highlight paragraph (content drift)"
     echo "  Hint: add a one-paragraph highlight near the top describing what changed in this release."
     exit 1
@@ -93,7 +92,7 @@ fi
 
 # Evolution table — if a "## Version evolution" / "## Evolution" section
 # exists, it must include a column referencing the current minor/patch.
-if grep -qE "^## (Version evolution|Эволюция версий|Evolution|v[0-9]+ vs v[0-9]+)" "$REPO_DIR/README.md"; then
+if grep -qE "^## (Version evolution|Evolution|v[0-9]+ vs v[0-9]+)" "$REPO_DIR/README.md"; then
     if ! grep -q "v$VERSION" "$REPO_DIR/README.md"; then
         echo "validate-release: README.md has an evolution section but no v$VERSION column (content drift)"
         exit 1
