@@ -1,85 +1,85 @@
-# Правило: Делегирование субагентам
+# Rule: Delegation to subagents
 
-## Критерии оценки задачи
+## Task assessment criteria
 
-При получении задачи — сначала оценить:
+On receiving a task — first assess:
 
-**Сам (< 2 мин):**
-- Быстрые правки, мелкие фиксы
-- Обсуждения, анализ, ответы на вопросы
-- Изменения < 50 строк кода
-- Обновление конфигов и метафайлов
+**Yourself (< 2 min):**
+- Quick edits, small fixes
+- Discussions, analysis, answering questions
+- Changes < 50 lines of code
+- Updating configs and meta-files
 
-**Субагент (> 5 мин):**
-- Код > 50 строк
-- Новые модули или компоненты
-- Рефакторинг существующего кода
-- UI-изменения
-- Исследования и анализ документации
-- Тестирование (unit, integration, E2E)
+**Subagent (> 5 min):**
+- Code > 50 lines
+- New modules or components
+- Refactoring existing code
+- UI changes
+- Research and documentation analysis
+- Testing (unit, integration, E2E)
 
-## Протокол делегирования
+## Delegation protocol
 
-1. **Составить детальное ТЗ** для субагента:
-   - Контекст задачи
-   - Файлы для чтения
-   - Ожидаемый результат
-   - Ограничения
+1. **Write a detailed brief** for the subagent:
+   - Task context
+   - Files to read
+   - Expected result
+   - Constraints
 
-2. **Запустить субагента** (через Agent tool)
+2. **Launch the subagent** (via the Agent tool)
 
-3. **Сообщить пользователю** что запущено (кратко)
+3. **Tell the user** what has been launched (briefly)
 
-4. **Параллельность:** запускать несколько субагентов одновременно на независимые задачи
+4. **Parallelism:** launch several subagents at once on independent tasks
 
-## Оркестрация: charter, веер/solo, один писатель, доказательства
+## Orchestration: charter, fan-out/solo, single writer, evidence
 
-Надстройка над делегированием — операционные рычаги оркестраторской модели (см. `autonomy.md` →
-«Оркестраторская модель»; полный свод — `~/.claude/rules/orchestration-model.md`).
+A layer on top of delegation — the operational levers of the orchestrator model (see `autonomy.md` →
+"Orchestrator model"; full code — `~/.claude/rules/orchestration-model.md`).
 
-- **Charter — единица управления воркером (O5).** Пишущему воркеру выдавай короткий контракт: цель;
-  источники истины (read); ожидаемый выход; владелец файлов/контрактов; разрешённые действия;
-  команды проверки; стоп-условия; форма отчёта. **Без charter воркер только разведывает (read-only),
-  не меняет общую кодовую базу.** Charter = интернализованный handoff: пишешь его ты, не владелец.
-- **Веер или solo (O10).** Веер (несколько воркеров) — для декомпозируемого, покрытия (много
-  читателей под разными углами), параллельных писателей. Solo (сам) — для coherence-critical
-  авторской работы (единый контракт, методология, тонкая единая логика): распараллелить
-  авторски-цельное = франкенштейн. Знать, когда НЕ веером, — часть суждения.
-- **Один писатель на общий контракт (O3).** Schema / API / migration / dependency-manifest / CI /
-  entrypoint — один назначенный писатель + отдельный путь интеграции. Параллельных писателей в один
-  контракт делает **невозможным** worktree-изоляция (`isolation:"worktree"`), а не дисциплина.
-  Разнеси заранее — не жди merge-конфликта как сигнала координации.
-- **Доказательства без подмены (O6).** Итог воркера-проверки — ровно один из
-  `passed / failed / not_run / inconclusive`; последние два не переписывай оптимизмом. Верификатор
-  независим и свои находки **не чинит**. Не выдумывай прогресс / ETA / успех.
-- **Детерминированная оркестрация — Workflow.** Для графа работ с интеграцией (pipeline/parallel,
-  worktree-изоляция, бюджет, resume) используй saved-workflow'ы в `.claude/workflows/`, а не ручной
-  веер субагентов. Суждение — воркеру-модели, бухгалтерию (учёт/дедуп/порядок/статусы) — коду (O4).
+- **Charter — the unit of control over a worker (O5).** Give a writing worker a short contract: goal;
+  sources of truth (read); expected output; owner of files/contracts; permitted actions;
+  verification commands; stop conditions; report format. **Without a charter a worker only scouts (read-only)
+  and does not change the shared codebase.** Charter = an internalised handoff: you write it, not the owner.
+- **Fan-out or solo (O10).** Fan-out (several workers) — for the decomposable, for coverage (many
+  readers from different angles), for parallel writers. Solo (yourself) — for coherence-critical
+  authorial work (a single contract, methodology, subtle unified logic): parallelising something
+  authorially whole = a Frankenstein. Knowing when NOT to fan out is part of judgement.
+- **Single writer per shared contract (O3).** Schema / API / migration / dependency-manifest / CI /
+  entrypoint — one designated writer + a separate integration path. Parallel writers into one
+  contract are made **impossible** by worktree isolation (`isolation:"worktree"`), not by discipline.
+  Separate them in advance — don't wait for a merge conflict as the coordination signal.
+- **Evidence without substitution (O6).** The outcome of a verification worker is exactly one of
+  `passed / failed / not_run / inconclusive`; don't rewrite the last two with optimism. The verifier
+  is independent and does **not** fix its own findings. Don't invent progress / ETA / success.
+- **Deterministic orchestration — Workflow.** For a graph of work with integration (pipeline/parallel,
+  worktree isolation, budget, resume) use saved workflows in `.claude/workflows/`, not a manual
+  fan-out of subagents. Judgement goes to the model worker, bookkeeping (tracking/dedup/ordering/statuses) to code (O4).
 
-## Обязательный цикл после завершения субагента
+## Mandatory cycle after a subagent finishes
 
-**Это критически важно. Без этого шага работа субагента «теряется».**
+**This is critically important. Without this step the subagent's work is "lost".**
 
-Субагенты (implementer, researcher, reviewer) **не коммитят сами** — это ответственность менеджера. Hook `SubagentStop` напомнит, но выполнить цикл должен ты.
+Subagents (implementer, researcher, reviewer) **do not commit themselves** — that is the manager's responsibility. The `SubagentStop` hook will remind you, but you must carry out the cycle.
 
-После того как субагент вернул результат:
+After a subagent has returned its result:
 
-1. **Оценить результат** — корректно ли выполнено ТЗ
-2. **git add + git commit** — зафиксировать изменения субагента (менеджер коммитит, не субагент)
-3. **Обновить SNAPSHOT.md** — что изменилось, какое теперь состояние проекта
-4. **Интегрировать в контекст** — убедиться, что понимание проекта актуально
+1. **Assess the result** — was the brief carried out correctly
+2. **git add + git commit** — record the subagent's changes (the manager commits, not the subagent)
+3. **Update SNAPSHOT.md** — what changed, what the project state is now
+4. **Integrate into context** — make sure your understanding of the project is up to date
 
-**При параллельных субагентах:** не ждать завершения всех. Коммитить результат каждого субагента по мере поступления. Один субагент = один коммит + одно обновление SNAPSHOT.
+**With parallel subagents:** don't wait for all of them to finish. Commit each subagent's result as it arrives. One subagent = one commit + one SNAPSHOT update.
 
-Если этот цикл не выполнен:
-- После compaction агент «забудет» работу субагента
-- При следующей сессии — состояние проекта неактуально
-- Возможен drift: агент начнёт делать уже сделанное
+If this cycle is not carried out:
+- After compaction the agent will "forget" the subagent's work
+- In the next session the project state will be out of date
+- Drift is possible: the agent will start doing what has already been done
 
-## Стандартные субагенты
+## Standard subagents
 
-| Агент | Когда использовать |
+| Agent | When to use |
 |-------|-------------------|
-| `researcher` | Поиск по коду, web-исследования, анализ документации |
-| `implementer` | Написание кода > 50 строк, создание модулей |
-| `reviewer` | Code review, проверка качества, поиск проблем |
+| `researcher` | Code search, web research, documentation analysis |
+| `implementer` | Writing code > 50 lines, creating modules |
+| `reviewer` | Code review, quality checks, finding problems |

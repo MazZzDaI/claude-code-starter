@@ -1,60 +1,60 @@
-# Правило: Управление контекстом
+# Rule: Context management
 
-## Проблема
+## The problem
 
-Деградация контекста начинается при 50-60% заполнения окна. При compaction агент теряет детали и может повторять уже выполненную работу или ломать код.
+Context degradation begins at 50-60% window fill. During compaction the agent loses details and may repeat work already done or break code.
 
-## Превентивные меры
+## Preventive measures
 
-### Регулярное сохранение состояния
+### Regular state saving
 
-После каждого значимого блока работы (не реже чем каждые 20 tool calls — совпадает с checkpoint hook):
-- Проверить: есть ли незакоммиченные изменения
-- Если да: git commit с описательным сообщением
-- Обновить SNAPSHOT.md, если изменилось состояние проекта
+After every significant block of work (at least every 20 tool calls — matches the checkpoint hook):
+- Check: are there uncommitted changes
+- If so: git commit with a descriptive message
+- Update SNAPSHOT.md if the project state has changed
 
-### Признаки деградации контекста
+### Signs of context degradation
 
-Если замечаешь у себя:
-- Повторяешь ранее обсуждённое
-- Не помнишь, что было сделано в начале сессии
-- Путаешь файлы или структуру проекта
+If you notice yourself:
+- Repeating something discussed earlier
+- Not remembering what was done at the start of the session
+- Confusing files or the project structure
 
-**Немедленно:**
-1. Перечитай `.claude/SNAPSHOT.md`
-2. Перечитай `CLAUDE.md`
-3. Проверь `git log --oneline -20` для восстановления хронологии
+**Immediately:**
+1. Re-read `.claude/SNAPSHOT.md`
+2. Re-read `CLAUDE.md`
+3. Check `git log --oneline -20` to restore the chronology
 
-### Не накапливай незакоммиченные изменения
+### Don't accumulate uncommitted changes
 
-Большой объём незакоммиченных изменений = большой риск потери при compaction. Коммить часто, коммить атомарно.
+A large volume of uncommitted changes = a high risk of loss during compaction. Commit often, commit atomically.
 
-## Pre-Compaction протокол
+## Pre-Compaction protocol
 
-Перед compaction автоматически срабатывает hook `PreCompact`, который:
+Before compaction the `PreCompact` hook fires automatically, which:
 
-1. **git add -u + commit** tracked изменений (untracked файлы не добавляются — осознанно)
-2. **Обновить timestamp** в SNAPSHOT.md
+1. **git add -u + commit** of tracked changes (untracked files are not added — deliberately)
+2. **Updates the timestamp** in SNAPSHOT.md
 
-**Что hook НЕ делает** (это ответственность агента в рабочем процессе):
-- Не обновляет содержательные секции SNAPSHOT (Что сделано, В процессе, Следующие шаги)
-- Не добавляет новые untracked файлы
-- Не обходит `repo_access`: в shared/public режиме SNAPSHOT остаётся локальным, а если framework files всё ещё tracked — hook останавливается и требует `scripts/switch-repo-access.sh`
+**What the hook does NOT do** (this is the agent's responsibility in the workflow):
+- Doesn't update the content sections of SNAPSHOT (Done, In progress, Next steps)
+- Doesn't add new untracked files
+- Doesn't bypass `repo_access`: in shared/public mode SNAPSHOT stays local, and if framework files are still tracked — the hook stops and requires `scripts/switch-repo-access.sh`
 
-Поэтому важно обновлять SNAPSHOT.md **до** compaction — в рамках регулярных коммитов (каждые 20 tool calls). Если агент обновлял SNAPSHOT по ходу работы, hook просто зафиксирует последнее состояние.
+That is why it matters to update SNAPSHOT.md **before** compaction — as part of regular commits (every 20 tool calls). If the agent has been updating SNAPSHOT as it went, the hook simply records the latest state.
 
-## Post-Compaction протокол
+## Post-Compaction protocol
 
-После compaction (автоматически через hook `PostCompact`):
+After compaction (automatically via the `PostCompact` hook):
 
-1. **Перечитать SNAPSHOT.md** — восстановить понимание состояния
-2. **Перечитать CLAUDE.md** — восстановить контекст проекта
-3. **git log --oneline -10** — проверить хронологию коммитов
-4. **Не начинать новую работу** пока не восстановлен контекст
+1. **Re-read SNAPSHOT.md** — restore the understanding of the state
+2. **Re-read CLAUDE.md** — restore the project context
+3. **git log --oneline -10** — check the commit chronology
+4. **Don't start new work** until the context has been restored
 
-## Правило для длинных сессий
+## Rule for long sessions
 
-При работе более 30 минут:
-- Каждые 15 минут: коммит + обновление SNAPSHOT
-- Перед каждой крупной задачей: проверить актуальность SNAPSHOT
-- После каждого субагента: полный цикл (commit + SNAPSHOT update)
+When working for more than 30 minutes:
+- Every 15 minutes: commit + SNAPSHOT update
+- Before every major task: check that SNAPSHOT is up to date
+- After every subagent: the full cycle (commit + SNAPSHOT update)

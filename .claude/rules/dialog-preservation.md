@@ -1,31 +1,31 @@
-# Правило: Dialog Preservation
+# Rule: Dialog Preservation
 
-Claude Code пишет полный JSONL текущей сессии в `~/.claude/projects/<encoded-cwd>/`, где `<encoded-cwd>` — путь проекта с заменой `/` на `-`. Эти файлы со временем удаляются retention'ом. Чтобы не потерять ценные обсуждения — эволюцию методологии, archaeology решений, антипаттерны — копируй интересные сессии в `.claude/dialogs/` и веди короткий реестр в `.claude/dialogs/INDEX.md`.
+Claude Code writes the full JSONL of the current session to `~/.claude/projects/<encoded-cwd>/`, where `<encoded-cwd>` is the project path with `/` replaced by `-`. These files are deleted over time by retention. To avoid losing valuable discussions — the evolution of the methodology, the archaeology of decisions, anti-patterns — copy interesting sessions to `.claude/dialogs/` and keep a short register in `.claude/dialogs/INDEX.md`.
 
-## Поведение
+## Behaviour
 
-- **Автоматически:** при `/finish` диалог текущей сессии сохраняется в архив (идемпотентно).
-- **Явно:** если в сессии прямо сейчас что-то ценное — пользователь говорит `/save-dialog` или «сохрани диалог», и `scripts/save-dialogs.sh` копирует JSONL немедленно.
-- **Запись:** в `INDEX.md` строка таблицы `| Date | File | Session | Note |`. Note — 1 строка: тема и почему ценно.
+- **Automatically:** on `/finish` the current session's dialog is saved to the archive (idempotently).
+- **Explicitly:** if something valuable is happening in the session right now — the user says `/save-dialog` or "save the dialog", and `scripts/save-dialogs.sh` copies the JSONL immediately.
+- **Record:** in `INDEX.md`, a table row `| Date | File | Session | Note |`. Note — 1 line: the topic and why it is valuable.
 
-## Политика по repo_access
+## Policy by repo_access
 
-| Режим | `.claude/dialogs/` |
+| Mode | `.claude/dialogs/` |
 |-------|--------------------|
-| `private-solo` | Можно коммитить (часть полного слепка процесса) |
-| `private-shared` | Локально, не коммитить. Перед публикацией — чистка секретов |
-| `public` | Локально, не коммитить. Перед публикацией — чистка секретов |
+| `private-solo` | May be committed (part of the full snapshot of the process) |
+| `private-shared` | Local, don't commit. Before publishing — scrub secrets |
+| `public` | Local, don't commit. Before publishing — scrub secrets |
 
-Для shared/public добавь `.claude/dialogs/` в `.gitignore`. Планируется отдельный `scripts/cleanup-dialogs.sh` для regex-чистки перед публикацией (пока не реализован — чистить вручную или не публиковать).
+For shared/public, add `.claude/dialogs/` to `.gitignore`. A separate `scripts/cleanup-dialogs.sh` for regex scrubbing before publishing is planned (not implemented yet — scrub manually or don't publish).
 
-## Ритм анализа
+## Analysis rhythm
 
-Раз в месяц или квартал перечитывать `INDEX.md`, выписывать повторяющиеся паттерны и закреплять их в `methodology/draft/` (см. methodology layer). Без этого архив бесполезен.
+Once a month or quarter, re-read `INDEX.md`, write out recurring patterns and consolidate them into `methodology/draft/` (see the methodology layer). Without this the archive is useless.
 
-## Не делать
+## Don't
 
-- Не редактировать сами JSONL (источник истины).
-- Не пересылать архив наружу автоматически.
-- Не публиковать в shared/public без чистки секретов.
+- Don't edit the JSONL files themselves (the source of truth).
+- Don't forward the archive outside automatically.
+- Don't publish in shared/public without scrubbing secrets.
 
-Глобальная версия правила: `~/.claude/rules/dialog-preservation.md`.
+Global version of the rule: `~/.claude/rules/dialog-preservation.md`.

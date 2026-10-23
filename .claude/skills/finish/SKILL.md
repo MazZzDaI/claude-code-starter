@@ -1,19 +1,19 @@
 ---
 name: finish
-description: "Завершение рабочей сессии. Тесты, коммит, обновление SNAPSHOT, отчёт."
+description: "End the working session. Tests, commit, SNAPSHOT update, report."
 allowed-tools: Read Edit Write Glob Grep Bash
 disable-model-invocation: true
 ---
 
 # Skill: Finish Session
 
-## Что делать
+## What to do
 
-### 1. Запустить тесты
+### 1. Run the tests
 
-Если в проекте есть тесты:
+If the project has tests:
 ```bash
-# Определить тип проекта и запустить тесты
+# Detect the project type and run the tests
 if [ -f "package.json" ]; then
   npm test 2>&1 || true
 elif [ -f "pytest.ini" ] || [ -f "pyproject.toml" ] || [ -d "tests" ]; then
@@ -21,66 +21,66 @@ elif [ -f "pytest.ini" ] || [ -f "pyproject.toml" ] || [ -d "tests" ]; then
 fi
 ```
 
-Если тесты падают:
-- Попробовать починить (до 3 попыток, автономно)
-- Если не удалось — коммитить код, но записать в SNAPSHOT.md что тесты красные и что конкретно падает
-- Не блокировать весь finish из-за упавшего теста
+If the tests fail:
+- Try to fix them (up to 3 attempts, autonomously)
+- If that fails — commit the code, but record in SNAPSHOT.md that the tests are red and what exactly is failing
+- Don't block the whole finish because of a failing test
 
-### 2. Проверить git status
+### 2. Check git status
 
 ```bash
 git status --short
 git diff --stat
 ```
 
-### 3. Коммит изменений (по Commit Policy)
+### 3. Commit the changes (per the Commit Policy)
 
-Если есть незакоммиченные изменения — следовать правилу `commit-policy.md`:
+If there are uncommitted changes — follow the `commit-policy.md` rule:
 
-1. Для каждого файла определить категорию:
-   - **Запрещено** (.env, *.key, *.db, node_modules/ и т.д.) → убедиться что в `.gitignore`, если нет — добавить автоматически
-   - **Разрешено** (src/, tests/, CLAUDE.md, package.json и т.д.) → stage
-   - **Остальное** → решить по контексту, не спрашивая пользователя
-2. `git add` только разрешённых файлов (поимённо, не `git add .`)
-3. Сформировать описательное commit message
+1. For each file, determine its category:
+   - **Forbidden** (.env, *.key, *.db, node_modules/ etc.) → make sure it is in `.gitignore`; if not — add it automatically
+   - **Allowed** (src/, tests/, CLAUDE.md, package.json etc.) → stage
+   - **Everything else** → decide by context, without asking the user
+2. `git add` only the allowed files (by name, not `git add .`)
+3. Write a descriptive commit message
 4. git commit
 
-### 4. Обновить слои памяти
+### 4. Update the memory layers
 
-**SNAPSHOT.md** — что есть сейчас:
-- **Что сделано** — добавить записи о работе этой сессии
-- **В процессе** — очистить или обновить
-- **Следующие шаги** — что осталось
-- **Известные проблемы** — если обнаружены
-- **Дата** — обновить timestamp
+**SNAPSHOT.md** — what is now:
+- **Done** — add entries about this session's work
+- **In progress** — clear or update
+- **Next steps** — what remains
+- **Known issues** — if any were found
+- **Date** — update the timestamp
 
-**BACKLOG.md** (если есть) — что планируется:
-- Перенести закрытые задачи из Next в done
-- Добавить новые обнаруженные задачи (Next/Soon/Later)
-- Если решение «не делаем» — переместить в Won't do с одной строкой причины
+**BACKLOG.md** (if present) — what is planned:
+- Move closed tasks from Next to done
+- Add newly discovered tasks (Next/Soon/Later)
+- If the decision is "we won't do it" — move it to Won't do with a one-line reason
 
-**INVARIANTS.md** (если есть) — если в сессии возник новый инвариант или нашли нарушение существующего:
-- Добавить новый INV-NNN с описанием правила, причины, проверки
-- Это сигнал зрелости — не пропускать
+**INVARIANTS.md** (if present) — if a new invariant arose in the session, or a violation of an existing one was found:
+- Add a new INV-NNN describing the rule, the reason, the check
+- This is a signal of maturity — don't skip it
 
-**ARCHITECTURE.md** (если есть) — если в сессии изменилась карта системы (новый модуль, новые границы):
-- Обновить соответствующую секцию
+**ARCHITECTURE.md** (if present) — if the system map changed in the session (a new module, new boundaries):
+- Update the corresponding section
 
-### 4b. Сохранить диалог сессии
+### 4b. Save the session dialog
 
-Защита от retention cleanup Claude Code — диалог может содержать ценные методологические находки:
+Protection against Claude Code's retention cleanup — the dialog may contain valuable methodological findings:
 ```bash
 [ -f scripts/save-dialogs.sh ] && bash scripts/save-dialogs.sh || true
 ```
-Без note (быстрый автосейв). Если в сессии было что-то особенно ценное — пользователь может вручную запустить `/save-dialog` с note до или после `/finish`.
+Without a note (a quick autosave). If something particularly valuable happened in the session, the user can manually run `/save-dialog` with a note before or after `/finish`.
 
-### 5. Закоммитить обновлённые слои
+### 5. Commit the updated layers
 
 ```bash
-# Проверить режим framework state
+# Check the framework state mode
 scripts/framework-state-mode.sh check-safe-mode
 
-# Только private-solo коммитит memory layers в git-историю.
+# Only private-solo commits memory layers into the git history.
 if [ "$(scripts/framework-state-mode.sh should-commit-framework-state)" = "true" ]; then
   for f in .claude/SNAPSHOT.md .claude/BACKLOG.md .claude/INVARIANTS.md .claude/ARCHITECTURE.md; do
     [ -f "$f" ] && git add "$f"
@@ -91,26 +91,26 @@ else
 fi
 ```
 
-В режиме `public`/`private-shared` SNAPSHOT остаётся локальным файлом и не коммитится. Если helper сообщает blocker из-за tracked framework files, сначала запусти `scripts/switch-repo-access.sh <mode>`.
+In `public`/`private-shared` mode SNAPSHOT stays a local file and is not committed. If the helper reports a blocker because of tracked framework files, first run `scripts/switch-repo-access.sh <mode>`.
 
-### 6. Завершить лог сессии
+### 6. Close the session log
 
-Дописать в текущий файл `.claude/logs/sessions/YYYY-MM-DD_HH-MM.md`:
-- Итоги тестов (passed/failed/skipped)
-- Список коммитов сессии
-- Ошибки (если были)
-- Duration сессии
+Append to the current file `.claude/logs/sessions/YYYY-MM-DD_HH-MM.md`:
+- Test outcomes (passed/failed/skipped)
+- The list of the session's commits
+- Errors (if any)
+- Session duration
 
-### 7. Отчёт пользователю
+### 7. Report to the user
 
-Кратко (5-7 строк):
-- Что сделано за сессию
-- Результаты тестов
-- Хэши коммитов
-- Что осталось на следующую сессию
+Briefly (5-7 lines):
+- What was done during the session
+- Test results
+- Commit hashes
+- What is left for the next session
 
-## Чего НЕ делать
+## What NOT to do
 
-- Не пушить автоматически (push — отдельное решение)
-- Не коммитить файлы из списка «Запрещено всегда» (см. commit-policy.md)
-- Не затягивать finish дольше 2 минут
+- Don't push automatically (push is a separate decision)
+- Don't commit files from the "Always forbidden" list (see commit-policy.md)
+- Don't drag finish out beyond 2 minutes

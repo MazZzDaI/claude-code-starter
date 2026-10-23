@@ -8,40 +8,40 @@ paths:
   - "**/docker-compose.prod*"
 ---
 
-# Правило: Production Safety
+# Rule: Production Safety
 
-## Принцип
+## Principle
 
-Всё, что касается production — требует подтверждения пользователя. Всё остальное — полная автономность.
+Anything touching production requires the user's confirmation. Everything else — full autonomy.
 
-## Требует подтверждения
+## Requires confirmation
 
-- Deploy на production-сервер
-- Изменение production базы данных (миграции, данные)
-- Изменение DNS, домена, SSL
-- Изменение production environment variables
-- Push в main/master (если это production branch)
-- Публикация пакета (npm publish, PyPI upload)
-- Изменение CI/CD pipeline для production
+- Deploy to a production server
+- Changes to the production database (migrations, data)
+- Changes to DNS, domain, SSL
+- Changes to production environment variables
+- Push to main/master (if it is the production branch)
+- Publishing a package (npm publish, PyPI upload)
+- Changes to the CI/CD pipeline for production
 
-## Полная автономность (не спрашивать)
+## Full autonomy (don't ask)
 
-- Создание, изменение, удаление файлов в проекте
-- Запуск тестов (unit, integration, E2E)
-- Git операции: commit, branch, merge (кроме push в production)
+- Creating, changing, deleting files in the project
+- Running tests (unit, integration, E2E)
+- Git operations: commit, branch, merge (except push to production)
 - Staging deploy
-- Локальная разработка
-- Установка зависимостей
-- Рефакторинг кода
-- Создание и обновление документации
+- Local development
+- Installing dependencies
+- Refactoring code
+- Creating and updating documentation
 
-## Как спрашивать
+## How to ask
 
-Коротко. Без лишних объяснений:
+Briefly. Without unnecessary explanations:
 
 ```
-Production deploy готов:
-- [что будет развёрнуто]
-- [какие изменения]
-Подтвердить? (y/n)
+Production deploy ready:
+- [what will be deployed]
+- [what changes]
+Confirm? (y/n)
 ```

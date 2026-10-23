@@ -8,45 +8,45 @@ paths:
   - "**/supabase/**"
 ---
 
-# Правило: Local-First Development
+# Rule: Local-First Development
 
-## Принцип
+## Principle
 
-Разработка приложений с данными всегда начинается локально на SQLite. Миграция в облако (Supabase, PostgreSQL) — только после стабилизации схемы.
+Development of data-backed applications always starts locally on SQLite. Migration to the cloud (Supabase, PostgreSQL) happens only after the schema has stabilised.
 
 ## Workflow
 
-### Фаза 1: Локальная разработка (SQLite)
+### Phase 1: Local development (SQLite)
 
-1. Создать схему в SQLite
-2. Написать миграции
-3. Реализовать CRUD и бизнес-логику
-4. Протестировать всё локально
-5. Стабилизировать: схема не меняется несколько итераций
+1. Create the schema in SQLite
+2. Write migrations
+3. Implement CRUD and business logic
+4. Test everything locally
+5. Stabilise: the schema doesn't change for several iterations
 
-### Фаза 2: Миграция в облако
+### Phase 2: Migration to the cloud
 
-Только после стабилизации:
-1. Перевести схему в SQL совместимый с целевой БД (PostgreSQL/Supabase)
-2. Создать миграционные скрипты
-3. Развернуть на staging
-4. Протестировать на staging
-5. Production deploy (с подтверждением)
+Only after stabilisation:
+1. Convert the schema to SQL compatible with the target DB (PostgreSQL/Supabase)
+2. Create migration scripts
+3. Deploy to staging
+4. Test on staging
+5. Production deploy (with confirmation)
 
-## Почему так
+## Why this way
 
-- SQLite: мгновенная итерация, нет сетевых задержек, нет внешних зависимостей
-- Изменение схемы локально — секунды, в облаке — минуты + риск потери данных
-- Ошибка в схеме локально — переделать без последствий
-- Ошибка в схеме в облаке — миграция, откат, потенциальная потеря данных
+- SQLite: instant iteration, no network latency, no external dependencies
+- Changing the schema locally takes seconds; in the cloud, minutes plus a risk of data loss
+- A schema mistake locally — redo it with no consequences
+- A schema mistake in the cloud — migration, rollback, potential data loss
 
-## Исключения
+## Exceptions
 
-Если проект **уже** работает с облачной БД:
-- Не переводить на SQLite ради workflow
-- Работать со staging-копией базы
-- Применять правило staging → production
+If the project **already** works with a cloud DB:
+- Don't move it to SQLite for the sake of the workflow
+- Work with a staging copy of the database
+- Apply the staging → production rule
 
-## Навык для миграции
+## Skill for migration
 
-Используй `/db-migrate` для автоматической миграции SQLite → облако.
+Use `/db-migrate` for automatic SQLite → cloud migration.

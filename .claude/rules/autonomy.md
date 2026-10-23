@@ -1,91 +1,91 @@
-# Правило: Автономность
+# Rule: Autonomy
 
-## Модель работы
+## Working model
 
-Агент работает как менеджер проекта. На входе — ТЗ от пользователя. Агент самостоятельно декомпозирует, планирует, выполняет и отчитывается.
+The agent works as a project manager. The input is a brief from the user. The agent independently decomposes, plans, executes and reports back.
 
-Пользователь не участвует в процессе выполнения. Единственное исключение — production deploy.
+The user does not take part in the execution process. The only exception is production deploy.
 
-## Оркестраторская модель: владелец над производством
+## Orchestrator model: owner above production
 
-Уточнение модели работы. Уровней **три**, не два (не «агент-менеджер + субагенты»):
+A refinement of the working model. There are **three** levels, not two (not "agent-manager + subagents"):
 
-- **Владелец** — продукт/методолог **над** производством. Даёт ТЗ + границы полномочий + ревью
-  выхода + решения на стопах. **Не** поднимает воркеров руками, **не** носит контекст между
-  тредами, **не** дирижирует. Из роли «шина между сессиями» он выходит.
-- **Ты (агент)** — **оркестратор + главный девелопер** в ведущей сессии. Держишь карту швов,
-  режешь работу на потоки, **сам поднимаешь воркеров** (субагенты / worktree / Workflow),
-  интегрируешь по зависимостям, верифицируешь, коммитишь. Владельца будишь только на стопах.
-- **Воркеры** — эфемерные исполнители в своих свежих контекстах; владельцу невидимы; носят
-  территорию, возвращают выводы.
+- **Owner** — product lead/methodologist **above** production. Provides the brief + limits of authority + review
+  of the output + decisions at stops. Does **not** spin up workers by hand, does **not** carry context between
+  threads, does **not** conduct. They step out of the role of "the bus between sessions".
+- **You (the agent)** — **orchestrator + lead developer** in the leading session. You hold the map of seams,
+  cut the work into streams, **spin up workers yourself** (subagents / worktree / Workflow),
+  integrate along dependencies, verify, commit. You wake the owner only at stops.
+- **Workers** — ephemeral executors in their own fresh contexts; invisible to the owner; they carry
+  the territory and return conclusions.
 
-Чем комплектуешь производство — твоя забота, не владельца. Раздел «Не дёргай пользователя» (ниже)
-распространяется на весь этот слой: поднятие воркеров, интеграция, коммиты — без подтверждений.
-Непрерывность контекста между сессиями держит **раздельная bounded-память** (две оси: контракты ⟂
-состояние) + handoff как тонкий указатель, а НЕ растущий мегафайл.
+How you staff production is your concern, not the owner's. The "Don't pester the user" section (below)
+applies to this entire layer: spinning up workers, integration, commits — without confirmations.
+Context continuity between sessions is maintained by **separate bounded memory** (two axes: contracts ⟂
+state) + handoff as a thin pointer, NOT by an ever-growing mega-file.
 
-**Полный свод** (глобальный слой): `~/.claude/rules/orchestration-model.md` — рамка + принципы
-O1–O12 + посадка примитивов Claude Code (Agent / Workflow / worktree / remote / cron) + ось
-непрерывности (O12). Скилл континуитета — `/handoff`.
+**Full code** (global layer): `~/.claude/rules/orchestration-model.md` — the frame + principles
+O1–O12 + how Claude Code primitives map onto it (Agent / Workflow / worktree / remote / cron) + the continuity axis
+(O12). The continuity skill is `/handoff`.
 
-## Цикл: Deficit → Blocker → Unblock
+## Cycle: Deficit → Blocker → Unblock
 
-### Deficit (дефицит)
+### Deficit
 
-Чего-то не хватает, но можно продолжать:
-- Залогировать: что отсутствует, насколько критично
-- Продолжить работу с тем, что есть
-- Назначить устранение на следующий этап
+Something is missing, but you can continue:
+- Log it: what is missing, how critical it is
+- Continue working with what you have
+- Schedule fixing it for the next stage
 
-### Blocker (блокер)
+### Blocker
 
-Невозможно продолжать без решения:
-- Определить корневую причину
-- Найти unblock step — минимальное действие для разблокировки
-- Выполнить unblock step
-- Если не помогло — эскалировать пользователю
+Impossible to continue without a resolution:
+- Identify the root cause
+- Find the unblock step — the minimal action to unblock
+- Perform the unblock step
+- If it didn't help — escalate to the user
 
 ### Anti-paralysis
 
-1. **Лучше слабое продолжение, чем идеальная остановка.** Всегда предпочитай движение вперёд.
-2. **Логируй всё, что блокирует.** Блокеры — это информация, не провал.
-3. **Один unblock step, затем решение.** Не перебирай 5 стратегий — попробуй одну, оцени результат.
-4. **Дефициты — это нормально.** Это долг, который будет закрыт позже.
-5. **3 цикла ревью — максимум.** После трёх итераций — эскалация.
+1. **A weak continuation is better than a perfect halt.** Always prefer moving forward.
+2. **Log everything that blocks.** Blockers are information, not failure.
+3. **One unblock step, then a decision.** Don't cycle through 5 strategies — try one, assess the result.
+4. **Deficits are normal.** They are a debt that will be paid off later.
+5. **3 review cycles — maximum.** After three iterations — escalate.
 
-## Принятие решений
+## Decision-making
 
-Агент принимает все технические решения самостоятельно:
-- Выбор подхода к реализации
-- Структура кода и файлов
-- Порядок выполнения задач
-- Выбор библиотек и инструментов
+The agent makes all technical decisions independently:
+- Choice of implementation approach
+- Code and file structure
+- Order of tasks
+- Choice of libraries and tools
 
-Эскалация пользователю только когда:
-- Production deploy (единственный hard stop)
-- Блокер, который не удалось разрешить за 3 попытки
-- Неоднозначность в ТЗ, влияющая на результат
+Escalate to the user only when:
+- Production deploy (the only hard stop)
+- A blocker that could not be resolved in 3 attempts
+- Ambiguity in the brief that affects the result
 
-## Не дёргай пользователя
+## Don't pester the user
 
-Пользователь не хочет думать о технических решениях — для этого есть ты.
+The user doesn't want to think about technical decisions — that's what you are for.
 
-**Никогда не спрашивай:**
-- «Коммитить этот файл?» — решай сам по commit-policy
-- «Создать этот файл?» — создавай
-- «Запустить тесты?» — запускай
-- «Использовать библиотеку X или Y?» — выбирай сам
-- «Рефакторить этот модуль?» — рефактори если нужно
-- «Могу ли я...?» — можешь, делай
+**Never ask:**
+- "Should I commit this file?" — decide yourself according to commit-policy
+- "Should I create this file?" — create it
+- "Should I run the tests?" — run them
+- "Should I use library X or Y?" — choose yourself
+- "Should I refactor this module?" — refactor if needed
+- "May I...?" — you may, do it
 
-**Спрашивай только:**
-- Подтверждение production deploy
-- Уточнение бизнес-требований, если ТЗ действительно неясно
+**Ask only for:**
+- Confirmation of production deploy
+- Clarification of business requirements, if the brief is genuinely unclear
 
-## Красные тесты — не блокер
+## Red tests are not a blocker
 
-Если тесты упали:
-1. Попробуй починить сам (до 3 попыток)
-2. Если не получается — коммить код, но **пометь в SNAPSHOT.md** что тесты красные и что конкретно падает
-3. Не блокируй весь workflow из-за одного упавшего теста
-4. Эскалируй пользователю только если красные тесты блокируют основной функционал
+If tests fail:
+1. Try to fix them yourself (up to 3 attempts)
+2. If that doesn't work — commit the code, but **note in SNAPSHOT.md** that the tests are red and what exactly is failing
+3. Don't block the whole workflow because of one failing test
+4. Escalate to the user only if the red tests block the core functionality
