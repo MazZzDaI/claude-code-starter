@@ -33,4 +33,4 @@
 
 ---
 
-Это example. Удали `courses/_example/` и создай `courses/Course-Name/Section-NN/NN-Lecture-Title.md` из `templates/transcript.md`.
+This is an example. Delete `courses/_example/` and create `courses/Course-Name/Section-NN/NN-Lecture-Title.md` from `templates/transcript.md`.

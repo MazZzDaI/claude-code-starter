@@ -1,11 +1,11 @@
 # Knowledge Base — Categories Taxonomy
 #
-# Это шаблон. Заполни под структуру базы знаний.
+# This is a template. Fill it in to match the knowledge base structure.
 
 categories:
   - id: example
     name: "Example Category"
-    description: "Краткое описание"
+    description: "Short description"
     parent: null
     tags:
       - example

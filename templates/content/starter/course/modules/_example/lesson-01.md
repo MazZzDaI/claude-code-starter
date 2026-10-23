@@ -23,4 +23,4 @@
 
 ---
 
-Это example. Удали `modules/_example/` и создай `modules/01-name/lesson-01.md` из `templates/lesson.md`.
+This is an example. Delete `modules/_example/` and create `modules/01-name/lesson-01.md` from `templates/lesson.md`.

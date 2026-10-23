@@ -8,98 +8,98 @@ updated: YYYY-MM-DD
 # Architecture
 
 <!--
-Живая карта content-проекта. Не история и не план, а ответ на вопрос
-«где что лежит и как связано». Обновляй, когда меняется структура: новые
-разделы, перестройка arc, новые источники, изменение пайплайна экспорта.
+A living map of the content project. Not history and not a plan, but the answer to
+"where is everything and how is it connected". Update it when the structure changes: new
+sections, a rebuilt arc, new sources, a change to the export pipeline.
 
-Контракт-слой (как устроен продукт), а не state-слой (что сейчас в
-работе). State — в SNAPSHOT.md, план — в BACKLOG.md, жёсткие правила
-продукта — в INVARIANTS.md.
+The contract layer (how the product is built), not the state layer (what is currently
+in progress). State lives in SNAPSHOT.md, the plan in BACKLOG.md, the hard rules
+of the product in INVARIANTS.md.
 -->
 
-## Карта проекта
+## Project map
 
 <!--
-Раскладка папок и единиц контента. Что вообще есть: главы, уроки,
-разделы, транскрипты, документы, индексы, assets. Одна строка на единицу.
+The layout of folders and content units. What exists at all: chapters, lessons,
+sections, transcripts, documents, indexes, assets. One line per unit.
 -->
 
-- <!-- Пример: `chapters/` — главы книги, NN-slug.md -->
-- <!-- Пример: `briefs/` — задания на главы, по одному на главу -->
-- <!-- Пример: `bible/` — canon: персонажи, термины, мир -->
-- <!-- Пример: `sources/` — первичные источники (transcripts, документы, ссылки) -->
-- <!-- Пример: `assets/` — изображения, диаграммы, рядом с content units -->
-- <!-- Пример: `INDEX.md` — точка входа, навигация по продукту -->
+- <!-- Example: `chapters/` — book chapters, NN-slug.md -->
+- <!-- Example: `briefs/` — chapter briefs, one per chapter -->
+- <!-- Example: `bible/` — canon: characters, terms, world -->
+- <!-- Example: `sources/` — primary sources (transcripts, documents, links) -->
+- <!-- Example: `assets/` — images, diagrams, next to the content units -->
+- <!-- Example: `INDEX.md` — entry point, navigation across the product -->
 
-## Нарратив / arc
+## Narrative / arc
 
 <!--
-Как устроена дуга продукта: от чего к чему движется читатель/студент.
-Для книги — сюжетная или смысловая дуга. Для курса — учебная траектория
-от prerequisites к outcomes. Для базы знаний — taxonomy или dependency
-граф между статьями.
+How the product's arc is built: where the reader/student moves from and to.
+For a book — the plot or argument arc. For a course — the learning trajectory
+from prerequisites to outcomes. For a knowledge base — the taxonomy or dependency
+graph between articles.
 -->
 
-- <!-- Пример: книга — три части: проблема, разбор, синтез -->
-- <!-- Пример: курс — секции 1-3 базовые, 4-6 углублённые, 7 capstone -->
-- <!-- Пример: knowledge base — корень `concepts/`, отсюда ссылки наружу -->
+- <!-- Example: book — three parts: problem, analysis, synthesis -->
+- <!-- Example: course — sections 1-3 foundational, 4-6 advanced, 7 capstone -->
+- <!-- Example: knowledge base — root `concepts/`, links branch out from here -->
 
-## Иерархия источников
+## Source hierarchy
 
 <!--
-Краткая ссылка на source hierarchy проекта. Подробности — в
-.claude/rules/source-management.md или в CLAUDE.md. Здесь — карта, на
-каком уровне что хранится.
+A brief reference to the project's source hierarchy. Details are in
+.claude/rules/source-management.md or in CLAUDE.md. Here — a map of
+which level is stored where.
 -->
 
-1. <!-- Primary source: `sources/transcripts/` — авторские транскрипты -->
-2. <!-- Canon: `bible/`, `style-guide.md` — утверждённые правила и термины -->
-3. <!-- Brief: `briefs/` — задания на конкретные units -->
-4. <!-- Existing content: `chapters/`, `lessons/` — уже написанные единицы -->
-5. <!-- Generated: `notes/`, `research/` — research-материалы и drafts -->
+1. <!-- Primary source: `sources/transcripts/` — the author's transcripts -->
+2. <!-- Canon: `bible/`, `style-guide.md` — approved rules and terms -->
+3. <!-- Brief: `briefs/` — tasks for specific units -->
+4. <!-- Existing content: `chapters/`, `lessons/` — units already written -->
+5. <!-- Generated: `notes/`, `research/` — research materials and drafts -->
 
-## Навигация и индексы
+## Navigation and indexes
 
 <!--
-Где живёт точка входа и как читатель (или агент) ориентируется.
-Индексы — это контракт навигации. Если переименовал главу, должен
-обновить и индекс.
+Where the entry point lives and how the reader (or agent) finds their way.
+Indexes are the navigation contract. If you renamed a chapter, you must
+update the index as well.
 -->
 
-- <!-- Пример: `INDEX.md` — top-level, ссылается на все разделы -->
-- <!-- Пример: `chapters/INDEX.md` — список глав со статусами -->
-- <!-- Пример: `course-registry.md` — registry всех уроков, ссылки и duration -->
+- <!-- Example: `INDEX.md` — top-level, links to all sections -->
+- <!-- Example: `chapters/INDEX.md` — list of chapters with statuses -->
+- <!-- Example: `course-registry.md` — registry of all lessons, links and duration -->
 
-## Pipeline и экспорт
+## Pipeline and export
 
 <!--
-Как контент превращается в финальный продукт. Стадии, скрипты,
-выходные форматы, куда публикуется.
+How content turns into the final product. Stages, scripts,
+output formats, where it is published.
 -->
 
-- <!-- Пример: Intake → Research → Outline → Write → Enrich → Review → Export -->
-- <!-- Пример: экспорт через `scripts/build-bundle.sh` → `dist/bundle/` -->
-- <!-- Пример: публикация: PDF (Pandoc) + EPUB + web (статический сайт) -->
+- <!-- Example: Intake → Research → Outline → Write → Enrich → Review → Export -->
+- <!-- Example: export via `scripts/build-bundle.sh` → `dist/bundle/` -->
+- <!-- Example: publication: PDF (Pandoc) + EPUB + web (static site) -->
 
-## Зависимости
+## Dependencies
 
 <!--
-Внешние материалы и инструменты, без которых продукт не существует.
-Лицензии источников, ссылки на canon, обязательные библиотеки/скрипты.
+External materials and tools without which the product does not exist.
+Source licences, links to the canon, mandatory libraries/scripts.
 -->
 
-- <!-- Пример: материалы автора по лицензии X, нельзя удалять provenance -->
-- <!-- Пример: Pandoc для финальной сборки PDF -->
-- <!-- Пример: внешний glossary, на который ссылаемся, фиксируем версию -->
+- <!-- Example: the author's materials under licence X, provenance must not be removed -->
+- <!-- Example: Pandoc for the final PDF build -->
+- <!-- Example: an external glossary we link to, version pinned -->
 
-## Открытые вопросы
+## Open questions
 
 <!--
-Структурные решения, ещё не принятые. Не задачи и не дефициты, а
-развилки, на которых нужно остановиться и подумать прежде, чем
-двигаться. Когда вопрос закрыт — переносится в основной текст или
-удаляется.
+Structural decisions not yet made. Not tasks and not deficits, but
+forks in the road where you need to stop and think before
+moving on. Once a question is closed, it moves into the main text or
+is deleted.
 -->
 
-- <!-- Пример: глоссарий — общий для всего продукта или по главам? -->
-- <!-- Пример: упражнения — в конце урока или отдельной секцией? -->
+- <!-- Example: glossary — shared across the whole product or per chapter? -->
+- <!-- Example: exercises — at the end of the lesson or as a separate section? -->

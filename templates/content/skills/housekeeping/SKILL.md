@@ -1,6 +1,6 @@
 ---
 name: housekeeping
-description: "Обслуживание content-проекта: индексы, metadata, snapshot, links, sources."
+description: "Maintaining a content project: indexes, metadata, snapshot, links, sources."
 allowed-tools: Read Edit Write Glob Grep Bash
 disable-model-invocation: true
 ---
@@ -9,31 +9,31 @@ disable-model-invocation: true
 
 ## Purpose
 
-Проверить, что content-проект не разъехался: навигация, metadata, links, snapshot, formats.
+Check that the content project has not drifted apart: navigation, metadata, links, snapshot, formats.
 
 ## Checks
 
 ### 1. Index and Registry
-- `INDEX.md`, `00-course-index.md` существуют, если нужны
-- Новые content files добавлены в index
-- Archived/draft файлы не смешаны с current
-- Orphan files перечислены или подключены
+- `INDEX.md`, `00-course-index.md` exist, if needed
+- New content files have been added to the index
+- Archived/draft files are not mixed with current ones
+- Orphan files are listed or linked in
 
 ### 2. Metadata
-- `meta.yaml` or frontmatter заполнены
-- Status актуален
-- Audience/type/tags указаны
-- Updated date не старее последней правки
+- `meta.yaml` or frontmatter is filled in
+- Status is up to date
+- Audience/type/tags are specified
+- Updated date is not older than the last edit
 
 ### 3. Links
 - Relative links resolve
 - Image/media paths exist
-- Cross-links между chapters/lessons не сломаны
+- Cross-links between chapters/lessons are not broken
 
 ### 4. Source Hygiene
-- `sources.md` обновлен после research
-- Важные утверждения имеют provenance
-- Deficits не потеряны
+- `sources.md` updated after research
+- Important claims have provenance
+- Deficits have not been lost
 
 ### 5. SNAPSHOT
 - current phase
@@ -45,29 +45,29 @@ disable-model-invocation: true
 
 ### 6. CLAUDE.md Drift
 
-- Структура контента в `CLAUDE.md` соответствует реальному дереву папок?
-- Описание workflow актуально?
-- Source hierarchy не изменилась?
-- Audience и content_type не устарели?
+- Does the content structure in `CLAUDE.md` match the actual folder tree?
+- Is the workflow description up to date?
+- Has the source hierarchy changed?
+- Are audience and content_type out of date?
 
-Если обнаружен drift — обновить `CLAUDE.md` автоматически.
+If drift is detected, update `CLAUDE.md` automatically.
 
 ### 7. Commit Hygiene
 - No secrets
-- No private docs в public/shared mode
+- No private docs in public/shared mode
 - Generated artifacts ignored unless deliverable
 
 ## What Not To Do
 
-- Не переписывай контент
-- Не меняй смысл
-- Не удаляй черновики без запроса
-- Не трать больше 3 минут без причины
+- Do not rewrite content
+- Do not change the meaning
+- Do not delete drafts without being asked
+- Do not spend more than 3 minutes without a reason
 
 ## When To Run
 
-- перед push
-- перед handoff
-- после массового перемещения файлов
-- после генерации нового bundle
-- по запросу пользователя
+- before push
+- before handoff
+- after moving files en masse
+- after generating a new bundle
+- at the user's request

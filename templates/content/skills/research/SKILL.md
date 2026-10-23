@@ -1,6 +1,6 @@
 ---
 name: research
-description: "Сбор, проверка и систематизация источников."
+description: "Gathering, verifying and systematising sources."
 allowed-tools: Read Write Edit Glob Grep Bash WebSearch
 disable-model-invocation: false
 ---
@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 ## Purpose
 
-Собрать материал, sources, concept map и deficits перед outline или writing.
+Gather material, sources, a concept map and deficits before outline or writing.
 
 ## Input
 
@@ -21,24 +21,24 @@ disable-model-invocation: false
 
 ## Process
 
-1. Определи scope
-2. Проверь source hierarchy проекта
-3. Собери sources: локальные файлы, docs, web, primary records
-4. Раздели по credibility: primary / expert / practitioner / introductory / generated
-5. Сгруппируй по темам
-6. Выдели key concepts, prerequisites, disagreements, gaps
-7. Зафиксируй deficits и confidence
+1. Define the scope
+2. Check the project's source hierarchy
+3. Gather sources: local files, docs, web, primary records
+4. Sort by credibility: primary / expert / practitioner / introductory / generated
+5. Group by topic
+6. Identify key concepts, prerequisites, disagreements, gaps
+7. Record deficits and confidence
 
 ## Output
 
 - `research-report.md`
 - `sources.md` with annotations
-- `concepts.md` или `source-map.md`
+- `concepts.md` or `source-map.md`
 - optional `deficits.md`
 
 ## Quality
 
-- Каждый важный факт имеет source
-- 2-3 независимых sources для спорных тем
-- Gaps не скрыты
-- Research достаточен для outline
+- Every important fact has a source
+- 2-3 independent sources for disputed topics
+- Gaps are not hidden
+- Research is sufficient for the outline

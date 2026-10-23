@@ -20,4 +20,4 @@
 |---|--------|---------|----------|--------|
 | 01 | ... | ... | ... | draft |
 
-Это шаблон syllabus. Заполни под конкретный курс.
+This is a syllabus template. Fill it in for the specific course.

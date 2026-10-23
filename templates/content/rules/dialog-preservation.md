@@ -1,5 +1,5 @@
-# Правило: Dialog Preservation (content)
+# Rule: Dialog Preservation (content)
 
-Claude Code пишет полный JSONL текущей сессии в `~/.claude/projects/<encoded-cwd>/`. Эти файлы со временем удаляются retention'ом. Чтобы не потерять ценные обсуждения — методологию, archaeology решений, антипаттерны — копируй интересные сессии в `.claude/dialogs/` и веди реестр в `.claude/dialogs/INDEX.md`. Автоматика: при `/finish` диалог сохраняется сам; явно — через `/save-dialog`. В `repo_access=private-solo` архив можно коммитить; в `private-shared`/`public` — оставлять локально и чистить от секретов перед любой публикацией.
+Claude Code writes the full JSONL of the current session to `~/.claude/projects/<encoded-cwd>/`. These files are deleted over time by retention. To avoid losing valuable discussions — methodology, archaeology of decisions, anti-patterns — copy interesting sessions into `.claude/dialogs/` and keep a register in `.claude/dialogs/INDEX.md`. Automation: on `/finish` the dialog is saved automatically; explicitly — via `/save-dialog`. With `repo_access=private-solo` the archive may be committed; with `private-shared`/`public` — keep it local and scrub secrets before any publication.
 
-Полное описание поведения, формата INDEX, политики по repo_access и ритма анализа — в глобальном правиле `~/.claude/rules/dialog-preservation.md`.
+The full description of the behaviour, the INDEX format, the repo_access policy and the analysis rhythm is in the global rule `~/.claude/rules/dialog-preservation.md`.

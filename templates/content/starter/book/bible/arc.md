@@ -2,13 +2,13 @@
 
 ## Premise
 
-Главная идея книги в одной фразе.
+The book's main idea in one sentence.
 
 ## Reader Journey
 
-- Start: где читатель в начале
-- End: где читатель в конце
-- Transformation: что меняется
+- Start: where the reader is at the start
+- End: where the reader is at the end
+- Transformation: what changes
 
 ## Chapter Map
 
@@ -16,4 +16,4 @@
 |---|---------|----------|--------|
 | 01 | ... | teach / prove / decide | draft |
 
-Это шаблон сюжетной/аргументационной арки. Заполни под проект.
+This is a template for the narrative/argument arc. Fill it in for the project.

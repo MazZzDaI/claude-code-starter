@@ -1,23 +1,23 @@
 ---
 name: save-dialog
-description: Сохранить JSONL текущей сессии Claude Code в .claude/dialogs/. Триггеры: /save-dialog, "сохрани диалог", "архив диалога".
+description: Save the JSONL of the current Claude Code session to .claude/dialogs/. Triggers: /save-dialog, "save the dialog", "archive the dialog".
 ---
 
 # Skill: Save Dialog
 
-## Зачем
+## Why
 
-Закрепить ценный момент сессии до того, как Claude Code сделает retention cleanup. Полезно когда прямо сейчас в диалоге найдено решение, антипаттерн, кусок методологии — а сессия ещё не закончена.
+To lock in a valuable moment of the session before Claude Code performs its retention cleanup. Useful when a solution, an anti-pattern or a piece of methodology has just been found in the dialog — and the session is not over yet.
 
-Полное правило поведения: `~/.claude/rules/dialog-preservation.md` (или `.claude/rules/dialog-preservation.md` в проекте).
+The full behaviour rule: `~/.claude/rules/dialog-preservation.md` (or `.claude/rules/dialog-preservation.md` in the project).
 
-## Шаги
+## Steps
 
-1. **Спросить пользователя одной строкой** тему / почему этот диалог ценен. Это пойдёт в `INDEX.md` рядом с записью о сохранённом файле.
-   - Если пользователь скажет «без note», «пропусти», «не надо» — записать без note (пустая ячейка).
-   - Если ответил темой — взять её целиком как note (1 строка).
+1. **Ask the user, in one line,** for the topic / why this dialog is valuable. This goes into `INDEX.md` next to the entry for the saved file.
+   - If the user says "no note", "skip", "not needed" — record it without a note (empty cell).
+   - If they reply with a topic — take it in full as the note (1 line).
 
-2. **Запустить скрипт:**
+2. **Run the script:**
 
    ```bash
    if [ -f scripts/save-dialogs.sh ]; then
@@ -27,21 +27,21 @@ description: Сохранить JSONL текущей сессии Claude Code в
            bash scripts/save-dialogs.sh
        fi
    else
-       echo "Framework не установлен полностью — нет scripts/save-dialogs.sh."
-       echo "Запусти /setup-project для апгрейда фреймворка в этой папке."
+       echo "Framework is not fully installed — scripts/save-dialogs.sh is missing."
+       echo "Run /setup-project to upgrade the framework in this folder."
        exit 0
    fi
    ```
 
-3. **Показать пользователю вывод** скрипта (одна строка: `saved: N, new: M, updated: K, total in archive: T`).
+3. **Show the user the script's output** (one line: `saved: N, new: M, updated: K, total in archive: T`).
 
-## Чего не делать
+## What not to do
 
-- Не редактировать сами JSONL.
-- Не задавать больше одного вопроса (тема — единственный.)
-- Не отправлять архив наружу.
-- Не падать, если скрипта нет — это сигнал апгрейда фреймворка, не блокер.
+- Do not edit the JSONL files themselves.
+- Do not ask more than one question (the topic is the only one).
+- Do not send the archive anywhere outside.
+- Do not fail if the script is missing — that is a signal to upgrade the framework, not a blocker.
 
-## После выполнения
+## Afterwards
 
-Кратко (1-2 строки): сохранил/не сохранил, сколько новых файлов, где лежат.
+Briefly (1-2 lines): saved/not saved, how many new files, where they are.

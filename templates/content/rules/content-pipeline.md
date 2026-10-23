@@ -2,37 +2,37 @@
 
 ## Purpose
 
-Общий рабочий цикл для проектов, где продуктом является контент.
+A common working cycle for projects where the product is content.
 
 ## Mandatory Intake
 
-Перед research, writing, editing определи режим входа.
+Before research, writing or editing, determine the input mode.
 
 ### Rich input
 
-Признаки:
-- авторский текст, транскрипт, глава, лекция, документ;
-- формулировки, примеры, порядок мысли важны;
-- задача похожа на адаптацию, структурирование, чистку, редактуру.
+Signs:
+- an author's text, transcript, chapter, lecture, document;
+- wording, examples and the order of thought matter;
+- the task resembles adaptation, structuring, clean-up, editing.
 
-Правила:
-- источник истины — входной материал;
-- не сокращай и не переписывай авторский смысл;
-- допускаются структура, заголовки, форматирование, пояснения, transitions;
-- пояснения добавляй как дополнение, не замену.
+Rules:
+- the source of truth is the input material;
+- do not shorten or rewrite the author's meaning;
+- structure, headings, formatting, explanations and transitions are permitted;
+- add explanations as a supplement, not a replacement.
 
 ### Sparse input
 
-Признаки:
-- тема или краткий бриф;
-- источников мало;
-- ожидается генерация структуры и текста.
+Signs:
+- a topic or a short brief;
+- few sources;
+- generation of structure and text is expected.
 
-Правила:
-- запускай research;
-- фиксируй sources;
-- разделяй факты от выводов;
-- логируй дефициты явно.
+Rules:
+- run research;
+- record sources;
+- separate facts from conclusions;
+- log deficits explicitly.
 
 ### Intake output
 
@@ -54,51 +54,51 @@ Intake → Research → Outline → Write → Enrich → Review → Export/Index
 
 ### Stage 1: Research
 
-Цель: собрать и систематизировать материал.
+Goal: gather and systematise the material.
 
-Выходы:
+Outputs:
 - `research-report.md`
 - `sources.md`
-- `concepts.md` или `source-map.md`
+- `concepts.md` or `source-map.md`
 
-Критерии:
-- ключевые темы покрыты;
-- sources имеют provenance;
-- спорные факты отмечены;
-- gaps записаны как deficits.
+Criteria:
+- key topics are covered;
+- sources have provenance;
+- disputed facts are flagged;
+- gaps are recorded as deficits.
 
 ### Stage 2: Outline
 
-Цель: построить структуру продукта.
+Goal: build the product's structure.
 
-Выходы:
-- курс: `program.md`, `learning-objectives.md`, `dependencies.md`
-- книга: `arc.md`, `chapter-map.md`, `briefs/chapter-N.md`
-- база знаний: `INDEX.md`, `INDEX-*.md`, taxonomy
-- документы: `document-map.md`, canonical files list
+Outputs:
+- course: `program.md`, `learning-objectives.md`, `dependencies.md`
+- book: `arc.md`, `chapter-map.md`, `briefs/chapter-N.md`
+- knowledge base: `INDEX.md`, `INDEX-*.md`, taxonomy
+- documents: `document-map.md`, canonical files list
 
-Критерии:
-- последовательность соответствует learning или decision flow;
-- нет циклических prerequisites;
-- каждый раздел имеет функцию;
-- структура не теряет обязательный source.
+Criteria:
+- the sequence follows the learning or decision flow;
+- no circular prerequisites;
+- every section has a function;
+- the structure does not lose a mandatory source.
 
 ### Stage 3: Write
 
-Цель: создать или адаптировать content units.
+Goal: create or adapt content units.
 
-Правила:
-- один unit — один фокус;
-- цель или функция видна в начале;
-- термины объяснены при первом важном употреблении;
-- богатый вход сохраняется;
-- sparse input опирается на research.
+Rules:
+- one unit — one focus;
+- the goal or function is visible at the start;
+- terms are explained at their first significant use;
+- rich input is preserved;
+- sparse input relies on research.
 
 ### Stage 4: Enrich
 
-Цель: сделать контент практичным и полезным.
+Goal: make the content practical and useful.
 
-Возможные проходы:
+Possible passes:
 - examples and cases
 - exercises and quizzes
 - glossary/thesaurus
@@ -109,29 +109,29 @@ Intake → Research → Outline → Write → Enrich → Review → Export/Index
 
 ### Stage 5: Review
 
-Цель: проверить соответствие задаче, источникам, стилю, формату.
+Goal: check conformance with the task, sources, style and format.
 
 Severity:
-- Critical — фактическая ошибка, потеря обязательного source, broken structure, нарушение hierarchy.
-- Major — слабое объяснение, missing example, несоответствие аудитории, неполный формат.
-- Minor — стилистика, локальная формулировка, nice-to-have.
+- Critical — factual error, loss of a mandatory source, broken structure, violation of the hierarchy.
+- Major — weak explanation, missing example, mismatch with the audience, incomplete format.
+- Minor — stylistics, local wording, nice-to-have.
 
-Maximum iterations: 3. После 3 сделай escalation note.
+Maximum iterations: 3. After 3, write an escalation note.
 
 ### Stage 6: Export/Index
 
-Цель: подготовить финальный продукт.
+Goal: prepare the final product.
 
-Проверить:
-- metadata заполнены;
-- index/registry обновлен;
-- внутренние ссылки работают;
-- assets рядом с content unit;
-- output bundle соответствует contract.
+Check:
+- metadata is filled in;
+- index/registry is updated;
+- internal links work;
+- assets sit next to the content unit;
+- the output bundle matches the contract.
 
 ## Anti-Paralysis
 
-- Логируй дефициты и двигайся дальше, если не блокируют смысл.
-- Не ищи идеальный source бесконечно; отметь confidence и продолжай.
-- Лучше черновик с явными deficits, чем остановка.
-- Эскалируй только смысловые конфликты, которые нельзя решить по source hierarchy.
+- Log deficits and move on if they do not block the meaning.
+- Do not search endlessly for the perfect source; note the confidence and carry on.
+- A draft with explicit deficits is better than a standstill.
+- Escalate only conflicts of meaning that cannot be resolved by the source hierarchy.

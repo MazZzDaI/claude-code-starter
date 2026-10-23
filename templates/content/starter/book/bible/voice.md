@@ -1,9 +1,9 @@
 # Voice Bible
 
 **Tone:** ...
-**Persona:** кто рассказчик
+**Persona:** who the narrator is
 **Register:** formal / informal / technical / conversational
-**Pacing:** медленный / средний / быстрый
+**Pacing:** slow / medium / fast
 
 ## Voice Markers
 
@@ -11,7 +11,7 @@
 
 ## Anti-Patterns
 
-- запрещённые обороты
-- запрещённые жанровые сдвиги
+- forbidden turns of phrase
+- forbidden genre shifts
 
-Это шаблон. Заполни под конкретный проект.
+This is a template. Fill it in for the specific project.

@@ -1,6 +1,6 @@
 ---
 name: content-index
-description: "Построение и обновление индексов, registry, оглавлений, course maps, cross-links."
+description: "Building and updating indexes, registries, tables of contents, course maps and cross-links."
 allowed-tools: Read Write Edit Glob Grep Bash
 disable-model-invocation: false
 ---
@@ -9,23 +9,23 @@ disable-model-invocation: false
 
 ## Purpose
 
-Обновить навигацию и registry так, чтобы проект был читаемым после изменения контента.
+Update navigation and the registry so that the project remains readable after content changes.
 
 ## Input
 
 - content tree
-- existing `INDEX.md`, `00-course-index.md`, `course-registry.md` или README
+- existing `INDEX.md`, `00-course-index.md`, `course-registry.md` or README
 - metadata files
 
 ## Process
 
-1. Просканируй content files
-2. Извлеки title, status, type, tags, updated date, summary
-3. Проверь missing metadata
-4. Обнови master index
-5. Обнови section indexes
-6. Проверь relative links
-7. Зафиксируй orphan files
+1. Scan the content files
+2. Extract title, status, type, tags, updated date, summary
+3. Check for missing metadata
+4. Update the master index
+5. Update the section indexes
+6. Check relative links
+7. Record orphan files
 
 ## Output
 
@@ -38,7 +38,7 @@ disable-model-invocation: false
 
 ## Quality
 
-- Каждый publishable file достижим из индекса
-- Нет broken relative links
-- Index descriptions one-line и specific
+- Every publishable file is reachable from the index
+- No broken relative links
+- Index descriptions are one-line and specific
 - Archive/drafts clearly separated

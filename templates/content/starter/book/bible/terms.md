@@ -2,6 +2,6 @@
 
 | Term | Definition | Notes |
 |------|------------|-------|
-| ... | ... | первое употребление: главa N |
+| ... | ... | first use: chapter N |
 
-Это шаблон. Заполни список ключевых терминов проекта.
+This is a template. Fill in the list of the project's key terms.

@@ -25,4 +25,4 @@ tags: []
 
 ---
 
-Это example. Удали и создай `docs/topic-name.md` из `templates/document.md`.
+This is an example. Delete it and create `docs/topic-name.md` from `templates/document.md`.

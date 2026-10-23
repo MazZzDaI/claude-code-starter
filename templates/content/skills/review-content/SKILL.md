@@ -1,6 +1,6 @@
 ---
 name: review-content
-description: "Проверка готовности контента: sources, структура, стиль, формат, ссылки."
+description: "Checking content readiness: sources, structure, style, format, links."
 allowed-tools: Read Write Edit Glob Grep Bash
 disable-model-invocation: false
 ---
@@ -9,7 +9,7 @@ disable-model-invocation: false
 
 ## Purpose
 
-Проверить content unit или bundle перед финализацией, публикацией или handoff.
+Check a content unit or bundle before finalisation, publication or handoff.
 
 ## Input
 
@@ -22,40 +22,40 @@ disable-model-invocation: false
 ## Process
 
 ### Brief Compliance (7 checks)
-1. Контент отвечает исходной задаче
-2. Тип выхода соответствует запросу
-3. Scope включает обязательное и исключает запрещённое
-4. Audience level соответствует brief
-5. Output format корректен
-6. Все обязательные content units созданы
-7. Ограничения из brief соблюдены
+1. The content answers the original task
+2. The output type matches the request
+3. The scope includes what is mandatory and excludes what is forbidden
+4. The audience level matches the brief
+5. The output format is correct
+6. All mandatory content units have been created
+7. The constraints from the brief are respected
 
 ### Structure & Flow (7 checks)
-8. Иерархия заголовков понятна
-9. Один раздел — одна функция
-10. Переходы между разделами логичны
-11. Нет knowledge jumps без scaffolding
-12. Prerequisites указаны или покрыты
-13. Навигация (index, cross-links) работает
-14. Порядок соответствует learning curve / decision flow
+8. The heading hierarchy is clear
+9. One section — one function
+10. Transitions between sections are logical
+11. No knowledge jumps without scaffolding
+12. Prerequisites are stated or covered
+13. Navigation (index, cross-links) works
+14. The order follows the learning curve / decision flow
 
 ### Content Quality (8 checks)
-15. Source integrity — rich input сохранён
-16. Факты имеют provenance
-17. Нет invented citations или unsupported claims
-18. Термины объяснены на уровне аудитории
-19. Примеры из мира аудитории
-20. Нет unexplained jargon
-21. Summary/takeaway помогает (если формат требует)
-22. Exercises/quizzes тестируют taught material (если применимо)
+15. Source integrity — rich input preserved
+16. Facts have provenance
+17. No invented citations or unsupported claims
+18. Terms are explained at the audience's level
+19. Examples come from the audience's world
+20. No unexplained jargon
+21. The summary/takeaway helps (if the format requires one)
+22. Exercises/quizzes test taught material (if applicable)
 
 ### Format & Delivery (6 checks)
-23. Файл соответствует шаблону из content-formats.md
-24. Metadata заполнены (status, audience, sources, updated)
-25. Internal links относительные и resolve
-26. Assets существуют и подключены
-27. Index/registry обновлён
-28. Export bundle compliant (если применимо)
+23. The file matches the template from content-formats.md
+24. Metadata is filled in (status, audience, sources, updated)
+25. Internal links are relative and resolve
+26. Assets exist and are linked
+27. Index/registry updated
+28. Export bundle compliant (if applicable)
 
 ## Output
 
@@ -79,7 +79,7 @@ disable-model-invocation: false
 
 ## Rules
 
-- Не переписывай во время review
-- Всегда указывай location
-- Minor issues не блокируют
-- Если проблем нет, напиши это явно
+- Do not rewrite during review
+- Always state the location
+- Minor issues do not block
+- If there are no problems, say so explicitly
