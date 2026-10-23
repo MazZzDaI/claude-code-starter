@@ -7,43 +7,43 @@ updated: {{DATE}}
 # Backlog
 
 <!--
-Что планируется, но ещё не делается.
+What is planned but not yet under way.
 
-Граница с другими файлами:
-- SNAPSHOT.md — что **в работе прямо сейчас**.
-- BACKLOG.md (этот файл) — что **будет потом**: запланированные задачи,
-  известные доработки, отложенные идеи.
-- INVARIANTS.md — правила продукта, которые нельзя нарушать.
+Boundary with other files:
+- SNAPSHOT.md — what is **in progress right now**.
+- BACKLOG.md (this file) — what **comes later**: planned tasks,
+  known improvements, deferred ideas.
+- INVARIANTS.md — product rules that must not be broken.
 
-Формат пункта:
-- [ ] <id>: <короткий заголовок> — <контекст> (опц. `→ path/to/file.md`)
+Item format:
+- [ ] <id>: <short title> — <context> (optional `→ path/to/file.md`)
 
-id — произвольный (TASK-01, FIX-3 или слаг), главное — стабильный.
+id — arbitrary (TASK-01, FIX-3 or a slug); what matters is that it is stable.
 -->
 
 ## Next
 
-<!-- Что брать в работу следующим, по приоритету. -->
+<!-- What to pick up next, in priority order. -->
 
 - [ ] ...
 
 ## Soon
 
-<!-- Известная работа на ближайшее время, направление ясно, деталей пока нет. -->
+<!-- Known near-term work: the direction is clear, the details are not yet. -->
 
 - [ ] ...
 
 ## Later
 
-<!-- Признано нужным, но не запланировано; не блокирует текущие цели. -->
+<!-- Acknowledged as needed but not scheduled; does not block current goals. -->
 
 - [ ] ...
 
 ## Won't do
 
 <!--
-Явно отклонённые направления. Один пункт = одна причина, чтобы не
-открывать дебаты заново после compaction или в следующей сессии.
+Explicitly rejected directions. One item = one reason, so that the debate
+is not reopened after compaction or in the next session.
 -->
 
 - [ ] ...

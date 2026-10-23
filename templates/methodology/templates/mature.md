@@ -12,33 +12,33 @@ composes_with: []       # other methodology ids it chains with
 related: []
 ---
 
-# Methodology: [имя]
+# Methodology: [name]
 
-## Концепция
-[1 параграф]
+## Concept
+[1 paragraph]
 
 ## Routing signals
-[как роутер определяет применимость, в формализованном виде]
+[how the router determines applicability, in formalised form]
 
-## Декомпозиция (judgment vs bookkeeping)
-- **Суждение (LLM):** что решает модель
-- **Бухгалтерия (код):** что считает/проверяет код
-- Граница между ними (важная часть: см. [[rules/llm-as-component]])
+## Decomposition (judgment vs bookkeeping)
+- **Judgement (LLM):** what the model decides
+- **Bookkeeping (code):** what the code counts/checks
+- The boundary between them (an important part: see [[rules/llm-as-component]])
 
-## Prompt skeleton (для executor)
+## Prompt skeleton (for executor)
 ```text
-[Шаблон промпта с placeholder'ами {{input_x}}]
+[Prompt template with {{input_x}} placeholders]
 ```
 
 ## Anti-patterns
 - ...
 
 ## Composition notes
-- Как соединяется с другими методологиями (id ссылки)
-- Какие данные передаёт дальше
+- How it connects to other methodologies (id references)
+- What data it passes on
 
-## Примеры и trace-ы
-- ссылки на конкретные применения
+## Examples and traces
+- links to specific applications
 
 ---
-*Поднимать до crystallized, когда вызывается стабильно. Тогда часть переезжает в детерминированный код, а методология остаётся как спецификация (живёт здесь же, статус не меняем).*
+*Raise to crystallized once it is invoked consistently. Then part of it moves into deterministic code, and the methodology remains as the specification (it lives right here; we do not change the status).*

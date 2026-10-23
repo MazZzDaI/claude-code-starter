@@ -1,39 +1,39 @@
-# Methodology Layer (Global) — как это растёт
+# Methodology Layer (Global) — how this grows
 
-Это **глобальный слой** методологий: `~/.claude/methodology/`. Лежит здесь то, что применимо во многих проектах. Проектные методологии (`<project>/methodology/`) могут ссылаться на эти файлы и уточнять под конкретный домен, не дублируя.
+This is the **global layer** of methodologies: `~/.claude/methodology/`. It holds what applies across many projects. Project methodologies (`<project>/methodology/`) may reference these files and refine them for a specific domain without duplicating them.
 
-## Что это вообще
+## What this is
 
-Методологии — приёмы, которые применяются автоматическими пайплайнами (router → adapter → executor), а не мной-агентом на лету.
+Methodologies are techniques applied by automated pipelines (router → adapter → executor), not by me, the agent, on the fly.
 
-| Слой | Кому | Когда |
+| Layer | For whom | When |
 |------|------|-------|
-| `~/.claude/rules/` | Мне (Claude Code) | Всегда в контексте сессии |
-| `~/.claude/methodology/` | Автоматическим пайплайнам | По routing-сигналу |
+| `~/.claude/rules/` | Me (Claude Code) | Always in session context |
+| `~/.claude/methodology/` | Automated pipelines | On a routing signal |
 
-## Лестница зрелости
+## Maturity ladder
 
 ```
 draft → pattern → mature → crystallized
 ```
 
-- **draft** — наблюдение в 5 строк. Самый низкий порог входа.
-- **pattern** — повторилось 3+ раз, понятно когда применять.
-- **mature** — стабильный prompt-каркас, формальные routing signals.
-- **crystallized** — переехало в код, спецификация остаётся.
+- **draft** — a 5-line observation. The lowest barrier to entry.
+- **pattern** — has recurred 3+ times; it is clear when to apply it.
+- **mature** — a stable prompt scaffold, formal routing signals.
+- **crystallized** — has moved into code; the specification remains.
 
-Подробнее — см. одноимённый файл в проектном слое (он же — расширенная версия этой шпаргалки).
+More detail — see the file of the same name in the project layer (it is also the extended version of this cheat sheet).
 
-## Низкий порог входа
+## Low barrier to entry
 
-`draft` — это 5 строк, не доклад. Лучше неотшлифованный draft, чем потерянное наблюдение.
+A `draft` is 5 lines, not a report. An unpolished draft is better than a lost observation.
 
-## Глобальный vs проектный
+## Global vs project
 
-- Глобальный (этот каталог) — методологии общего назначения, переиспользуемые между проектами.
-- Проектный (`<project>/methodology/`) — методологии конкретного проекта; могут ссылаться на глобальные через `related: [[~global/<id>]]`.
-- При routing-конфликте проектная методология выигрывает; глобальная — fallback.
+- Global (this directory) — general-purpose methodologies, reusable across projects.
+- Project (`<project>/methodology/`) — methodologies of a specific project; they may reference global ones via `related: [[~global/<id>]]`.
+- On a routing conflict the project methodology wins; the global one is the fallback.
 
 ## Canonical example
 
-`00-example-llm-as-component.md` — полностью заполненная mature-методология. Используй её как образец, когда созревает что-то своё.
+`00-example-llm-as-component.md` — a fully filled-in mature methodology. Use it as a model when something of your own matures.

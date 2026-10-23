@@ -12,41 +12,41 @@ composes_with: []       # other methodology ids it chains with
 related: []
 ---
 
-# Methodology: [имя]
+# Methodology: [name]
 
-## Концепция
-[1 параграф]
+## Concept
+[1 paragraph]
 
 ## Routing signals
-[как роутер определяет применимость, в формализованном виде]
+[how the router determines applicability, in formalised form]
 
-## Декомпозиция (judgment vs bookkeeping)
-- **Суждение (LLM):** что решает модель
-- **Бухгалтерия (код):** что считает/проверяет код
-- Граница между ними (важная часть: см. [[rules/llm-as-component]])
+## Decomposition (judgment vs bookkeeping)
+- **Judgement (LLM):** what the model decides
+- **Bookkeeping (code):** what the code counts/checks
+- The boundary between them (an important part: see [[rules/llm-as-component]])
 
-## Prompt skeleton (для executor)
+## Prompt skeleton (for executor)
 ```text
-[Шаблон промпта с placeholder'ами {{input_x}}]
+[Prompt template with {{input_x}} placeholders]
 ```
 
 ## Anti-patterns
 - ...
 
 ## Composition notes
-- Как соединяется с другими методологиями (id ссылки)
-- Какие данные передаёт дальше
+- How it connects to other methodologies (id references)
+- What data it passes on
 
-## Примеры и trace-ы
-- ссылки на конкретные применения
+## Examples and traces
+- links to specific applications
 
-## Реализация в коде
-- `path/to/file.py` — что именно делает
-- Какие части остались за LLM, какие сделаны детерминированно
+## Implementation in code
+- `path/to/file.py` — what exactly it does
+- Which parts stayed with the LLM, which were made deterministic
 
-## История перехода
-- Что было причиной кристаллизации (стабильность? цена? скорость?)
-- Что было выкинуто в процессе
+## Transition history
+- What caused the crystallisation (stability? cost? speed?)
+- What was discarded along the way
 
 ---
-*Crystallized означает, что методология живёт одновременно как спецификация (этот файл) и как код. При изменении кода — обнови этот файл, иначе спецификация рассинхронизируется с реализацией.*
+*Crystallized means the methodology lives both as a specification (this file) and as code. When the code changes, update this file, otherwise the specification will drift out of sync with the implementation.*

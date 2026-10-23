@@ -1,30 +1,30 @@
-# Правило: Dialog Preservation
+# Rule: Dialog Preservation
 
-## Цель
+## Goal
 
-Сохранять ценные диалоги Claude Code до того, как они будут удалены retention'ом.
+Preserve valuable Claude Code dialogs before they are deleted by retention.
 
-Зачем это нужно:
-- **Эволюция методологии.** В живых диалогах видно, как менялись подходы — не пост-фактум, а в момент решения.
-- **Archaeology решений.** Почему выбрали X, а не Y; что попробовали и отбросили — это часто исчезает из коммитов и SNAPSHOT, но остаётся в дискуссии.
-- **Антипаттерны.** Тупики и неудачные попытки полезнее успехов: они учат, чего не делать.
-- **Источник для будущей методологии.** Накопленные диалоги — сырьё для пересборки рабочих практик (см. [[methodology]]).
+Why this matters:
+- **Methodology evolution.** Live dialogs show how approaches changed — not after the fact, but at the moment of decision.
+- **Archaeology of decisions.** Why X was chosen rather than Y; what was tried and discarded — this often vanishes from commits and SNAPSHOT but remains in the discussion.
+- **Anti-patterns.** Dead ends and failed attempts are more useful than successes: they teach you what not to do.
+- **A source for future methodology.** Accumulated dialogs are raw material for rebuilding working practices (see [[methodology]]).
 
-## Где Claude Code пишет
+## Where Claude Code writes
 
-Claude Code сохраняет полный JSONL-лог каждой сессии в:
+Claude Code saves the full JSONL log of each session to:
 
 ```
 ~/.claude/projects/<encoded-cwd>/<session-id>.jsonl
 ```
 
-Где `<encoded-cwd>` — путь к проекту, в котором каждый `/` заменён на `-`. Например, проект `/Users/alex/Code/foo` превращается в `-Users-alex-Code-foo` (leading `/` тоже становится `-`).
+Where `<encoded-cwd>` is the project path with every `/` replaced by `-`. For example, the project `/Users/alex/Code/foo` becomes `-Users-alex-Code-foo` (the leading `/` also becomes `-`).
 
-Эти файлы имеют retention — Claude Code в какой-то момент их подчищает. Поэтому интересные сессии нужно копировать в проект.
+These files are subject to retention — at some point Claude Code cleans them up. That is why interesting sessions need to be copied into the project.
 
-## Куда сохранять
+## Where to save
 
-В проекте — в папке `.claude/dialogs/`:
+In the project — in the `.claude/dialogs/` folder:
 
 ```
 .claude/dialogs/
@@ -32,58 +32,58 @@ Claude Code сохраняет полный JSONL-лог каждой сесси
   INDEX.md
 ```
 
-- `YYYY-MM-DD` — дата создания исходного JSONL (по mtime файла).
-- `session-id-short` — первые 8 символов session-id (для удобной идентификации; полный ID не нужен).
-- `INDEX.md` — реестр: что за диалог, почему его сохранили, какая тема.
+- `YYYY-MM-DD` — creation date of the source JSONL (from the file's mtime).
+- `session-id-short` — the first 8 characters of the session-id (for easy identification; the full ID is not needed).
+- `INDEX.md` — the register: what the dialog is, why it was saved, what the topic is.
 
-## Когда сохранять
+## When to save
 
-1. **Автоматически при `/finish`.** В конце каждой сессии скилл сам копирует JSONL текущей сессии в архив. Идемпотентно — если уже скопирован, ничего не делает.
-2. **Явно через `/save-dialog`.** Если в сессии прямо сейчас произошло что-то ценное (нашли решение, отбросили антипаттерн, выработали методологию) и сессия ещё не закончена — пользователь говорит `/save-dialog` или «сохрани диалог», и скилл сразу копирует текущий JSONL.
+1. **Automatically on `/finish`.** At the end of every session the skill itself copies the current session's JSONL into the archive. Idempotent — if it has already been copied, it does nothing.
+2. **Explicitly via `/save-dialog`.** If something valuable has just happened in the session (a solution found, an anti-pattern discarded, a methodology worked out) and the session is not yet over, the user says `/save-dialog` or "save the dialog", and the skill copies the current JSONL straight away.
 
-Лучше сохранить и потом удалить, чем потерять.
+Better to save and delete later than to lose it.
 
-## Что записывать в INDEX.md
+## What to record in INDEX.md
 
-INDEX.md — компактный реестр. На каждый сохранённый диалог одна строка таблицы:
+INDEX.md is a compact register. One table row per saved dialog:
 
 | Date | File | Session | Note |
 |------|------|---------|------|
-| 2026-06-11 | 2026-06-11_a1b2c3d4.jsonl | a1b2c3d4 | сборка dialog-preservation feature; нашли минимальный паттерн bash + skill + rule |
+| 2026-06-11 | 2026-06-11_a1b2c3d4.jsonl | a1b2c3d4 | building the dialog-preservation feature; found the minimal bash + skill + rule pattern |
 
-Note — короткая (1 строка), отвечающая на два вопроса:
-- какая тема обсуждалась;
-- почему этот диалог стоит хранить (что в нём найдено).
+The note is short (1 line) and answers two questions:
+- what topic was discussed;
+- why this dialog is worth keeping (what was found in it).
 
-Если note пустая — это OK; значит сохранение было автоматическим (`/finish`). Можно вернуться и дозаполнить позже.
+An empty note is OK; it means the save was automatic (`/finish`). You can come back and fill it in later.
 
-## Безопасность по repo_access
+## Safety by repo_access
 
 ### `repo_access=private-solo`
 
-`.claude/dialogs/` можно коммитить в git. Это слепок процесса, он полезен для будущего анализа и часть «полного рабочего стола».
+`.claude/dialogs/` may be committed to git. It is a snapshot of the process, useful for future analysis and part of the "complete desk".
 
-### `repo_access=private-shared` или `public`
+### `repo_access=private-shared` or `public`
 
-`.claude/dialogs/` остаётся **только локальным**. В шаблонном `.gitignore` должна быть строка `.claude/dialogs/`. Перед публикацией:
+`.claude/dialogs/` stays **local only**. The template `.gitignore` must contain the line `.claude/dialogs/`. Before publishing:
 
-- прогнать архив через regex-чистку секретов (planned: `scripts/cleanup-dialogs.sh` — не реализован, добавится отдельно);
-- проверить, что в диалогах нет приватных URL, токенов, имён людей, путей с домашней директорией пользователя;
-- только после этого решать, можно ли что-то опубликовать (обычно — нет; сырые диалоги остаются приватными).
+- run the archive through a regex secret scrub (planned: `scripts/cleanup-dialogs.sh` — not implemented, will be added separately);
+- check that the dialogs contain no private URLs, tokens, people's names, or paths containing the user's home directory;
+- only then decide whether anything can be published (usually — no; raw dialogs stay private).
 
-## Ритм анализа
+## Analysis rhythm
 
-Архив диалогов растёт сам по себе и без обратной связи бесполезен. Раз в месяц или раз в квартал:
+The dialog archive grows by itself and is useless without a feedback loop. Once a month or once a quarter:
 
-1. Прочитать накопленные диалоги (хотя бы по INDEX.md и note-полю).
-2. Выписать повторяющиеся паттерны — что сработало, что нет, какие подходы стабилизировались.
-3. Закрепить найденные паттерны в `methodology/draft/` (или эквивалент в проекте) — это и есть связь с methodology layer ([[methodology]]).
+1. Read the accumulated dialogs (at least via INDEX.md and the note field).
+2. Write down recurring patterns — what worked, what didn't, which approaches stabilised.
+3. Lock the patterns found into `methodology/draft/` (or the project's equivalent) — this is the link to the methodology layer ([[methodology]]).
 
-Это превращает архив диалогов из «кладбища логов» в реальный источник методологии.
+This turns the dialog archive from a "graveyard of logs" into a real source of methodology.
 
-## Не делать
+## Don't
 
-- Не пересылать `.claude/dialogs/` наружу автоматически.
-- Не публиковать в shared/public репозитории без чистки.
-- Не редактировать сами JSONL — они должны оставаться сырыми (источник истины).
-- Не плодить пустые note — лучше пустая ячейка, чем декоративное «session work».
+- Don't send `.claude/dialogs/` anywhere external automatically.
+- Don't publish to shared/public repositories without scrubbing.
+- Don't edit the JSONL files themselves — they must stay raw (source of truth).
+- Don't churn out empty notes — an empty cell is better than a decorative "session work".
