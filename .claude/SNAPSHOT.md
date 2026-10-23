@@ -3,10 +3,13 @@
 ## Current state
 
 **Status:** release v6.3.0 (orchestrator model)
-**Last updated:** 2026-07-25
+**Last updated:** 2026-10-23
 
 ## Done
 
+- **Repo translated to British English** (2026-10-23): all Russian text across docs, rules,
+  skills, templates, scripts, tests, hooks and archive/ translated. Hook/migrate/validator
+  matchers still accept legacy Russian labels for already-installed projects.
 - **v6.3.0 — orchestrator model** (2026-07-25): owner = product above production,
   agent = orchestrator + lead developer, raises workers itself. Delivered:
   `templates/global/rules/orchestration-model.md` (O1–O12), `/handoff` in the install set,
