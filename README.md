@@ -295,3 +295,10 @@ Archive:
 | Content templates | none | `chapter.md`, `lesson.md`, `transcript.md`, `article.md`, `document.md` | same | same | same |
 
 For details on the evolution of versions, see [CHANGELOG.md](CHANGELOG.md).
+
+## Credits and Licence
+
+- **Originator:** [Alexey Krol](https://github.com/alexeykrol) — author of the Claude Code Starter framework ([original repository](https://github.com/alexeykrol/claude-code-starter)).
+- **British English translation:** Oleksandr Dudarenko.
+
+Released under the [MIT Licence](LICENSE).

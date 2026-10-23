@@ -44,6 +44,7 @@ copy_required "$REPO_DIR/manifest.md" "$STAGE_DIR/manifest.md"
 copy_required "$REPO_DIR/.gitignore" "$STAGE_DIR/.gitignore"
 copy_required "$REPO_DIR/README.md" "$STAGE_DIR/README.md"
 copy_required "$REPO_DIR/CHANGELOG.md" "$STAGE_DIR/CHANGELOG.md"
+copy_required "$REPO_DIR/LICENSE" "$STAGE_DIR/LICENSE"
 copy_required "$REPO_DIR/.claude/SNAPSHOT.md" "$STAGE_DIR/.claude/SNAPSHOT.md"
 copy_required "$REPO_DIR/.claude/settings.json" "$STAGE_DIR/.claude/settings.json"
 
